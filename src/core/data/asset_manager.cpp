@@ -2,15 +2,17 @@
 // Created by Viktor on 18.12.2020 г..
 //
 
-#include <stdexcept>
 #include <iostream>
 #include "include/asset_manager.h"
 
 
 AssetManager::AssetManager() {
-	std::cout << "Creating assetmanager\n";
 	const std::string spritePaths[] = {
-			"spriteSheet.png",
+		"blocks.png",
+		"birds.png",
+		"pigs.png",
+		"background.png",
+		"ground.png"
 	};
 
 	int c = 0;
@@ -24,17 +26,15 @@ AssetManager::AssetManager() {
 }
 
 const Texture* AssetManager::getSprite(const std::string name) const {
+#if __DEBUG 
 	if (m_mappedSprites.find(name) == m_mappedSprites.end()) {
 		std::cout << "Sprite " + name + " doesn't exists";
 	}
+#endif
 	return m_mappedSprites.at(name);
 }
 
 AssetManager::~AssetManager() {
-	for (const auto& textureData : m_mappedCubeTextures) {
-		delete[] textureData.uvs;
-	}
-
 	for (const auto& it : m_mappedSprites) {
 		delete it.second;
 	}

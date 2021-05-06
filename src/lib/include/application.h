@@ -17,7 +17,8 @@ private:
 	Graphics* graphics;
 	Logger* logger;
 	Audio* audio;
-	
+private:
+	void initImgui();
 	void exitApp();
 public:
 	void gameLoop();

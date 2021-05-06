@@ -22,17 +22,9 @@
 // TODO Don't know how to use project path
 const std::string ASSETS_LOCATION = __FILE__ "/../../../../assets/sprites/";
 
-struct TextureCubeData {
-	float* uvs = nullptr;
-
-	TextureCubeData(TextureRegion& region, int sides = 1);
-	TextureCubeData() = default;
-};
-
 class AssetManager {
 private:
 	std::unordered_map<std::string, const Texture*> m_mappedSprites;
-	std::array<TextureCubeData, 35> m_mappedCubeTextures;
 	static std::string stripName(const std::string& name);
 public:
 	AssetManager();

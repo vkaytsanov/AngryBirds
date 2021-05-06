@@ -7,8 +7,11 @@
 #include "systems/include/render_system.h"
 #include "systems/include/debug_system.h"
 #include "../lib/utils/camera/include/first_person_camera_controller.h"
+#include "data/include/asset_manager.h"
 #include "systems/include/transform_system.h"
 #include "systems/include/physics_system.h"
+
+#include "../lib/imgui/imgui.h"
 
 
 void GLAPIENTRY
@@ -29,7 +32,7 @@ void AngryBirds::create() {
 	// glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	// glEnable(GL_DEBUG_OUTPUT);
 	// glDebugMessageCallback(MessageCallback, 0);
-
+	AssetManager::getInstance();
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_CULL_FACE);
@@ -45,9 +48,14 @@ void AngryBirds::create() {
 
 void AngryBirds::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.4, 0.4, 0.4, 1.0);
+	glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 
 	m_entityX.systems.updateAll(Lib::graphics->getDeltaTime());
+}
+
+void AngryBirds::renderImGui() {
+	ImGui::Begin("testWindow");
+	ImGui::End();
 }
 
 void AngryBirds::pause() {

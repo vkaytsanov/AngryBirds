@@ -71,6 +71,14 @@
     <ClInclude Include="src\lib\entityx\quick.h" />
     <ClInclude Include="src\lib\entityx\System.h" />
     <ClInclude Include="src\lib\entityx\tags\TagsComponent.h" />
+    <ClInclude Include="src\lib\imgui\imconfig.h" />
+    <ClInclude Include="src\lib\imgui\imgui.h" />
+    <ClInclude Include="src\lib\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\lib\imgui\imgui_impl_sdl.h" />
+    <ClInclude Include="src\lib\imgui\imgui_internal.h" />
+    <ClInclude Include="src\lib\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\lib\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\lib\imgui\imstb_truetype.h" />
     <ClInclude Include="src\lib\include\application.h" />
     <ClInclude Include="src\lib\include\audio.h" />
     <ClInclude Include="src\lib\include\configuration.h" />
@@ -182,6 +190,13 @@
     <ClCompile Include="src\lib\entityx\help\Timer.cc" />
     <ClCompile Include="src\lib\entityx\System.cc" />
     <ClCompile Include="src\lib\graphics.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_impl_sdl.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\lib\input.cpp" />
     <ClCompile Include="src\lib\lib.cpp" />
     <ClCompile Include="src\lib\logger.cpp" />
@@ -331,6 +346,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -346,6 +362,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -361,6 +378,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -375,6 +393,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

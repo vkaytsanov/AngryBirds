@@ -9,12 +9,17 @@
 
 #include <typeinfo>
 
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_sdl.h"
+
 
 Application::Application(Listener* listener) :
-		Application(listener, new Configuration()) {}
+	Application(listener, new Configuration()) {
+}
 
 Application::Application(Listener* listener, Configuration* config) :
-		Application(listener, config, new Graphics(config)) {}
+	Application(listener, config, new Graphics(config)) {
+}
 
 /* Initializing here the application */
 Application::Application(Listener* listener, Configuration* config, Graphics* graphics) {
@@ -33,7 +38,7 @@ Application::Application(Listener* listener, Configuration* config, Graphics* gr
 	this->audio = new Audio();
 	// if we dont have declared title, we will use the name of the class
 	if (config->title == nullptr) config->title = typeid(listener).name();
-	// creating the m_window
+	// creating the m_pWindow
 	graphics->createWindow();
 	// creating the environment lib
 	Lib::app = this;
@@ -42,8 +47,12 @@ Application::Application(Listener* listener, Configuration* config, Graphics* gr
 	Lib::audio = audio;
 	// creating the objects from the m_pGame
 	listener->create();
+	
+	initImgui();
+
 	// reset the delta time so we dont get huge value after long initialization of the game
 	graphics->m_lastTime = SDL_GetTicks();
+	
 	running = true;
 
 	gameLoop();
@@ -65,12 +74,12 @@ void Application::gameLoop() {
 		bool isBackground = graphics->isBackground();
 		bool isPaused = isMinimized || isBackground;
 		if (!wasPaused && isPaused) {
-			// the m_pGame m_window just became not active on the user's end
+			// the m_pGame m_pWindow just became not active on the user's end
 			wasPaused = true;
 			listener->pause();
 		}
 		if (wasPaused && !isPaused) {
-			// the m_pGame m_window just became active on the user's end
+			// the m_pGame m_pWindow just became active on the user's end
 			wasPaused = false;
 			listener->resume();
 		}
@@ -89,6 +98,17 @@ void Application::gameLoop() {
 		if (!isPaused) {
 			graphics->updateTime();
 			listener->render();
+			
+			// imgui
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplSDL2_NewFrame(graphics->getWindow());
+			ImGui::NewFrame();
+
+			listener->renderImGui();
+			
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			
 			SDL_GL_SwapWindow(graphics->getWindow());
 
 			/* So we don't use 100% CPU */
@@ -104,11 +124,33 @@ void Application::gameLoop() {
 	}
 }
 
+
+void Application::initImgui() {
+
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsClassic();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplSDL2_InitForOpenGL(graphics->getWindow(), graphics->getContext());
+	ImGui_ImplOpenGL3_Init(graphics->getGlslVersion());
+}
+
 void Application::exitApp() {
 	running = false;
 }
 
 Application::~Application() {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
 	delete listener;
 	delete audio;
 	delete logger;
@@ -135,6 +177,3 @@ void Application::log(const char* tag, int message) const {
 void Application::debug(const char* tag, const char* message) const {
 	logger->debug(tag, message);
 }
-
-
-

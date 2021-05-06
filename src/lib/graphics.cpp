@@ -2,15 +2,14 @@
 #include <iostream>
 #include "include/graphics.h"
 
-
 Graphics::Graphics() : Graphics(new Configuration()) {
 }
 
 Graphics::Graphics(Configuration* config) : m_pConfig(config),
-                                            m_context(nullptr),
-                                            m_window(nullptr),
-                                            m_screenSurface(nullptr),
-                                            m_renderer(nullptr),
+                                            m_pContext(nullptr),
+                                            m_pWindow(nullptr),
+                                            m_pScreenSurface(nullptr),
+                                            m_pRenderer(nullptr),
                                             m_background(false),
                                             m_visible(true) {
 
@@ -18,8 +17,8 @@ Graphics::Graphics(Configuration* config) : m_pConfig(config),
 
 void Graphics::updateTime() {
 	// calculating the delta time
-	uint64_t time = SDL_GetTicks();
-	m_deltaTime = (time - m_lastTime) / 1000.0f;
+	uint32_t time = SDL_GetTicks();
+	m_deltaTime = (static_cast<float>(time - m_lastTime)) / 1000.0f;
 	m_lastTime = time;
 
 	// calculating m_fps
@@ -43,7 +42,7 @@ float Graphics::getDeltaTime() const {
 	return m_deltaTime;
 }
 
-float Graphics::getFps() {
+float Graphics::getFps() const {
 	return m_fps;
 }
 
@@ -57,30 +56,46 @@ void Graphics::createWindow() {
 		if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
 			std::cout << IMG_GetError() << "\n";
 		}
-#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201'703L) || __cplusplus >= 201'703L)
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+	// Decide OpenGL and GLSL versions
+#if defined(__APPLE__)
+    // GL 3.2 Core + GLSL 150
+    m_glslVersion = "#version 150";
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#elif defined(__EMSCRIPTEN__)
+    // GL 3.0 + GLSL 130
+    m_glslVersion = "#version 130";
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#else
+	m_glslVersion = "#version 330 core";
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
 #endif
 
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
-
-		//Create m_window
-		m_window = SDL_CreateWindow(m_pConfig->title,
-		                            m_pConfig->x,
-		                            m_pConfig->y,
-		                            m_pConfig->width,
-		                            m_pConfig->height,
-		                            m_pConfig->isVisible | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
-		if (m_window == nullptr) {
+		//Create m_pWindow
+		m_pWindow = SDL_CreateWindow(m_pConfig->title,
+		                             m_pConfig->x,
+		                             m_pConfig->y,
+		                             m_pConfig->width,
+		                             m_pConfig->height,
+		                             m_pConfig->isVisible | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+		if (m_pWindow == nullptr) {
 			std::cout << SDL_GetError() << "\n";
 		}
 		else {
-			//Create the m_context for OpenGL
-			m_context = SDL_GL_CreateContext(m_window);
+			//Create the m_pContext for OpenGL
+			m_pContext = SDL_GL_CreateContext(m_pWindow);
 
 
-			if (!m_context) {
+			if (!m_pContext) {
 				std::cout << SDL_GetError() << "\n";
 			}
 			else {
@@ -95,17 +110,17 @@ void Graphics::createWindow() {
 
 			}
 
-			//Get m_window surface
-			m_screenSurface = SDL_GetWindowSurface(m_window);
-			if (m_screenSurface == nullptr) {
+			//Get m_pWindow surface
+			m_pScreenSurface = SDL_GetWindowSurface(m_pWindow);
+			if (m_pScreenSurface == nullptr) {
 				std::cout << SDL_GetError() << "\n";
 			}
 			else {
 				//Update the surface
-				SDL_UpdateWindowSurface(m_window);
-				//Create m_renderer
-				m_renderer = SDL_CreateRenderer(m_window, -1, 0);
-				if (m_renderer == nullptr) {
+				SDL_UpdateWindowSurface(m_pWindow);
+				//Create m_pRenderer
+				m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
+				if (m_pRenderer == nullptr) {
 					std::cout << SDL_GetError() << "\n";
 				}
 			}
@@ -118,21 +133,21 @@ void Graphics::createWindow() {
 }
 
 void Graphics::update() {
-	SDL_UpdateWindowSurface(m_window);
+	SDL_UpdateWindowSurface(m_pWindow);
 }
 
 Graphics::~Graphics() {
-	//Destroy openGL m_context
-	SDL_GL_DeleteContext(m_context);
+	//Destroy openGL m_pContext
+	SDL_GL_DeleteContext(m_pContext);
 	//Destroy surface
-	SDL_FreeSurface(m_screenSurface);
-	m_screenSurface = nullptr;
-	//Destroy m_renderer
-	SDL_DestroyRenderer(m_renderer);
-	m_renderer = nullptr;
-	//Destroy m_window
-	SDL_DestroyWindow(m_window);
-	m_window = nullptr;
+	SDL_FreeSurface(m_pScreenSurface);
+	m_pScreenSurface = nullptr;
+	//Destroy m_pRenderer
+	SDL_DestroyRenderer(m_pRenderer);
+	m_pRenderer = nullptr;
+	//Destroy m_pWindow
+	SDL_DestroyWindow(m_pWindow);
+	m_pWindow = nullptr;
 	//Shutdown SDL_TTF
 	TTF_Quit();
 	//Shut down SDL_Image
@@ -142,7 +157,7 @@ Graphics::~Graphics() {
 }
 
 SDL_Renderer* Graphics::getRenderer() const {
-	return m_renderer;
+	return m_pRenderer;
 }
 
 void Graphics::setWidth(const int width) const {
@@ -158,7 +173,7 @@ bool Graphics::isBackground() const {
 }
 
 void Graphics::setBackground(const bool background) {
-	this->m_background = background;
+	m_background = background;
 }
 
 bool Graphics::isVisible() const {
@@ -166,13 +181,21 @@ bool Graphics::isVisible() const {
 }
 
 void Graphics::setVisible(const bool visible) {
-	this->m_visible = visible;
+	m_visible = visible;
 }
 
 SDL_Window* Graphics::getWindow() const {
-	return m_window;
+	return m_pWindow;
 }
 
 SDL_Surface* Graphics::getScreenSurface() const {
-	return m_screenSurface;
+	return m_pScreenSurface;
+}
+
+SDL_GLContext Graphics::getContext() const {
+	return m_pContext;
+}
+
+const char* Graphics::getGlslVersion() const {
+	return m_glslVersion.c_str();
 }

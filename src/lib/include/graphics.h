@@ -13,6 +13,8 @@
 #include <SDL2/SDL_ttf.h>
 #endif
 
+#include <string>
+
 #include "configuration.h"
 
 
@@ -20,17 +22,18 @@ class Graphics {
 	friend class Application;
 private:
 	Configuration* m_pConfig;
-	SDL_Window* m_window;
-	SDL_GLContext m_context;
-	SDL_Surface* m_screenSurface;
-	SDL_Renderer* m_renderer;
-	float m_lastTime = 0;
+	SDL_Window* m_pWindow;
+	SDL_GLContext m_pContext;
+	SDL_Surface* m_pScreenSurface;
+	SDL_Renderer* m_pRenderer;
+	uint32_t m_lastTime = 0;
 	float m_deltaTime = 0;
 	uint16_t m_fps = 0;
 	uint16_t m_frames = 0;
 	uint64_t m_frameStart = 0;
 	bool m_background;
 	bool m_visible;
+	std::string m_glslVersion;
 public:
 	explicit Graphics(Configuration* config);
 	Graphics();
@@ -45,15 +48,14 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	float getDeltaTime() const;
-	float getFps();
+	float getFps() const;
 	void createWindow();
 	void update();
-
 	SDL_Renderer* getRenderer() const;
-
 	SDL_Window* getWindow() const;
-
 	SDL_Surface* getScreenSurface() const;
+	SDL_GLContext getContext() const;
+	const char* getGlslVersion() const;
 };
 
 #endif

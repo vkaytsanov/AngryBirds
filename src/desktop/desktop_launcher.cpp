@@ -9,7 +9,7 @@
 
 
 int main(int argc, char* args[]) {
-	auto* config = new Configuration("AngryBirds", 960, 480);
+	auto* config = new Configuration("AngryBirds", 1120, 700);
 
 	auto* app = new Application(new AngryBirds(), config);
 
