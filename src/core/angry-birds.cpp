@@ -12,7 +12,29 @@
 #include "systems/include/physics_system.h"
 
 #include "../lib/imgui/imgui.h"
+#include <cereal/archives/json.hpp>
+#include <cereal/types/vector.hpp>
 
+
+struct TransformDeserialize {
+	int64_t id;
+	Transform transform;
+
+	template <typename Archive>
+	void serialize(Archive& archive) {
+		archive(id, transform);
+	}
+};
+
+struct RigidBodyDeserialize {
+	int64_t id;
+	RigidBody rigidBody;
+
+	template <typename Archive>
+	void serialize(Archive& archive) {
+		archive(id, rigidBody);
+	}
+};
 
 void GLAPIENTRY
 MessageCallback(GLenum source,
@@ -44,6 +66,17 @@ void AngryBirds::create() {
 
 	m_entityX.systems.configure();
 
+	// {
+	// entityx::Entity ent = m_entityX.entities.create();
+	// 	ent.addComponent<Transform>();
+	// 	ent.addComponent<RigidBody>();
+	// }
+	// {
+	// entityx::Entity ent = m_entityX.entities.create();
+	// ent.addComponent<Transform>(Vector3f(5, 3, 2));
+	// }
+	deserialize();
+
 }
 
 void AngryBirds::render() {
@@ -54,7 +87,9 @@ void AngryBirds::render() {
 }
 
 void AngryBirds::renderImGui() {
-	ImGui::Begin("testWindow");
+	ImGui::Begin("testWindow", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+	ImGui::SetWindowPos({0, 0});
+	ImGui::SetWindowSize({300, static_cast<float>(Lib::graphics->getHeight())});
 	ImGui::End();
 }
 
@@ -70,6 +105,63 @@ void AngryBirds::resize(const int width, const int height) {
 	//m_pGraphicsSystem->resizeViewport(width, height);
 }
 
-AngryBirds::~AngryBirds() {
+void AngryBirds::deserialize() {
+	std::ifstream is("scene.json");
+	cereal::JSONInputArchive archive(is);
+
+
+	std::vector<TransformDeserialize> transforms;
+	std::vector<RigidBodyDeserialize> rigidBodys;
+
+	archive(transforms);
+	archive(rigidBodys);
+
+	for (int i = 0; i < transforms.size(); i++) {
+		std::cout << "TransformX: " << transforms[i].transform.position.x << "\n";
+		auto entity = m_entityX.entities.create();
+		entity.addComponent<Transform>(transforms[i].transform);
+	}
+	
+	for (int i = 0; i < rigidBodys.size(); i++) {
+		std::cout << "RigidBodyUseG: " << rigidBodys[i].rigidBody.m_useGravity << "\n";
+		m_entityX.entities.assign<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].rigidBody);
+	}
+
+	std::cout << m_entityX.entities.get(entityx::Entity::Id(rigidBodys[0].id)).getComponent<Transform>()->position.x << "\n";
+	
 }
 
+void AngryBirds::serialize() {
+	std::ofstream os("scene.json");
+	cereal::JSONOutputArchive archive(os);
+	std::vector<TransformDeserialize> transforms;
+	std::vector<RigidBodyDeserialize> rigidBodys;
+	
+	for (auto entity : m_entityX.entities.entities_with_components<Transform>()) {
+		entityx::ComponentHandle<Transform> ch = entity.getComponent<Transform>();
+		// transforms.emplace_back(*ch.get());
+		//Transform* c = ch.get();
+		TransformDeserialize td;
+		td.id = ch.entity().id().id();
+		td.transform = *ch;
+		transforms.emplace_back(td);
+	}
+	
+	for (auto entity : m_entityX.entities.entities_with_components<RigidBody>()) {
+		entityx::ComponentHandle<RigidBody> ch = entity.getComponent<RigidBody>();
+		// transforms.emplace_back(*ch.get());
+		//Transform* c = ch.get();
+		RigidBodyDeserialize rbd;
+		rbd.id = ch.entity().id().id();
+		rbd.rigidBody = *ch;
+		
+		rigidBodys.emplace_back(rbd);
+	}
+	
+	archive(transforms);
+	archive(rigidBodys);
+}
+
+AngryBirds::~AngryBirds() {
+	serialize();
+}

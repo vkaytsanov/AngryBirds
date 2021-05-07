@@ -9,10 +9,10 @@
  */
 
 #pragma once
-
 #include "Entity.h"
 #include "Event.h"
 #include "System.h"
+#include "../../src/core/components/include/transform.h"
 
 
 namespace entityx {
@@ -40,6 +40,8 @@ namespace entityx {
 			systems.add(s);
 			return s;
 		}
+
+		
 	};
 
 }  // namespace entityx

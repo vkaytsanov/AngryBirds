@@ -194,6 +194,11 @@ public:
 		return x == 0 && y == 0 && z == 0;
 	}
 
+	template<typename Archive>
+	void serialize(Archive& archive) {
+		archive(x, y, z);
+	}
+
 };
 
 typedef Vector3<float> Vector3f;

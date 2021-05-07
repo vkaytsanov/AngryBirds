@@ -157,6 +157,7 @@ public:
 		Lib::app->log("quaternion", (std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z) + " " +
 		                             std::to_string(w)).c_str());
 	}
+
 };
 
 typedef Quaternion<float> Quaternionf;

@@ -24,6 +24,11 @@ public:
 	void addForce(const Vector3f& force);
 	void addForceImpulse(const Vector3f& force);
 
+	template<typename Archive>
+	void serialize(Archive& archive) {
+		archive(m_useGravity);
+	}
+
 };
 
 

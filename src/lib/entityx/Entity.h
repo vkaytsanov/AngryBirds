@@ -78,6 +78,11 @@ namespace entityx {
 
 			uint32_t version() const { return id_ >> 32; }
 
+			template<typename Archive>
+			void serialize(Archive& archive) {
+				archive(id_);
+			}
+
 		private:
 			friend class EntityManager;
 

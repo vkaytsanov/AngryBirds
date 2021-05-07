@@ -5,13 +5,13 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-
+#include "../../../lib/entityx/entityx.h"
 #include "../../../lib/utils/geometry/include/vector3.h"
 #include "../../../lib/utils/geometry/include/matrix4.h"
 
 
 
-struct Transform {
+struct Transform : public entityx::Component<Transform>{
 	Vector3f position;
 	Vector3f eulerAngles;
 	Vector3f scale = Vector3f(1, 1, 1);
@@ -35,9 +35,15 @@ struct Transform {
 	void rotate(const float roll, const float pitch, const float yaw);
 	void rotate(const Vector3f& vec);
 	void rotateClampX(const Vector3f& vec, const float value);
-
-
+	
+	template<typename Archive>
+	inline void serialize(Archive& archive);
 };
+
+template <typename Archive>
+void Transform::serialize(Archive& archive) {
+	archive(position, eulerAngles, scale);
+}
 
 
 #endif //TRANSFORM_H
