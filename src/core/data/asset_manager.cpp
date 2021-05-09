@@ -17,7 +17,7 @@ AssetManager::AssetManager() {
 
 	int c = 0;
 	for (const std::string& path : spritePaths) {
-		m_mappedSprites[stripName(path)] = new Texture(ASSETS_LOCATION + path);
+		m_spriteSheets[stripName(path)] = std::make_shared<Texture>(ASSETS_LOCATION, path);
 		c++;
 	}
 
@@ -25,19 +25,16 @@ AssetManager::AssetManager() {
 
 }
 
-const Texture* AssetManager::getSprite(const std::string name) const {
+std::shared_ptr<Texture> AssetManager::getSprite(const std::string name) const {
 #if _DEBUG 
-	if (m_mappedSprites.find(name) == m_mappedSprites.end()) {
+	if (m_spriteSheets.find(name) == m_spriteSheets.end()) {
 		std::cout << "Sprite " + name + " doesn't exists";
 	}
 #endif
-	return m_mappedSprites.at(name);
+	return m_spriteSheets.at(name);
 }
 
 AssetManager::~AssetManager() {
-	for (const auto& it : m_mappedSprites) {
-		delete it.second;
-	}
 }
 
 std::string AssetManager::stripName(const std::string& name) {

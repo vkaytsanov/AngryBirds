@@ -4,14 +4,20 @@
 
 #include "include/vertex_array.h"
 
+#include <iostream>
+
 VertexArray::VertexArray() {
 	arrayObject = 0;
 	glGenVertexArrays(1, &arrayObject);
 }
 
+VertexArray::VertexArray(const VertexArray& other) : arrayObject(other.arrayObject){
+}
+
 VertexArray::~VertexArray() {
 	glDeleteVertexArrays(1, &arrayObject);
 	unbind();
+	std::cout << "Vertex Destructor\n";
 }
 
 void VertexArray::bind() const {

@@ -24,12 +24,12 @@ const std::string ASSETS_LOCATION = __FILE__ "/../../../../assets/sprites/";
 
 class AssetManager {
 private:
-	std::unordered_map<std::string, const Texture*> m_mappedSprites;
+	std::unordered_map<std::string, std::shared_ptr<Texture>> m_spriteSheets;
 	static std::string stripName(const std::string& name);
 public:
 	AssetManager();
 	~AssetManager();
-	const Texture* getSprite(std::string name) const;
+	std::shared_ptr<Texture> getSprite(std::string name) const;
 	static AssetManager& getInstance();
 };
 

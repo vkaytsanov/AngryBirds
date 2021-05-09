@@ -16,12 +16,36 @@ struct Vertex2d {
 class Sprite : public entityx::Component<Sprite> {
 private:
 	VertexArray m_vao;
+private:
+	void init();
 public:
 	TextureRegion m_textureRegion;
 	Vector3f m_color;
-	bool m_flipX;
-	bool m_flipY;
+	bool m_flipX = false;
+	bool m_flipY = false;
 public:
+	Sprite() = default;
 	Sprite(const TextureRegion& tR);
+	Sprite(Sprite&& other) noexcept;
+	Sprite(const Sprite& other) = default;
+	Sprite& operator=(Sprite&& other) noexcept;
 	const VertexArray* getVao() const;
+
+	template <typename Archive>
+	inline void save(Archive& archive) const;
+
+	template <typename Archive>
+	inline void load(Archive& archive);
+
 };
+
+template <typename Archive>
+void Sprite::save(Archive& archive) const {
+	archive(m_textureRegion, m_color, m_flipX, m_flipY);
+}
+
+template <typename Archive>
+void Sprite::load(Archive& archive) {
+	archive(m_textureRegion, m_color, m_flipX, m_flipY);
+	init();
+}

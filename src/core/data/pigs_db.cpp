@@ -6,10 +6,8 @@
 #include "../components/include/transform.h"
 
 PigsDB::PigsDB(entityx::EntityManager& entityManager) {
-	const Texture* spriteSheet = AssetManager::getInstance().getSprite("pigs");
-
 	auto normalPig = entityManager.create();
 	normalPig.addComponent<Transform>();
-	normalPig.addComponent<Sprite>(TextureRegion(spriteSheet, 679, 790, 99, 97));
+	normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("pigs"), 679, 790, 99, 97));
 	// normalPig.addComponent<CircleCollider>(1.0f);
 }

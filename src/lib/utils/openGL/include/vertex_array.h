@@ -9,9 +9,12 @@
 
 class VertexArray {
 private:
+public:
 	unsigned int arrayObject;
 public:
 	VertexArray();
+	VertexArray(const VertexArray& other);
+
 	~VertexArray();
 	void bind() const;
 	void unbind() const;

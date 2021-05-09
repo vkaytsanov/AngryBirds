@@ -7,17 +7,17 @@
 #include <cmath>
 
 
-TextureRegion::TextureRegion(const Texture* texture) : texture(texture){
+TextureRegion::TextureRegion(std::shared_ptr<Texture> texture) : texture(texture){
 	regionWidth = texture->getWidth();
 	regionHeight = texture->getHeight();
 }
 
-TextureRegion::TextureRegion(Texture* texture, int width, int height) {
+TextureRegion::TextureRegion(std::shared_ptr<Texture> texture, int width, int height) {
 	this->texture = texture;
 	setRegionXY(0, 0, width, height);
 }
 
-TextureRegion::TextureRegion(const Texture* texture, int x, int y, int width, int height) : texture(texture){
+TextureRegion::TextureRegion(std::shared_ptr<Texture> texture, int x, int y, int width, int height) : texture(texture){
 	setRegionXY(x, y, width, height);
 }
 
@@ -40,7 +40,21 @@ void TextureRegion::setRegionUV(float u, float v, float u2, float v2) {
 	this->v2 = v2;
 }
 
-const Texture* TextureRegion::getTexture() const {
+TextureRegion& TextureRegion::setRegionUV(std::shared_ptr<Texture> texture, float u, float v, float u2, float v2) {
+	this->texture = texture;
+	this->u = u;
+	this->v = v;
+	this->u2 = u2;
+	this->v2 = v2;
+
+	return *this;
+}
+
+void TextureRegion::setTexture(std::shared_ptr<Texture> texture) {
+	this->texture = texture;
+}
+
+std::shared_ptr<Texture> TextureRegion::getTexture() const {
 	return texture;
 }
 
@@ -124,6 +138,14 @@ int TextureRegion::getRegionX() const {
 
 int TextureRegion::getRegionY() const {
 	return (int) std::round(v * (float) texture->getHeight());
+}
+
+int TextureRegion::getRegionWidth() const {
+	return regionWidth;
+}
+
+int TextureRegion::getRegionHeight() const {
+	return regionHeight;
 }
 
 TextureRegion& TextureRegion::operator+(const TextureRegion& tR) {

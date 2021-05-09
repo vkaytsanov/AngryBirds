@@ -4,9 +4,7 @@
 #include "utils/openGL/include/index_buffer.h"
 #include "utils/openGL/include/vertex_buffer.h"
 
-Sprite::Sprite(const TextureRegion& tR) : m_textureRegion(tR) {
-	// std::cout << "size: " << sizeof(*this);
-	// assert(sizeof(*this) % 16 == 0); // memory alignment
+void Sprite::init() {
 	static bool indexBufferInitialized = false;
 	static IndexBuffer ibo;
 	if (!indexBufferInitialized) {
@@ -19,10 +17,10 @@ Sprite::Sprite(const TextureRegion& tR) : m_textureRegion(tR) {
 		ibo.bufferData(6 * sizeof(GLuint), indices, GL_STATIC_DRAW);
 	}
 	Vertex2d vertices[] = {
-		Vertex2d(Vector2f(0, 0), Vector2f(tR.getU(), tR.getV2())),
-		Vertex2d(Vector2f(200.0f, 0), Vector2f(tR.getU2(), tR.getV2())),
-		Vertex2d(Vector2f(200.0f, 200), Vector2f(tR.getU2(), tR.getV())),
-		Vertex2d(Vector2f(0.0f, 200), Vector2f(tR.getU(), tR.getV())),
+		Vertex2d(Vector2f(0, 0), Vector2f(m_textureRegion.getU(), m_textureRegion.getV2())),
+		Vertex2d(Vector2f(200.0f, 0), Vector2f(m_textureRegion.getU2(), m_textureRegion.getV2())),
+		Vertex2d(Vector2f(200.0f, 200), Vector2f(m_textureRegion.getU2(), m_textureRegion.getV())),
+		Vertex2d(Vector2f(0.0f, 200), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
 	};
 
 	VertexBuffer vbo;
@@ -36,9 +34,35 @@ Sprite::Sprite(const TextureRegion& tR) : m_textureRegion(tR) {
 	vbo.bufferData(sizeof(Vertex2d) * 4, vertices, GL_STATIC_DRAW);
 
 	m_vao.unbind();
+}
 
+Sprite::Sprite(const TextureRegion& tR) : m_textureRegion(tR) {
+	// std::cout << "size: " << sizeof(*this);
+	// assert(sizeof(*this) % 16 == 0); // memory alignment
+
+	init();
+
+}
+
+Sprite::Sprite(Sprite&& other) noexcept {
+	std::swap(m_vao, other.m_vao);
+	std::swap(m_textureRegion, other.m_textureRegion);
+	std::swap(m_color, other.m_color);
+	std::swap(m_flipX, other.m_flipX);
+	std::swap(m_flipY, other.m_flipY);
+	// unsigned int tmp = other.m_vao.arrayObject;
+	// other.m_vao.arrayObject = m_vao.arrayObject;
+	// m_vao.arrayObject = tmp;
+}
+
+Sprite& Sprite::operator=(Sprite&& other) noexcept{
+	unsigned int tmp = other.m_vao.arrayObject;
+	other.m_vao.arrayObject = m_vao.arrayObject;
+	m_vao.arrayObject = tmp;
+	return *this;
 }
 
 const VertexArray* Sprite::getVao() const {
 	return &m_vao;
 }
+

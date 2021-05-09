@@ -12,8 +12,11 @@
 #include "systems/include/physics_system.h"
 
 #include "../lib/imgui/imgui.h"
-#include <cereal/archives/json.hpp>
+#include <cereal/archives/binary.hpp>
 #include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/complex.hpp>
+#include <cereal/types/memory.hpp>
 
 #include "components/include/sprite.h"
 
@@ -35,6 +38,18 @@ struct RigidBodyDeserialize {
 	template <typename Archive>
 	void serialize(Archive& archive) {
 		archive(id, rigidBody);
+	}
+};
+
+struct SpriteDeserialize {
+	int64_t id;
+	Sprite sprite;
+
+	SpriteDeserialize() = default;
+	SpriteDeserialize(int64_t id, const Sprite& sprite) : id(id), sprite(sprite){}
+	template <typename Archive>
+	void serialize(Archive& archive) {
+		archive(id, sprite);
 	}
 };
 
@@ -81,11 +96,11 @@ void AngryBirds::create() {
 	// ent.addComponent<Transform>(Vector3f(5, 3, 2));
 	// }
 
-	auto normalPig = m_entityX.entities.create();
-	normalPig.addComponent<Transform>();
-	normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("pigs"), 679, 790, 99, 97));
+	// auto normalPig = m_entityX.entities.create();
+	// normalPig.addComponent<Transform>();
+	// normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("pigs"), 679, 790, 99, 97));
 
-	//deserialize();
+	deserialize();
 
 }
 
@@ -120,37 +135,42 @@ void AngryBirds::resize(const int width, const int height) {
 }
 
 void AngryBirds::deserialize() {
-	std::ifstream is("scene.json");
-	cereal::JSONInputArchive archive(is);
+	std::ifstream is("scene.bin");
+	cereal::BinaryInputArchive archive(is);
 
 
 	std::vector<TransformDeserialize> transforms;
 	std::vector<RigidBodyDeserialize> rigidBodys;
+	std::vector<SpriteDeserialize> spriteDeserializes;
 
 	archive(transforms);
 	archive(rigidBodys);
+	archive(spriteDeserializes);
 
-	for (int i = 0; i < transforms.size(); i++) {
+	for (unsigned i = 0; i < transforms.size(); i++) {
 		std::cout << "TransformX: " << transforms[i].transform.position.x << "\n";
 		auto entity = m_entityX.entities.create();
 		entity.addComponent<Transform>(transforms[i].transform);
 	}
 
-	for (int i = 0; i < rigidBodys.size(); i++) {
+	for (unsigned i = 0; i < rigidBodys.size(); i++) {
 		std::cout << "RigidBodyUseG: " << rigidBodys[i].rigidBody.m_useGravity << "\n";
 		m_entityX.entities.assign<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].rigidBody);
 	}
 
-	std::cout << m_entityX.entities.get(entityx::Entity::Id(rigidBodys[0].id)).getComponent<Transform>()->position.x <<
-		"\n";
+	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
+		std::cout << "TextName: " << spriteDeserializes[i].sprite.m_textureRegion.getTexture()->m_name << "\n";
+		m_entityX.entities.assign<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id), std::move(spriteDeserializes[i].sprite));
+	}
 
 }
 
 void AngryBirds::serialize() {
-	std::ofstream os("scene.json");
-	cereal::JSONOutputArchive archive(os);
+	std::ofstream os("scene.bin");
+	cereal::BinaryOutputArchive archive(os);
 	std::vector<TransformDeserialize> transforms;
 	std::vector<RigidBodyDeserialize> rigidBodys;
+	std::vector<SpriteDeserialize> spritesSerialization;
 
 	for (auto entity : m_entityX.entities.entities_with_components<Transform>()) {
 		entityx::ComponentHandle<Transform> ch = entity.getComponent<Transform>();
@@ -173,13 +193,23 @@ void AngryBirds::serialize() {
 		rigidBodys.emplace_back(rbd);
 	}
 
+	for (auto entity : m_entityX.entities.entities_with_components<Sprite>()) {
+		entityx::ComponentHandle<Sprite> ch = entity.getComponent<Sprite>();
+		// transforms.emplace_back(*ch.get());
+		//Transform* c = ch.get();
+		SpriteDeserialize rbd = SpriteDeserialize(ch.entity().id().id(), *ch);
+
+		spritesSerialization.emplace_back(rbd);
+	}
+
 	archive(transforms);
 	archive(rigidBodys);
+	archive(spritesSerialization);
 }
 
 AngryBirds::AngryBirds() {
 }
 
 AngryBirds::~AngryBirds() {
-	//serialize();
+	// serialize();
 }
