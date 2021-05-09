@@ -7,6 +7,7 @@
 
 
 #include "texture.h"
+#include "../../../core/data/include/asset_manager.h"
 
 class TextureRegion {
 private:
@@ -42,12 +43,23 @@ public:
 	TextureRegion& operator+(const TextureRegion& tR);
 
 	template<typename Archive>
-	void serialize(Archive& archive);
+	void save(Archive& archive) const;
+
+	template<typename Archive>
+	void load(Archive& archive);
 };
 
 template <typename Archive>
-void TextureRegion::serialize(Archive& archive) {
+void TextureRegion::save(Archive& archive) const {
 	archive(texture, u, v, u2, v2);
+}
+
+template <typename Archive>
+void TextureRegion::load(Archive& archive) {
+	archive(texture, u, v, u2, v2);
+	// we get only the directory and name of the texture and now we are just getting the real
+	// sprite from the asset manager, instead of creating new one
+	texture = AssetManager::getInstance().getSprite(texture->m_name.substr(0, texture->m_name.length() - 4));
 }
 
 

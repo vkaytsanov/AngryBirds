@@ -17,21 +17,6 @@
 
 #include <string>
 
-enum TextureFilter {
-	Nearest = GL_NEAREST,
-	Linear = GL_LINEAR,
-	MipMap = GL_MIPMAP,
-	MipMapNearestNearest = GL_NEAREST_MIPMAP_NEAREST,
-	MipMapLinearNearest = GL_LINEAR_MIPMAP_NEAREST,
-	MipMapNearestLinear = GL_NEAREST_MIPMAP_LINEAR,
-	MipMapLinearLinear = GL_LINEAR_MIPMAP_LINEAR,
-};
-
-enum TextureWrap {
-	Repeat = GL_REPEAT,
-	RepeatMirrored = GL_MIRRORED_REPEAT,
-	ClampToEdge = GL_CLAMP_TO_EDGE,
-};
 
 class Texture {
 private:
@@ -70,7 +55,7 @@ void Texture::save(Archive& archive) const {
 template <typename Archive>
 void Texture::load(Archive& archive) {
 	archive(m_dir, m_name);
-	init();
+	// init();
 }
 
 

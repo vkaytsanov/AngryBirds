@@ -47,6 +47,7 @@ struct SpriteDeserialize {
 
 	SpriteDeserialize() = default;
 	SpriteDeserialize(int64_t id, const Sprite& sprite) : id(id), sprite(sprite){}
+	
 	template <typename Archive>
 	void serialize(Archive& archive) {
 		archive(id, sprite);
