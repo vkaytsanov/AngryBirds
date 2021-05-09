@@ -14,25 +14,25 @@ OrthographicCamera::OrthographicCamera(const float viewportWidth, const float vi
 	this->m_viewportWidth = viewportWidth;
 	this->m_viewportHeight = viewportHeight;
 	m_nearPlane = 0;
-	update(true);
+
 }
 
 void OrthographicCamera::update(bool updateFrustum) {
-	Lib::app->error("OrthographicCamera", "Using not implemented function");
-//	m_projection.setToOrthogonal(
-//			-m_viewportWidth / 2,
-//			m_viewportWidth / 2,
-//			-m_viewportHeight / 2,
-//			m_viewportHeight / 2,
-//			m_nearPlane,
-//			m_farPlane
-//	);
-//	m_view.setToLookAt(position, m_direction, m_up);
-//	m_combined = m_projection * m_view;
-//
-//	if (updateFrustum){
-//		m_frustum.update(&m_combined);
-//	}
+	// Lib::app->error("OrthographicCamera", "Using not implemented function");
+	m_projection.setToOrthogonal(
+			-m_viewportWidth / 2,
+			m_viewportWidth / 2,
+			-m_viewportHeight / 2,
+			m_viewportHeight / 2,
+			m_nearPlane,
+			m_farPlane
+	);
+	
+	m_combined = m_projection * m_pTransform->transformMatrix;
+
+	if (updateFrustum){
+		m_frustum.update(&m_combined);
+	}
 }
 
 

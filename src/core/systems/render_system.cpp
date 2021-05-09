@@ -3,9 +3,11 @@
 //
 
 #include "include/render_system.h"
+#include "../components/include/sprite.h"
 
-
-RenderSystem::RenderSystem() :m_camera(70) {
+RenderSystem::RenderSystem() : m_camera(),
+                               m_spriteShader("textures/shader.vert", "textures/shader.frag"),
+                               fpsController(&m_camera) {
 
 }
 
@@ -21,5 +23,24 @@ void RenderSystem::update(entityx::EntityManager& entities, entityx::EventManage
 }
 
 void RenderSystem::postUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
+	fpsController.update(dt);
 	m_camera.update(true);
+	
+	m_spriteShader.begin();
+
+
+	m_spriteShader.setMatrix4("combinedMatrix", m_camera.getCombinedMatrix());
+	m_spriteShader.setMatrix4("modelMatrix", Matrix4f());
+	glActiveTexture(GL_TEXTURE0);
+	for (auto entity : entities.entities_with_components<Sprite>()) {
+		Sprite* ch = entity.getComponent<Sprite>().get();
+		glBindTexture(GL_TEXTURE_2D, ch->m_textureRegion.getTexture()->getBuffer());
+
+		ch->getVao()->bind();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		ch->getVao()->unbind();
+	}
+
+	m_spriteShader.end();
+
 }

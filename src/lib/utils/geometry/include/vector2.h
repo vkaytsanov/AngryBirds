@@ -22,19 +22,19 @@ public:
 		this->y = y;
 	}
 
-	Vector2<T> operator+(const Vector2<T>& vec) {
+	Vector2<T> operator+(const Vector2<T>& vec) const {
 		return Vector2<T>(this->x + vec.x, this->y + vec.y);
 	}
 
-	Vector2<T> operator-(const Vector2<T>& vec) {
+	Vector2<T> operator-(const Vector2<T>& vec) const {
 		return Vector2<T>(this->x - vec.x, this->y - vec.y);
 	}
 
-	Vector2<T> operator*(const Vector2<T>& vec) {
+	Vector2<T> operator*(const Vector2<T>& vec) const {
 		return Vector2<T>(this->x * vec.x, this->y * vec.y);
 	}
 
-	Vector2<T> operator/(const Vector2<T>& vec) {
+	Vector2<T> operator/(const Vector2<T>& vec) const {
 		return Vector2<T>(this->x / vec.x, this->y / vec.y);
 	}
 };

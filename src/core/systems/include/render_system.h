@@ -10,16 +10,16 @@
 #include "../../../lib/utils/include/shaders.h"
 #include "../../../lib/utils/camera/include/perspective_camera.h"
 #include "../../../lib/utils/camera/include/orthographic_camera.h"
+#include "utils/camera/include/first_person_camera_controller.h"
 
 
-class RenderSystem : public entityx::System<RenderSystem>{
+class RenderSystem : public entityx::System<RenderSystem> {
 private:
-	static constexpr int RENDER_DISTANCE = 3;
-
-	PerspectiveCamera m_camera;
-	Transform* m_pPlayerTransform;
+	FirstPersonCameraController fpsController;
+	Shaders m_spriteShader;
 
 public:
+	OrthographicCamera m_camera;
 	RenderSystem();
 	void configure(entityx::EntityManager& entities, entityx::EventManager& events) override;
 	void update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;

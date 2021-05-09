@@ -6,6 +6,7 @@
 #include "../../lib/include/listener.h"
 #include "game_state_manager.h"
 #include "../../lib/entityx/entityx.h"
+#include "../data/include/pigs_db.h"
 
 
 class AngryBirds : public Listener {
@@ -13,8 +14,7 @@ public:
 	entityx::EntityX m_entityX;
 	GameStateManager m_gameStateManager;
 
-
-	AngryBirds() = default;
+	AngryBirds();
 	~AngryBirds() override;
 	// Inherited via Listener
 	void create() override;

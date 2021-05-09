@@ -26,7 +26,7 @@ AssetManager::AssetManager() {
 }
 
 const Texture* AssetManager::getSprite(const std::string name) const {
-#if __DEBUG 
+#if _DEBUG 
 	if (m_mappedSprites.find(name) == m_mappedSprites.end()) {
 		std::cout << "Sprite " + name + " doesn't exists";
 	}

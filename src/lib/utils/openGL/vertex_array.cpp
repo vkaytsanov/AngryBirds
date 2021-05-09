@@ -7,7 +7,6 @@
 VertexArray::VertexArray() {
 	arrayObject = 0;
 	glGenVertexArrays(1, &arrayObject);
-	bind();
 }
 
 VertexArray::~VertexArray() {

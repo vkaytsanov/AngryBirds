@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\components\include\circle_collider.h" />
     <ClInclude Include="src\core\components\include\box_collider.h" />
     <ClInclude Include="src\core\components\include\chunk.h" />
     <ClInclude Include="src\core\components\include\chunk_aabb.h" />
@@ -27,12 +28,16 @@
     <ClInclude Include="src\core\components\include\particle.h" />
     <ClInclude Include="src\core\components\include\particle_emitter.h" />
     <ClInclude Include="src\core\components\include\player_controller.h" />
+    <ClInclude Include="src\core\components\include\rect_collider.h" />
     <ClInclude Include="src\core\components\include\rigid_body.h" />
     <ClInclude Include="src\core\components\include\transform.h" />
+    <ClInclude Include="src\core\components\include\sprite.h" />
+    <ClInclude Include="src\core\components\rigid_body_2d.h" />
     <ClInclude Include="src\core\data\include\asset_manager.h" />
     <ClInclude Include="src\core\data\include\hit_box.h" />
     <ClInclude Include="src\core\data\include\skybox.h" />
     <ClInclude Include="src\core\data\include\world.h" />
+    <ClInclude Include="src\core\data\include\pigs_db.h" />
     <ClInclude Include="src\core\data\prefabs\include\cactus_prefab.h" />
     <ClInclude Include="src\core\data\prefabs\include\prefab.h" />
     <ClInclude Include="src\core\data\prefabs\include\tree_prefab.h" />
@@ -256,9 +261,14 @@
   <ItemGroup>
     <ClCompile Include="src\core\components\box_collider.cpp" />
     <ClCompile Include="src\core\components\chunk_aabb.cpp" />
+    <ClCompile Include="src\core\components\circle_collider.cpp" />
+    <ClCompile Include="src\core\components\rect_collider.cpp" />
     <ClCompile Include="src\core\components\rigid_body.cpp" />
+    <ClCompile Include="src\core\components\rigid_body_2d.cpp" />
+    <ClCompile Include="src\core\components\sprite.cpp" />
     <ClCompile Include="src\core\components\transform.cpp" />
     <ClCompile Include="src\core\data\asset_manager.cpp" />
+    <ClCompile Include="src\core\data\pigs_db.cpp" />
     <ClCompile Include="src\core\game_state_manager.cpp" />
     <ClCompile Include="src\core\angry-birds.cpp" />
     <ClCompile Include="src\core\systems\debug_system.cpp" />
@@ -410,23 +420,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath);$(ProjectDir)src\lib</IncludePath>
+    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath);$(ProjectDir)src\lib</IncludePath>
+    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)dependencies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)dependencies\include;$(IncludePath);$(ProjectDir)src\lib</IncludePath>
+    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)dependencies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)dependencies\include;$(IncludePath);$(ProjectDir)src\lib</IncludePath>
+    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -14,8 +14,8 @@ Texture::Texture(std::string path) {
 	glGenTextures(1, &textureBuffer);
 	glBindTexture(GL_TEXTURE_2D, textureBuffer);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexImage2D(GL_TEXTURE_2D,
 	             0,
@@ -26,11 +26,12 @@ Texture::Texture(std::string path) {
 	             textureFormat,
 	             GL_UNSIGNED_BYTE,
 	             surface->pixels);
+	SDL_FreeSurface(surface);
+	surface = nullptr;
 }
 
 Texture::~Texture() {
-	SDL_FreeSurface(surface);
-	surface = nullptr;
+	
 	glDeleteBuffers(1, &textureBuffer);
 }
 
