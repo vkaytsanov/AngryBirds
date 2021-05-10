@@ -4,6 +4,8 @@
 #include "utils/ui/include/user_interface.h"
 #include <cstring>
 
+#include "imgui/imgui_impl_sdl.h"
+
 Input::Input(const float width, const float height) {
 	SDL_memset(m_keys, false, sizeof m_keys);
 	m_lastMousePosX = m_currMousePosX = width / 2;
@@ -24,6 +26,9 @@ void Input::update() {
 	//    m_mouseRightClick = false;
 
 	while (SDL_PollEvent(&e) != 0) {
+		if(ImGui_ImplSDL2_ProcessEvent(&e)) {
+			continue;
+		}
 		//User requests m_quit
 		if (e.type == SDL_QUIT) {
 			m_quit = true;

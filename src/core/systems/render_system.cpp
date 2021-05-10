@@ -23,7 +23,7 @@ void RenderSystem::update(entityx::EntityManager& entities, entityx::EventManage
 }
 
 void RenderSystem::postUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
-	fpsController.update(dt);
+	//fpsController.update(dt);
 	m_camera.update(true);
 	
 	m_spriteShader.begin();

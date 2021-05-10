@@ -46,8 +46,10 @@ struct SpriteDeserialize {
 	Sprite sprite;
 
 	SpriteDeserialize() = default;
-	SpriteDeserialize(int64_t id, const Sprite& sprite) : id(id), sprite(sprite){}
-	
+
+	SpriteDeserialize(int64_t id, const Sprite& sprite) : id(id), sprite(sprite) {
+	}
+
 	template <typename Archive>
 	void serialize(Archive& archive) {
 		archive(id, sprite);
@@ -85,6 +87,7 @@ void AngryBirds::create() {
 	m_entityX.systems.add<RenderSystem>();
 	m_entityX.systems.add<DebugSystem>();
 
+	m_pEditor = std::make_unique<Editor>();
 	m_entityX.systems.configure();
 
 	// {
@@ -109,18 +112,21 @@ void AngryBirds::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 
+#ifdef USE_EDITOR
+	m_pEditor->m_fbo.bind();
 	m_entityX.systems.updateAll(Lib::graphics->getDeltaTime());
+	m_pEditor->m_fbo.unbind();
+
+	m_pEditor->update(Lib::graphics->getDeltaTime());
+#else
+	m_entityX.systems.updateAll(Lib::graphics->getDeltaTime());
+#endif
 }
 
 void AngryBirds::renderImGui() {
-	ImGui::Begin("testWindow", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-	ImGui::SetWindowPos({0, 0});
-	ImGui::SetWindowSize({300, static_cast<float>(Lib::graphics->getHeight())});
-	ImGui::SameLine();
-	ImGui::InputFloat("x", &m_entityX.systems.system<RenderSystem>()->m_camera.m_pTransform->eulerAngles.x);
-	ImGui::InputFloat("y", &m_entityX.systems.system<RenderSystem>()->m_camera.m_pTransform->eulerAngles.y);
-	ImGui::InputFloat("z", &m_entityX.systems.system<RenderSystem>()->m_camera.m_pTransform->eulerAngles.z);
-	ImGui::End();
+#ifdef USE_EDITOR
+	m_pEditor->renderImGui();
+#endif
 }
 
 void AngryBirds::pause() {
@@ -156,12 +162,13 @@ void AngryBirds::deserialize() {
 
 	for (unsigned i = 0; i < rigidBodys.size(); i++) {
 		std::cout << "RigidBodyUseG: " << rigidBodys[i].rigidBody.m_useGravity << "\n";
-		m_entityX.entities.assign<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].rigidBody);
+		m_entityX.entities.addComponent<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].rigidBody);
 	}
 
 	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
 		std::cout << "TextName: " << spriteDeserializes[i].sprite.m_textureRegion.getTexture()->m_name << "\n";
-		m_entityX.entities.assign<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id), std::move(spriteDeserializes[i].sprite));
+		m_entityX.entities.addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id),
+		                                        std::move(spriteDeserializes[i].sprite));
 	}
 
 }
@@ -175,8 +182,6 @@ void AngryBirds::serialize() {
 
 	for (auto entity : m_entityX.entities.entities_with_components<Transform>()) {
 		entityx::ComponentHandle<Transform> ch = entity.getComponent<Transform>();
-		// transforms.emplace_back(*ch.get());
-		//Transform* c = ch.get();
 		TransformDeserialize td;
 		td.id = ch.entity().id().id();
 		td.transform = *ch;
@@ -185,8 +190,6 @@ void AngryBirds::serialize() {
 
 	for (auto entity : m_entityX.entities.entities_with_components<RigidBody>()) {
 		entityx::ComponentHandle<RigidBody> ch = entity.getComponent<RigidBody>();
-		// transforms.emplace_back(*ch.get());
-		//Transform* c = ch.get();
 		RigidBodyDeserialize rbd;
 		rbd.id = ch.entity().id().id();
 		rbd.rigidBody = *ch;
@@ -196,8 +199,6 @@ void AngryBirds::serialize() {
 
 	for (auto entity : m_entityX.entities.entities_with_components<Sprite>()) {
 		entityx::ComponentHandle<Sprite> ch = entity.getComponent<Sprite>();
-		// transforms.emplace_back(*ch.get());
-		//Transform* c = ch.get();
 		SpriteDeserialize rbd = SpriteDeserialize(ch.entity().id().id(), *ch);
 
 		spritesSerialization.emplace_back(rbd);

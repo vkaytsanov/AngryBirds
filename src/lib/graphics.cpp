@@ -57,7 +57,7 @@ void Graphics::createWindow() {
 			std::cout << IMG_GetError() << "\n";
 		}
 
-	// Decide OpenGL and GLSL versions
+		// Decide OpenGL and GLSL versions
 #if defined(__APPLE__)
     // GL 3.2 Core + GLSL 150
     m_glslVersion = "#version 150";
@@ -73,11 +73,11 @@ void Graphics::createWindow() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #else
-	m_glslVersion = "#version 330 core";
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+		m_glslVersion = "#version 330 core";
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
 #endif
 
 		//Create m_pWindow
@@ -99,11 +99,17 @@ void Graphics::createWindow() {
 				std::cout << SDL_GetError() << "\n";
 			}
 			else {
+				// glewExperimental = GL_TRUE;
 				GLenum err = glewInit();
 				if (GLEW_OK != err) {
 					std::cout << glewGetErrorString(err) << "\n";
 				}
-
+				SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+				SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+				SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+				
+				SDL_GL_MakeCurrent(m_pWindow, m_pContext);
+				
 				std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << "\n";
 				// refresh rate synchronized to the monitor
 				SDL_GL_SetSwapInterval(1);

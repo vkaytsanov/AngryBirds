@@ -676,7 +676,7 @@ namespace entityx {
 		 * @returns Smart pointer to newly created getComponent.
 		 */
 		template<typename C, typename ... Args>
-		ComponentHandle<C> assign(Entity::Id id, Args&& ... args) {
+		ComponentHandle<C> addComponent(Entity::Id id, Args&& ... args) {
 			assert_valid(id);
 			const BaseComponent::Family family = component_family<C>();
 			assert(!entity_component_mask_[id.index()].test(family));
@@ -989,13 +989,13 @@ namespace entityx {
 	template<typename C, typename ... Args>
 	ComponentHandle<C> Entity::addComponent(Args&& ... args) {
 		assert(valid());
-		return manager_->assign<C>(id_, std::forward<Args>(args) ...);
+		return manager_->addComponent<C>(id_, std::forward<Args>(args) ...);
 	}
 
 	template<typename C>
 	ComponentHandle<C> Entity::assign_from_copy(const C& component) {
 		assert(valid());
-		return manager_->assign<C>(id_, std::forward<const C&>(component));
+		return manager_->addComponent<C>(id_, std::forward<const C&>(component));
 	}
 
 	template<typename C, typename ... Args>
@@ -1006,7 +1006,7 @@ namespace entityx {
 			*(handle.get()) = C(std::forward<Args>(args) ...);
 		}
 		else {
-			handle = manager_->assign<C>(id_, std::forward<Args>(args) ...);
+			handle = manager_->addComponent<C>(id_, std::forward<Args>(args) ...);
 		}
 		return handle;
 	}

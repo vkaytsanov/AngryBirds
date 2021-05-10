@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\scene_editor\include\editor.h" />
     <ClInclude Include="src\core\components\include\circle_collider.h" />
     <ClInclude Include="src\core\components\include\box_collider.h" />
     <ClInclude Include="src\core\components\include\chunk.h" />
@@ -37,7 +38,6 @@
     <ClInclude Include="src\core\data\include\hit_box.h" />
     <ClInclude Include="src\core\data\include\skybox.h" />
     <ClInclude Include="src\core\data\include\world.h" />
-    <ClInclude Include="src\core\data\include\pigs_db.h" />
     <ClInclude Include="src\core\data\prefabs\include\cactus_prefab.h" />
     <ClInclude Include="src\core\data\prefabs\include\prefab.h" />
     <ClInclude Include="src\core\data\prefabs\include\tree_prefab.h" />
@@ -245,6 +245,7 @@
     <ClInclude Include="src\lib\utils\noise\noise.h" />
     <ClInclude Include="src\lib\utils\noise\noisegen.h" />
     <ClInclude Include="src\lib\utils\noise\vectortable.h" />
+    <ClInclude Include="src\lib\utils\openGL\include\frame_buffer.h" />
     <ClInclude Include="src\lib\utils\openGL\include\index_buffer.h" />
     <ClInclude Include="src\lib\utils\openGL\include\particle_vertex.h" />
     <ClInclude Include="src\lib\utils\openGL\include\vertex.h" />
@@ -262,13 +263,13 @@
     <ClCompile Include="src\core\components\box_collider.cpp" />
     <ClCompile Include="src\core\components\chunk_aabb.cpp" />
     <ClCompile Include="src\core\components\circle_collider.cpp" />
+    <ClCompile Include="src\core\scene_editor\editor.cpp" />
     <ClCompile Include="src\core\components\rect_collider.cpp" />
     <ClCompile Include="src\core\components\rigid_body.cpp" />
     <ClCompile Include="src\core\components\rigid_body_2d.cpp" />
     <ClCompile Include="src\core\components\sprite.cpp" />
     <ClCompile Include="src\core\components\transform.cpp" />
     <ClCompile Include="src\core\data\asset_manager.cpp" />
-    <ClCompile Include="src\core\data\pigs_db.cpp" />
     <ClCompile Include="src\core\game_state_manager.cpp" />
     <ClCompile Include="src\core\angry-birds.cpp" />
     <ClCompile Include="src\core\systems\debug_system.cpp" />
@@ -341,6 +342,7 @@
     <ClCompile Include="src\lib\utils\noise\module\turbulence.cpp" />
     <ClCompile Include="src\lib\utils\noise\module\voronoi.cpp" />
     <ClCompile Include="src\lib\utils\noise\noisegen.cpp" />
+    <ClCompile Include="src\lib\utils\openGL\frame_buffer.cpp" />
     <ClCompile Include="src\lib\utils\openGL\index_buffer.cpp" />
     <ClCompile Include="src\lib\utils\openGL\particle_vertex.cpp" />
     <ClCompile Include="src\lib\utils\openGL\vertex.cpp" />

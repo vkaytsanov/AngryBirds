@@ -41,22 +41,14 @@ public:
 	int getHeight() const;
 
 	template <typename Archive>
-	void save(Archive& archive) const;
-
-	template <typename Archive>
-	void load(Archive& archive);
+	void serialize(Archive& archive);
 };
 
 template <typename Archive>
-void Texture::save(Archive& archive) const {
+void Texture::serialize(Archive& archive) {
 	archive(m_dir, m_name);
 }
 
-template <typename Archive>
-void Texture::load(Archive& archive) {
-	archive(m_dir, m_name);
-	// init();
-}
 
 
 #endif //TEXTURE_H
