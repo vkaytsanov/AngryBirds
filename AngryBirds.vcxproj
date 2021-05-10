@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\components\include\serializable.h" />
     <ClInclude Include="src\core\scene_editor\include\editor.h" />
     <ClInclude Include="src\core\components\include\circle_collider.h" />
     <ClInclude Include="src\core\components\include\box_collider.h" />

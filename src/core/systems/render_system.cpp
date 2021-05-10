@@ -13,7 +13,6 @@ RenderSystem::RenderSystem() : m_camera(),
 
 void RenderSystem::configure(entityx::EntityManager& entities, entityx::EventManager& events) {
 	m_camera.m_pTransform = new Transform();
-	m_camera.m_pTransform->position.y = 0;
 }
 
 void RenderSystem::preUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {

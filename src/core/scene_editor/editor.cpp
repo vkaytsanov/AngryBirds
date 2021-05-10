@@ -1,46 +1,121 @@
 ﻿#include "include/editor.h"
 
-#include "imgui/imgui.h"
+#include <fstream>
+
+#include "../lib/imgui/imgui.h"
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/complex.hpp>
+#include <cereal/types/memory.hpp>
+
+#include "../components/include/serializable.h"
+#include "../components/include/sprite.h"
+#include "../components/include/rigid_body.h"
+
+
+Editor::Editor() : m_prefabs(m_eventManager) {
+	loadPrefabs();
+}
+
+void Editor::loadPrefabs() {
+	std::ifstream is("scene.bin");
+	cereal::BinaryInputArchive archive(is);
+
+
+	std::vector<SerializableComponent<Transform>> transforms;
+	std::vector<SerializableComponent<RigidBody>> rigidBodys;
+	std::vector<SerializableComponent<Sprite>> spriteDeserializes;
+
+	archive(transforms);
+	archive(rigidBodys);
+	archive(spriteDeserializes);
+
+	for (unsigned i = 0; i < transforms.size(); i++) {
+		std::cout << "TransformX: " << transforms[i].component.position.x << "\n";
+		auto entity = m_prefabs.create();
+		entity.addComponent<Transform>(transforms[i].component);
+	}
+
+	for (unsigned i = 0; i < rigidBodys.size(); i++) {
+		std::cout << "RigidBodyUseG: " << rigidBodys[i].component.m_useGravity << "\n";
+		m_prefabs.addComponent<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].component);
+	}
+
+	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
+		std::cout << "TextName: " << spriteDeserializes[i].component.m_textureRegion.getTexture()->m_name << "\n";
+		m_prefabs.addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id),
+		                               std::move(spriteDeserializes[i].component));
+	}
+}
+
+void Editor::addToCurrentScene(entityx::EntityX* entityX, const entityx::Entity entity) {
+	auto clone = entityX->entities.create_from_copy(entity);
+	
+	entityx::ComponentHandle<Transform> ch = clone.getComponent<Transform>();
+	ImVec2 pos = ImGui::GetMousePos();
+	ImVec2 dropPos;
+
+	ImVec2 gameWindowCenter((gameWindowBottomRightPos.x + gameWindowTopLeftPos.x) / 2, (gameWindowBottomRightPos.y + gameWindowTopLeftPos.y) / 2);
+	dropPos.x = pos.x - gameWindowCenter.x;
+	dropPos.y = gameWindowCenter.y - pos.y;
+	ch->position = Vector3f(dropPos.x, dropPos.y, 0);
+}
 
 void Editor::update(float dt) {
 }
 
-void Editor::renderImGui(entityx::EntityManager& entities) {
-	bool show = false;
-	ImGui::ShowDemoWindow(nullptr);
+void Editor::renderImGui(entityx::EntityX* entityX) {
+	static bool show = false;
+	//ImGui::ShowDemoWindow(nullptr);
 	showDockSpace(&show);
 
 	ImGui::Begin("Hierarchy");
 	{
-		ImGui::BeginChild("entities");
-		for (auto entity : entities.entities_with_components<Transform>()) {
-			std::string label = "Entity " + std::to_string(entity.id().index());
-			const bool highlight = m_selectedEntity && m_selectedEntity->id().index() == entity.id().index();
 
-			if (ImGui::Selectable(label.c_str(), highlight)) {
-				m_selectedEntity = &entity;
+		for (auto entity : entityX->entities.entities_with_components<Transform>()) {
+			std::string label = "Entity " + std::to_string(entity.id().index());
+			const bool isSelected = m_pSelectedEntity && m_pSelectedEntity->id().id() == entity.id().id();
+
+			if (ImGui::Selectable(label.c_str(), isSelected)) {
+				m_pSelectedEntity = &entity;
 			}
 		}
-		ImGui::EndChild();
 	}
 	ImGui::End();
 
 	ImGui::Begin("Scene Window");
-	ImVec2 vMin = ImGui::GetWindowContentRegionMin();
-	ImVec2 vMax = ImGui::GetWindowContentRegionMax();
 
-	vMin.x += ImGui::GetWindowPos().x;
-	vMin.y += ImGui::GetWindowPos().y;
-	vMax.x += ImGui::GetWindowPos().x;
-	vMax.y += ImGui::GetWindowPos().y;
-	ImGui::GetWindowDrawList()->AddImage((void*)m_fbo.getTextureBuffer(), vMin, vMax,
+	gameWindowTopLeftPos = ImGui::GetWindowContentRegionMin();
+	gameWindowBottomRightPos = ImGui::GetWindowContentRegionMax();
+
+	gameWindowTopLeftPos.x += ImGui::GetWindowPos().x;
+	gameWindowTopLeftPos.y += ImGui::GetWindowPos().y;
+	gameWindowBottomRightPos.x += ImGui::GetWindowPos().x;
+	gameWindowBottomRightPos.y += ImGui::GetWindowPos().y;
+	ImGui::GetWindowDrawList()->AddImage((void*)m_fbo.getTextureBuffer(), gameWindowTopLeftPos, gameWindowBottomRightPos,
 	                                     ImVec2(0, 1), ImVec2(1, 0));
 
+	// Dropping prefabs to scene area
+	ImVec2 gameWindowArea;
+	gameWindowArea.x = gameWindowBottomRightPos.x - gameWindowTopLeftPos.x;
+	gameWindowArea.y = gameWindowBottomRightPos.y - gameWindowTopLeftPos.y;
+	
+	// so we can drop in the window, https://github.com/ocornut/imgui/issues/1771
+	ImGui::InvisibleButton("Prefab Payload", gameWindowArea);
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Prefab")) {
+			IM_ASSERT(payload->DataSize == sizeof(entityx::Entity));
+
+			addToCurrentScene(entityX, *(const entityx::Entity*)payload->Data);
+		}
+		ImGui::EndDragDropTarget();
+	}
 	ImGui::End();
 
 	ImGui::Begin("Details");
 	{
-		if (m_selectedEntity) {
+		if (m_pSelectedEntity) {
 			ImGui::BeginChild("Components");
 
 			drawTransformComponentWidget();
@@ -51,6 +126,23 @@ void Editor::renderImGui(entityx::EntityManager& entities) {
 	ImGui::End();
 
 	ImGui::Begin("Prefabs");
+	{
+		for (auto entity : m_prefabs.entities_with_components<Sprite>()) {
+			ImGui::PushID(entity.id().index());
+			const TextureRegion* tR = &entity.getComponent<Sprite>()->m_textureRegion;
+
+			ImGui::ImageButton(
+				(void*)tR->getTexture()->getBuffer(), {64, 64}, {tR->getU(), tR->getU2()}, {tR->getV(), tR->getV2()});
+			//addToCurrentScene(entityX, entity);
+
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+				ImGui::SetDragDropPayload("Prefab", &entity, sizeof(entity));
+				ImGui::Text("Add to Scene");
+				ImGui::EndDragDropSource();
+			}
+			ImGui::PopID();
+		}
+	}
 	ImGui::End();
 
 	ImGui::Begin("Scenes");
@@ -111,18 +203,18 @@ void Editor::showDockSpace(bool* open) {
 void Editor::drawTransformComponentWidget() {
 	static bool close = true;
 	if (ImGui::CollapsingHeader("Transform", &close, ImGuiTreeNodeFlags_DefaultOpen)) {
-		entityx::ComponentHandle<Transform> ch = m_selectedEntity->getComponent<Transform>();
+		entityx::ComponentHandle<Transform> ch = m_pSelectedEntity->getComponent<Transform>();
 		if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_DefaultOpen)) {
 			ImGui::PushItemWidth(50);
-			if(ImGui::InputFloat("X", &ch->position.x)) {
+			if (ImGui::InputFloat("X", &ch->position.x)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();
-			if(ImGui::InputFloat("Y", &ch->position.y)) {
+			if (ImGui::InputFloat("Y", &ch->position.y)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();
-			if(ImGui::InputFloat("Z", &ch->position.z)) {
+			if (ImGui::InputFloat("Z", &ch->position.z)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();
@@ -132,15 +224,15 @@ void Editor::drawTransformComponentWidget() {
 		}
 		if (ImGui::TreeNodeEx("Rotation", ImGuiTreeNodeFlags_DefaultOpen)) {
 			ImGui::PushItemWidth(50);
-			if(ImGui::InputFloat("X", &ch->eulerAngles.x)) {
+			if (ImGui::InputFloat("X", &ch->eulerAngles.x)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();
-			if(ImGui::InputFloat("Y", &ch->eulerAngles.y)) {
+			if (ImGui::InputFloat("Y", &ch->eulerAngles.y)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();
-			if(ImGui::InputFloat("Z", &ch->eulerAngles.z)) {
+			if (ImGui::InputFloat("Z", &ch->eulerAngles.z)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();
@@ -151,15 +243,15 @@ void Editor::drawTransformComponentWidget() {
 
 		if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_DefaultOpen)) {
 			ImGui::PushItemWidth(50);
-			if(ImGui::InputFloat("X", &ch->scale.x)) {
+			if (ImGui::InputFloat("X", &ch->scale.x)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();
-			if(ImGui::InputFloat("Y", &ch->scale.y)) {
+			if (ImGui::InputFloat("Y", &ch->scale.y)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();
-			if(ImGui::InputFloat("Z", &ch->scale.z)) {
+			if (ImGui::InputFloat("Z", &ch->scale.z)) {
 				ch->hasChanged = true;
 			}
 			ImGui::SameLine();

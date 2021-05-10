@@ -735,6 +735,9 @@
     <ClInclude Include="src\core\scene_editor\include\scene_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\components\include\serializable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\components\box_collider.cpp">

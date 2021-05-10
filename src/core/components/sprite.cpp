@@ -44,6 +44,7 @@ Sprite::Sprite(const TextureRegion& tR) : m_textureRegion(tR) {
 
 }
 
+
 Sprite::Sprite(Sprite&& other) noexcept {
 	std::swap(m_vao, other.m_vao);
 	std::swap(m_textureRegion, other.m_textureRegion);

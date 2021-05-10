@@ -4,35 +4,17 @@
 
 #include "include/angry-birds.h"
 #include "../lib/include/lib.h"
+#include "components/include/sprite.h"
 #include "systems/include/render_system.h"
 #include "systems/include/debug_system.h"
-#include "../lib/utils/camera/include/first_person_camera_controller.h"
+
 #include "data/include/asset_manager.h"
 #include "systems/include/transform_system.h"
 #include "systems/include/physics_system.h"
 
-#include "../lib/imgui/imgui.h"
-#include <cereal/archives/binary.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/string.hpp>
-#include <cereal/types/complex.hpp>
-#include <cereal/types/memory.hpp>
 
-#include "components/include/sprite.h"
 
-template <typename T>
-struct SerializableComponent {
-	int64_t id;
-	T component;
 
-	SerializableComponent() = default;
-	SerializableComponent(int64_t id, const T& component) : id(id), component(component){}
-	
-	template <typename Archive>
-	void serialize(Archive& archive) {
-		archive(id, component);
-	}
-};
 
 void GLAPIENTRY
 MessageCallback(GLenum source,
@@ -65,6 +47,11 @@ void AngryBirds::create() {
 	m_entityX.systems.add<RenderSystem>();
 	m_entityX.systems.add<DebugSystem>();
 #ifdef USE_EDITOR
+	// initializing component pools for this entity manager
+	auto entity = m_entityX.entities.create();
+	entity.addComponent<Transform>();
+	entity.addComponent<Sprite>();
+	entity.destroy();
 	m_pEditor = std::make_unique<Editor>();
 #endif
 	m_entityX.systems.configure();
@@ -104,7 +91,7 @@ void AngryBirds::render() {
 
 void AngryBirds::renderImGui() {
 #ifdef USE_EDITOR
-	m_pEditor->renderImGui(m_entityX.entities);
+	m_pEditor->renderImGui(&m_entityX);
 #endif
 }
 
@@ -121,67 +108,40 @@ void AngryBirds::resize(const int width, const int height) {
 }
 
 void AngryBirds::deserialize() {
-	std::ifstream is("scene.bin");
-	cereal::BinaryInputArchive archive(is);
-
-
-	std::vector<SerializableComponent<Transform>> transforms;
-	std::vector<SerializableComponent<RigidBody>> rigidBodys;
-	std::vector<SerializableComponent<Sprite>> spriteDeserializes;
-
-	archive(transforms);
-	archive(rigidBodys);
-	archive(spriteDeserializes);
-
-	for (unsigned i = 0; i < transforms.size(); i++) {
-		std::cout << "TransformX: " << transforms[i].component.position.x << "\n";
-		auto entity = m_entityX.entities.create();
-		entity.addComponent<Transform>(transforms[i].component);
-	}
-
-	for (unsigned i = 0; i < rigidBodys.size(); i++) {
-		std::cout << "RigidBodyUseG: " << rigidBodys[i].component.m_useGravity << "\n";
-		m_entityX.entities.addComponent<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].component);
-	}
-
-	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
-		std::cout << "TextName: " << spriteDeserializes[i].component.m_textureRegion.getTexture()->m_name << "\n";
-		m_entityX.entities.addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id),
-		                                        std::move(spriteDeserializes[i].component));
-	}
+	
 
 }
 
 void AngryBirds::serialize() {
-	std::ofstream os("scene.bin");
-	cereal::BinaryOutputArchive archive(os);
-	std::vector<SerializableComponent<Transform>> transforms;
-	std::vector<SerializableComponent<RigidBody>> rigidBodys;
-	std::vector<SerializableComponent<Sprite>> spritesSerialization;
-
-	for (auto entity : m_entityX.entities.entities_with_components<Transform>()) {
-		entityx::ComponentHandle<Transform> ch = entity.getComponent<Transform>();
-		SerializableComponent<Transform> td(ch.entity().id().id(), *ch);
-		transforms.emplace_back(td);
-	}
-
-	for (auto entity : m_entityX.entities.entities_with_components<RigidBody>()) {
-		entityx::ComponentHandle<RigidBody> ch = entity.getComponent<RigidBody>();
-		SerializableComponent<RigidBody> rbd(ch.entity().id().id(), *ch);
-
-		rigidBodys.emplace_back(rbd);
-	}
-
-	for (auto entity : m_entityX.entities.entities_with_components<Sprite>()) {
-		entityx::ComponentHandle<Sprite> ch = entity.getComponent<Sprite>();
-		SerializableComponent<Sprite> sc = SerializableComponent<Sprite>(ch.entity().id().id(), *ch);
-
-		spritesSerialization.emplace_back(sc);
-	}
-
-	archive(transforms);
-	archive(rigidBodys);
-	archive(spritesSerialization);
+	// std::ofstream os("scene.bin");
+	// cereal::BinaryOutputArchive archive(os);
+	// std::vector<SerializableComponent<Transform>> transforms;
+	// std::vector<SerializableComponent<RigidBody>> rigidBodys;
+	// std::vector<SerializableComponent<Sprite>> spritesSerialization;
+	//
+	// for (auto entity : m_entityX.entities.entities_with_components<Transform>()) {
+	// 	entityx::ComponentHandle<Transform> ch = entity.getComponent<Transform>();
+	// 	SerializableComponent<Transform> td(ch.entity().id().id(), *ch);
+	// 	transforms.emplace_back(td);
+	// }
+	//
+	// for (auto entity : m_entityX.entities.entities_with_components<RigidBody>()) {
+	// 	entityx::ComponentHandle<RigidBody> ch = entity.getComponent<RigidBody>();
+	// 	SerializableComponent<RigidBody> rbd(ch.entity().id().id(), *ch);
+	//
+	// 	rigidBodys.emplace_back(rbd);
+	// }
+	//
+	// for (auto entity : m_entityX.entities.entities_with_components<Sprite>()) {
+	// 	entityx::ComponentHandle<Sprite> ch = entity.getComponent<Sprite>();
+	// 	SerializableComponent<Sprite> sc = SerializableComponent<Sprite>(ch.entity().id().id(), *ch);
+	//
+	// 	spritesSerialization.emplace_back(sc);
+	// }
+	//
+	// archive(transforms);
+	// archive(rigidBodys);
+	// archive(spritesSerialization);
 }
 
 AngryBirds::AngryBirds() {
