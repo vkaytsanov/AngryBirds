@@ -20,39 +20,17 @@
 
 #include "components/include/sprite.h"
 
-
-struct TransformDeserialize {
+template <typename T>
+struct SerializableComponent {
 	int64_t id;
-	Transform transform;
+	T component;
 
+	SerializableComponent() = default;
+	SerializableComponent(int64_t id, const T& component) : id(id), component(component){}
+	
 	template <typename Archive>
 	void serialize(Archive& archive) {
-		archive(id, transform);
-	}
-};
-
-struct RigidBodyDeserialize {
-	int64_t id;
-	RigidBody rigidBody;
-
-	template <typename Archive>
-	void serialize(Archive& archive) {
-		archive(id, rigidBody);
-	}
-};
-
-struct SpriteDeserialize {
-	int64_t id;
-	Sprite sprite;
-
-	SpriteDeserialize() = default;
-
-	SpriteDeserialize(int64_t id, const Sprite& sprite) : id(id), sprite(sprite) {
-	}
-
-	template <typename Archive>
-	void serialize(Archive& archive) {
-		archive(id, sprite);
+		archive(id, component);
 	}
 };
 
@@ -146,29 +124,29 @@ void AngryBirds::deserialize() {
 	cereal::BinaryInputArchive archive(is);
 
 
-	std::vector<TransformDeserialize> transforms;
-	std::vector<RigidBodyDeserialize> rigidBodys;
-	std::vector<SpriteDeserialize> spriteDeserializes;
+	std::vector<SerializableComponent<Transform>> transforms;
+	std::vector<SerializableComponent<RigidBody>> rigidBodys;
+	std::vector<SerializableComponent<Sprite>> spriteDeserializes;
 
 	archive(transforms);
 	archive(rigidBodys);
 	archive(spriteDeserializes);
 
 	for (unsigned i = 0; i < transforms.size(); i++) {
-		std::cout << "TransformX: " << transforms[i].transform.position.x << "\n";
+		std::cout << "TransformX: " << transforms[i].component.position.x << "\n";
 		auto entity = m_entityX.entities.create();
-		entity.addComponent<Transform>(transforms[i].transform);
+		entity.addComponent<Transform>(transforms[i].component);
 	}
 
 	for (unsigned i = 0; i < rigidBodys.size(); i++) {
-		std::cout << "RigidBodyUseG: " << rigidBodys[i].rigidBody.m_useGravity << "\n";
-		m_entityX.entities.addComponent<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].rigidBody);
+		std::cout << "RigidBodyUseG: " << rigidBodys[i].component.m_useGravity << "\n";
+		m_entityX.entities.addComponent<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].component);
 	}
 
 	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
-		std::cout << "TextName: " << spriteDeserializes[i].sprite.m_textureRegion.getTexture()->m_name << "\n";
+		std::cout << "TextName: " << spriteDeserializes[i].component.m_textureRegion.getTexture()->m_name << "\n";
 		m_entityX.entities.addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id),
-		                                        std::move(spriteDeserializes[i].sprite));
+		                                        std::move(spriteDeserializes[i].component));
 	}
 
 }
@@ -176,32 +154,28 @@ void AngryBirds::deserialize() {
 void AngryBirds::serialize() {
 	std::ofstream os("scene.bin");
 	cereal::BinaryOutputArchive archive(os);
-	std::vector<TransformDeserialize> transforms;
-	std::vector<RigidBodyDeserialize> rigidBodys;
-	std::vector<SpriteDeserialize> spritesSerialization;
+	std::vector<SerializableComponent<Transform>> transforms;
+	std::vector<SerializableComponent<RigidBody>> rigidBodys;
+	std::vector<SerializableComponent<Sprite>> spritesSerialization;
 
 	for (auto entity : m_entityX.entities.entities_with_components<Transform>()) {
 		entityx::ComponentHandle<Transform> ch = entity.getComponent<Transform>();
-		TransformDeserialize td;
-		td.id = ch.entity().id().id();
-		td.transform = *ch;
+		SerializableComponent<Transform> td(ch.entity().id().id(), *ch);
 		transforms.emplace_back(td);
 	}
 
 	for (auto entity : m_entityX.entities.entities_with_components<RigidBody>()) {
 		entityx::ComponentHandle<RigidBody> ch = entity.getComponent<RigidBody>();
-		RigidBodyDeserialize rbd;
-		rbd.id = ch.entity().id().id();
-		rbd.rigidBody = *ch;
+		SerializableComponent<RigidBody> rbd(ch.entity().id().id(), *ch);
 
 		rigidBodys.emplace_back(rbd);
 	}
 
 	for (auto entity : m_entityX.entities.entities_with_components<Sprite>()) {
 		entityx::ComponentHandle<Sprite> ch = entity.getComponent<Sprite>();
-		SpriteDeserialize rbd = SpriteDeserialize(ch.entity().id().id(), *ch);
+		SerializableComponent<Sprite> sc = SerializableComponent<Sprite>(ch.entity().id().id(), *ch);
 
-		spritesSerialization.emplace_back(rbd);
+		spritesSerialization.emplace_back(sc);
 	}
 
 	archive(transforms);

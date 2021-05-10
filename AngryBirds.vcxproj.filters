@@ -732,6 +732,9 @@
     <ClInclude Include="src\lib\utils\openGL\include\frame_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\scene_editor\include\scene_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\components\box_collider.cpp">
@@ -1044,6 +1047,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\lib\utils\openGL\frame_buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\scene_editor\scene_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,6 +5,7 @@
 class Editor {
 private:
 	entityx::EntityX m_prefabs;
+	entityx::Entity* m_selectedEntity = nullptr;
 public:
 	FrameBuffer m_fbo;
 	void update(float dt);

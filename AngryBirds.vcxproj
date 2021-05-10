@@ -54,6 +54,7 @@
     <ClInclude Include="src\core\events\cube_destroyed_event.h" />
     <ClInclude Include="src\core\include\game_state_manager.h" />
     <ClInclude Include="src\core\include\angry-birds.h" />
+    <ClInclude Include="src\core\scene_editor\include\scene_manager.h" />
     <ClInclude Include="src\core\systems\include\chunk_renderer.h" />
     <ClInclude Include="src\core\systems\include\debug_system.h" />
     <ClInclude Include="src\core\systems\include\particle_system.h" />
@@ -272,6 +273,7 @@
     <ClCompile Include="src\core\data\asset_manager.cpp" />
     <ClCompile Include="src\core\game_state_manager.cpp" />
     <ClCompile Include="src\core\angry-birds.cpp" />
+    <ClCompile Include="src\core\scene_editor\scene_manager.cpp" />
     <ClCompile Include="src\core\systems\debug_system.cpp" />
     <ClCompile Include="src\core\systems\physics_system.cpp" />
     <ClCompile Include="src\core\systems\render_system.cpp" />

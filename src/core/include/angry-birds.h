@@ -8,7 +8,9 @@
 #include "../../lib/entityx/entityx.h"
 #include "../scene_editor/include/editor.h"
 
+#ifdef _DEBUG
 #define USE_EDITOR
+#endif
 
 class AngryBirds : public Listener {
 public:

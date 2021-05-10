@@ -6,7 +6,7 @@ void Editor::update(float dt) {
 }
 
 void Editor::renderImGui() {
-	bool show = true;
+	bool show = false;
 	showDockSpace(&show);
 
 	ImGui::Begin("Hierarchy");
@@ -30,6 +30,9 @@ void Editor::renderImGui() {
 	ImGui::End();
 
 	ImGui::Begin("Prefabs");
+	ImGui::End();
+
+	ImGui::Begin("Scenes");
 	ImGui::End();
 }
 
