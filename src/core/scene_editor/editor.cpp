@@ -5,12 +5,24 @@
 void Editor::update(float dt) {
 }
 
-void Editor::renderImGui() {
+void Editor::renderImGui(entityx::EntityManager& entities) {
 	bool show = false;
+	ImGui::ShowDemoWindow(nullptr);
 	showDockSpace(&show);
 
 	ImGui::Begin("Hierarchy");
+	{
+		ImGui::BeginChild("entities");
+		for (auto entity : entities.entities_with_components<Transform>()) {
+			std::string label = "Entity " + std::to_string(entity.id().index());
+			const bool highlight = m_selectedEntity && m_selectedEntity->id().index() == entity.id().index();
 
+			if (ImGui::Selectable(label.c_str(), highlight)) {
+				m_selectedEntity = &entity;
+			}
+		}
+		ImGui::EndChild();
+	}
 	ImGui::End();
 
 	ImGui::Begin("Scene Window");
@@ -27,6 +39,15 @@ void Editor::renderImGui() {
 	ImGui::End();
 
 	ImGui::Begin("Details");
+	{
+		if (m_selectedEntity) {
+			ImGui::BeginChild("Components");
+
+			drawTransformComponentWidget();
+
+			ImGui::EndChild();
+		}
+	}
 	ImGui::End();
 
 	ImGui::Begin("Prefabs");
@@ -85,4 +106,65 @@ void Editor::showDockSpace(bool* open) {
 
 	ImGui::End();
 
+}
+
+void Editor::drawTransformComponentWidget() {
+	static bool close = true;
+	if (ImGui::CollapsingHeader("Transform", &close, ImGuiTreeNodeFlags_DefaultOpen)) {
+		entityx::ComponentHandle<Transform> ch = m_selectedEntity->getComponent<Transform>();
+		if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_DefaultOpen)) {
+			ImGui::PushItemWidth(50);
+			if(ImGui::InputFloat("X", &ch->position.x)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			if(ImGui::InputFloat("Y", &ch->position.y)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			if(ImGui::InputFloat("Z", &ch->position.z)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			ImGui::PopItemWidth();
+			ImGui::NewLine();
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNodeEx("Rotation", ImGuiTreeNodeFlags_DefaultOpen)) {
+			ImGui::PushItemWidth(50);
+			if(ImGui::InputFloat("X", &ch->eulerAngles.x)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			if(ImGui::InputFloat("Y", &ch->eulerAngles.y)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			if(ImGui::InputFloat("Z", &ch->eulerAngles.z)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			ImGui::PopItemWidth();
+			ImGui::NewLine();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_DefaultOpen)) {
+			ImGui::PushItemWidth(50);
+			if(ImGui::InputFloat("X", &ch->scale.x)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			if(ImGui::InputFloat("Y", &ch->scale.y)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			if(ImGui::InputFloat("Z", &ch->scale.z)) {
+				ch->hasChanged = true;
+			}
+			ImGui::SameLine();
+			ImGui::PopItemWidth();
+			ImGui::TreePop();
+		}
+	}
 }

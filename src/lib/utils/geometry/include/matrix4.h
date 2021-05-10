@@ -92,9 +92,9 @@ void Matrix4<T>::setToOrthogonal(T left, T right, T bottom, T top, T near, T far
 	a[A11] = 2 / (top - bottom);
 	a[A22] = -2 / (far - near);
 
-	a[A03] = -(right + left) / (right - left);
-	a[A13] = -(top + bottom) / (top - bottom);
-	a[A23] = -(far + near) / (far - near);
+	a[A30] = -(right + left) / (right - left);
+	a[A31] = -(top + bottom) / (top - bottom);
+	a[A32] = -(far + near) / (far - near);
 }
 
 template<typename T>
@@ -153,6 +153,24 @@ Matrix4<T>& Matrix4<T>::setForTranslation(T x, T y, T z) {
 }
 
 template<typename T>
+Matrix4<T>& Matrix4<T>::setForTranslation(const Vector3<T>& vec) {
+	a[A30] = vec.x;
+	a[A31] = vec.y;
+	a[A32] = vec.z;
+	return *this;
+}
+
+template<typename T>
+Matrix4<T> Matrix4<T>::noTranslation() {
+	Matrix4<T> mat(this);
+	mat.a[A30] = 0;
+	mat.a[A31] = 0;
+	mat.a[A32] = 0;
+	mat.a[A33] = 1;
+	return mat;
+}
+
+template<typename T>
 Matrix4<T> Matrix4<T>::operator*(const Matrix4<T>& mat) {
 	Matrix4<T> result;
 	result[A00] = mat.a[A00] * a[A00] + mat.a[A01] * a[A10] + mat.a[A02] * a[A20] + mat.a[A03] * a[A30];
@@ -181,23 +199,7 @@ void Matrix4<T>::zerofy() {
 	}
 }
 
-template<typename T>
-Matrix4<T>& Matrix4<T>::setForTranslation(const Vector3<T>& vec) {
-	a[A30] = vec.x;
-	a[A31] = vec.y;
-	a[A32] = vec.z;
-	return *this;
-}
 
-template<typename T>
-Matrix4<T> Matrix4<T>::noTranslation() {
-	Matrix4<T> mat(this);
-	mat.a[A30] = 0;
-	mat.a[A31] = 0;
-	mat.a[A32] = 0;
-	mat.a[A33] = 1;
-	return mat;
-}
 
 template<typename T>
 Matrix4<T>& Matrix4<T>::operator=(const Matrix4<T>& other) {
@@ -280,7 +282,7 @@ Matrix4<T> Matrix4<T>::fromQuaternion(const Quaternion<T>& q) {
 template<typename T>
 Matrix4<T> Matrix4<T>::setToTransform(const Vector3<T>& position, const Quaternion<T>& rotation) {
 	// TODO FIX THIS FUNCTION TO RETURN BY REFERENCE BY CHANGING THIS MATRIX'S CONTENTS
-	return Matrix4<T>().fromQuaternion(rotation) * Matrix4<T>().setForTranslation(position * (-1));
+	return Matrix4<T>().fromQuaternion(rotation) * Matrix4<T>().setForTranslation(position);
 }
 
 template<typename T>

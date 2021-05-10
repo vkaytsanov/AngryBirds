@@ -9,6 +9,7 @@ private:
 public:
 	FrameBuffer m_fbo;
 	void update(float dt);
-	void renderImGui();
+	void renderImGui(entityx::EntityManager& entities);
 	void showDockSpace(bool* open);
+	void drawTransformComponentWidget();
 };

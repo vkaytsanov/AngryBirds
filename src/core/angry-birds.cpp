@@ -49,9 +49,9 @@ MessageCallback(GLenum source,
 
 void AngryBirds::create() {
 	//
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	glEnable(GL_DEBUG_OUTPUT);
-	glDebugMessageCallback(MessageCallback, 0);
+	// glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	// glEnable(GL_DEBUG_OUTPUT);
+	// glDebugMessageCallback(MessageCallback, 0);
 	AssetManager::getInstance();
 	// glEnable(GL_DEPTH_TEST);
 	// glDepthFunc(GL_LEQUAL);
@@ -64,8 +64,9 @@ void AngryBirds::create() {
 	m_entityX.systems.add<PhysicsSystem>();
 	m_entityX.systems.add<RenderSystem>();
 	m_entityX.systems.add<DebugSystem>();
-
+#ifdef USE_EDITOR
 	m_pEditor = std::make_unique<Editor>();
+#endif
 	m_entityX.systems.configure();
 
 	// {
@@ -103,7 +104,7 @@ void AngryBirds::render() {
 
 void AngryBirds::renderImGui() {
 #ifdef USE_EDITOR
-	m_pEditor->renderImGui();
+	m_pEditor->renderImGui(m_entityX.entities);
 #endif
 }
 

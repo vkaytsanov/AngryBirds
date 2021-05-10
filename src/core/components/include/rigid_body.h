@@ -21,6 +21,7 @@ public:
 	/** friction */
 	float m_drag = 5.0f;
 	Vector3f m_velocity;
+public:
 	void addForce(const Vector3f& force);
 	void addForceImpulse(const Vector3f& force);
 	

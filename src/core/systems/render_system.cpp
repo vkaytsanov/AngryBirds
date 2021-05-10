@@ -13,9 +13,11 @@ RenderSystem::RenderSystem() : m_camera(),
 
 void RenderSystem::configure(entityx::EntityManager& entities, entityx::EventManager& events) {
 	m_camera.m_pTransform = new Transform();
+	m_camera.m_pTransform->position.y = 0;
 }
 
 void RenderSystem::preUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
+	//fpsController.update(dt);
 }
 
 void RenderSystem::update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
@@ -23,17 +25,19 @@ void RenderSystem::update(entityx::EntityManager& entities, entityx::EventManage
 }
 
 void RenderSystem::postUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
-	//fpsController.update(dt);
+	
 	m_camera.update(true);
 	
 	m_spriteShader.begin();
 
 
 	m_spriteShader.setMatrix4("combinedMatrix", m_camera.getCombinedMatrix());
-	m_spriteShader.setMatrix4("modelMatrix", Matrix4f());
+	
 	glActiveTexture(GL_TEXTURE0);
 	for (auto entity : entities.entities_with_components<Sprite>()) {
 		Sprite* ch = entity.getComponent<Sprite>().get();
+
+		m_spriteShader.setMatrix4("modelMatrix", entity.getComponent<Transform>()->transformMatrix);
 		glBindTexture(GL_TEXTURE_2D, ch->m_textureRegion.getTexture()->getBuffer());
 
 		ch->getVao()->bind();
