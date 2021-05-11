@@ -46,15 +46,18 @@ void AngryBirds::create() {
 	m_entityX.systems.add<PhysicsSystem>();
 	m_entityX.systems.add<RenderSystem>();
 	m_entityX.systems.add<DebugSystem>();
+	m_entityX.systems.configure();
+	
 #ifdef USE_EDITOR
 	// initializing component pools for this entity manager
 	auto entity = m_entityX.entities.create();
 	entity.addComponent<Transform>();
 	entity.addComponent<Sprite>();
 	entity.destroy();
-	m_pEditor = std::make_unique<Editor>();
+	m_pEditor = std::make_unique<Editor>(&m_entityX);
+	m_pEditor->update(Lib::graphics->getDeltaTime());
 #endif
-	m_entityX.systems.configure();
+	
 
 	// {
 	// entityx::Entity ent = m_entityX.entities.create();
@@ -70,7 +73,7 @@ void AngryBirds::create() {
 	// normalPig.addComponent<Transform>();
 	// normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("pigs"), 679, 790, 99, 97));
 
-	deserialize();
+	// deserialize();
 
 }
 
@@ -79,10 +82,6 @@ void AngryBirds::render() {
 	glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 
 #ifdef USE_EDITOR
-	m_pEditor->m_fbo.bind();
-	m_entityX.systems.updateAll(Lib::graphics->getDeltaTime());
-	m_pEditor->m_fbo.unbind();
-
 	m_pEditor->update(Lib::graphics->getDeltaTime());
 #else
 	m_entityX.systems.updateAll(Lib::graphics->getDeltaTime());
@@ -91,7 +90,7 @@ void AngryBirds::render() {
 
 void AngryBirds::renderImGui() {
 #ifdef USE_EDITOR
-	m_pEditor->renderImGui(&m_entityX);
+	m_pEditor->renderImGui();
 #endif
 }
 
@@ -105,43 +104,6 @@ void AngryBirds::resume() {
 
 void AngryBirds::resize(const int width, const int height) {
 	//m_pGraphicsSystem->resizeViewport(width, height);
-}
-
-void AngryBirds::deserialize() {
-	
-
-}
-
-void AngryBirds::serialize() {
-	// std::ofstream os("scene.bin");
-	// cereal::BinaryOutputArchive archive(os);
-	// std::vector<SerializableComponent<Transform>> transforms;
-	// std::vector<SerializableComponent<RigidBody>> rigidBodys;
-	// std::vector<SerializableComponent<Sprite>> spritesSerialization;
-	//
-	// for (auto entity : m_entityX.entities.entities_with_components<Transform>()) {
-	// 	entityx::ComponentHandle<Transform> ch = entity.getComponent<Transform>();
-	// 	SerializableComponent<Transform> td(ch.entity().id().id(), *ch);
-	// 	transforms.emplace_back(td);
-	// }
-	//
-	// for (auto entity : m_entityX.entities.entities_with_components<RigidBody>()) {
-	// 	entityx::ComponentHandle<RigidBody> ch = entity.getComponent<RigidBody>();
-	// 	SerializableComponent<RigidBody> rbd(ch.entity().id().id(), *ch);
-	//
-	// 	rigidBodys.emplace_back(rbd);
-	// }
-	//
-	// for (auto entity : m_entityX.entities.entities_with_components<Sprite>()) {
-	// 	entityx::ComponentHandle<Sprite> ch = entity.getComponent<Sprite>();
-	// 	SerializableComponent<Sprite> sc = SerializableComponent<Sprite>(ch.entity().id().id(), *ch);
-	//
-	// 	spritesSerialization.emplace_back(sc);
-	// }
-	//
-	// archive(transforms);
-	// archive(rigidBodys);
-	// archive(spritesSerialization);
 }
 
 AngryBirds::AngryBirds() {

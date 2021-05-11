@@ -738,6 +738,15 @@
     <ClInclude Include="src\core\components\include\serializable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\scene_editor\include\scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\utils\include\dirent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\scene_editor\include\editor_asset_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\components\box_collider.cpp">
@@ -1055,8 +1064,19 @@
     <ClCompile Include="src\core\scene_editor\scene_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\scene_editor\scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\scene_editor\editor_asset_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\lib\cereal\external\rapidxml\manual.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="D:\Downloads\bin-file-format.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

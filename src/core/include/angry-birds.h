@@ -28,9 +28,6 @@ public:
 	void pause() override;
 	void resume() override;
 	void resize(const int width, const int height) override;
-
-	void deserialize();
-	void serialize();
 };
 
 #endif

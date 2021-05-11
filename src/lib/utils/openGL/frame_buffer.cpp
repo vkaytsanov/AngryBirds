@@ -2,12 +2,15 @@
 #include "include/frame_buffer.h"
 #include "include/lib.h"
 
-FrameBuffer::FrameBuffer() {
+
+FrameBuffer::FrameBuffer() : FrameBuffer(Lib::graphics->getWidth(), Lib::graphics->getHeight()){}
+
+FrameBuffer::FrameBuffer(const int width, const int height) {
 	glGenFramebuffers(1, &m_buffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_buffer);
 	glGenTextures(1, &m_textureBuffer);
 	glBindTexture(GL_TEXTURE_2D, m_textureBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Lib::graphics->getWidth(), Lib::graphics->getHeight(), 0, GL_RGBA,
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
 	             GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -17,12 +20,10 @@ FrameBuffer::FrameBuffer() {
 
 	glGenRenderbuffers(1, &m_renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_renderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, Lib::graphics->getWidth(), Lib::graphics->getHeight());
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_renderBuffer);
 
-	std::cout << "Color buffer: " << m_textureBuffer << std::endl;
-	std::cout << "Depth buffer: " << m_renderBuffer << std::endl;
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 		exit(-1);

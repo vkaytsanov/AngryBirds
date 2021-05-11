@@ -8,6 +8,7 @@ private:
 	unsigned int m_renderBuffer;
 public:
 	FrameBuffer();
+	FrameBuffer(const int width, const int height);
 	~FrameBuffer();
 	void bind();
 	void unbind();

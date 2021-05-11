@@ -4,7 +4,6 @@
 
 #include "include/vertex_array.h"
 
-#include <iostream>
 
 VertexArray::VertexArray() {
 	arrayObject = 0;
@@ -17,7 +16,6 @@ VertexArray::VertexArray(const VertexArray& other) : arrayObject(other.arrayObje
 VertexArray::~VertexArray() {
 	glDeleteVertexArrays(1, &arrayObject);
 	unbind();
-	std::cout << "Vertex Destructor\n";
 }
 
 void VertexArray::bind() const {
