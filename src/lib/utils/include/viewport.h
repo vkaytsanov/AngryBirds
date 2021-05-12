@@ -16,22 +16,25 @@
 
 class Viewport {
 private:
-	Camera* m_pCamera;
-	float m_worldWidth;
-	float m_worldHeight;
-	int m_screenX;
-	int m_screenY;
-	int m_screenWidth;
-	int m_screenHeight;
+	Camera* m_pCamera = nullptr;
+	float m_worldWidth = 0;
+	float m_worldHeight = 0;
+	int m_screenX = 0;
+	int m_screenY = 0;
+	int m_screenWidth = 0;
+	int m_screenHeight = 0;
 protected:
-	void setScreenBounds(int x, int y, const int& width, const int& height);
+	void setScreenBounds(int x, int y, const int width, const int height);
 public:
+	Viewport() = default;
+	Viewport(Camera* camera);
+	virtual ~Viewport() = default;
 	virtual void update(int screenWidth, int screenHeight, bool centerCamera) = 0;
 	void apply(bool centerCamera) const;
 	void setCamera(Camera* camera);
 	void setWorldWidth(float worldWidth);
 	void setWorldHeight(float worldHeight);
-	void setWorldSize(float& worldWidth, float& worldHeight);
+	void setWorldSize(float worldWidth, float worldHeight);
 	Camera* getCamera() const;
 	float getWorldWidth() const;
 	float getWorldHeight() const;

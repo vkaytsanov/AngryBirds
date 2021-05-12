@@ -13,8 +13,8 @@
  * lesser than the specified in @param minWorldWidth and @param minWorldHeight */
 class UniversalViewport : public Viewport {
 private:
-	float minWorldWidth;
-	float minWorldHeight;
+	float m_minWorldWidth;
+	float m_minWorldHeight;
 public:
 	UniversalViewport(float minWorldWidth, float minWorldHeight);
 	UniversalViewport(float minWorldWidth, float minWorldHeight, Camera* camera);

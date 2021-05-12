@@ -11,11 +11,12 @@
 #include "../../../lib/utils/camera/include/perspective_camera.h"
 #include "../../../lib/utils/camera/include/orthographic_camera.h"
 #include "utils/camera/include/first_person_camera_controller.h"
+#include "utils/include/universal_viewport.h"
 
 
 class RenderSystem : public entityx::System<RenderSystem> {
 private:
-	FirstPersonCameraController fpsController;
+	UniversalViewport m_viewport;
 	Shaders m_spriteShader;
 
 public:
@@ -25,6 +26,7 @@ public:
 	void update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
 	void preUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
 	void postUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
+	void onResize(const int width, const int height);
 };
 
 

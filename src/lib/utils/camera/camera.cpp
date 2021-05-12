@@ -11,9 +11,6 @@ Camera::Camera() {
 }
 
 
-Camera::~Camera() {
-}
-
 Matrix4f& Camera::getTransformMatrix() const{
 	return m_pTransform->transformMatrix;
 }

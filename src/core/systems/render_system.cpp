@@ -5,14 +5,15 @@
 #include "include/render_system.h"
 #include "../components/include/sprite.h"
 
-RenderSystem::RenderSystem() : m_camera(),
-                               m_spriteShader("textures/shader.vert", "textures/shader.frag"),
-                               fpsController(&m_camera) {
+RenderSystem::RenderSystem() : m_viewport(240, 120, &m_camera),
+                               m_spriteShader("textures/shader.vert", "textures/shader.frag") {
 
+	m_camera.m_pTransform = new Transform();
+	onResize(Lib::graphics->getWidth(), Lib::graphics->getHeight());
 }
 
 void RenderSystem::configure(entityx::EntityManager& entities, entityx::EventManager& events) {
-	m_camera.m_pTransform = new Transform();
+	
 }
 
 void RenderSystem::preUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
@@ -24,7 +25,6 @@ void RenderSystem::update(entityx::EntityManager& entities, entityx::EventManage
 }
 
 void RenderSystem::postUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
-	
 	m_camera.update(true);
 	
 	m_spriteShader.begin();
@@ -46,4 +46,8 @@ void RenderSystem::postUpdate(entityx::EntityManager& entities, entityx::EventMa
 
 	m_spriteShader.end();
 
+}
+
+void RenderSystem::onResize(const int width, const int height) {
+	m_viewport.update(width, height, false);
 }

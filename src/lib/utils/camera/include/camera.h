@@ -33,7 +33,7 @@ public:
 	float m_viewportHeight;
 
 	Camera();
-	~Camera();
+	virtual ~Camera() = default;
 	virtual void update(bool updateFrustum = true) = 0;
 	Matrix4f& getTransformMatrix() const;
 	Matrix4f& getProjectionMatrix();

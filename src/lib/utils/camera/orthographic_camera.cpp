@@ -11,14 +11,13 @@ OrthographicCamera::OrthographicCamera() : OrthographicCamera(Lib::graphics->get
 }
 
 OrthographicCamera::OrthographicCamera(const float viewportWidth, const float viewportHeight) {
-	this->m_viewportWidth = viewportWidth;
-	this->m_viewportHeight = viewportHeight;
+	m_viewportWidth = viewportWidth;
+	m_viewportHeight = viewportHeight;
 	m_nearPlane = 0;
 
 }
 
 void OrthographicCamera::update(bool updateFrustum) {
-	// Lib::app->error("OrthographicCamera", "Using not implemented function");
 	m_projection.setToOrthogonal(
 			-m_viewportWidth / 2,
 			m_viewportWidth / 2,

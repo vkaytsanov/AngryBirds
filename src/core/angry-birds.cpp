@@ -103,7 +103,7 @@ void AngryBirds::resume() {
 }
 
 void AngryBirds::resize(const int width, const int height) {
-	//m_pGraphicsSystem->resizeViewport(width, height);
+	m_entityX.systems.system<RenderSystem>()->onResize(width, height);
 }
 
 AngryBirds::AngryBirds() {

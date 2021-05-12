@@ -5,6 +5,9 @@
 #include <cmath>
 #include "include/viewport.h"
 
+Viewport::Viewport(Camera* camera) : m_pCamera(camera){
+}
+
 void Viewport::apply(bool centerCamera) const {
 	glViewport(m_screenX, m_screenY, m_screenWidth, m_screenHeight);
 	m_pCamera->m_viewportWidth = m_worldWidth;
@@ -14,7 +17,6 @@ void Viewport::apply(bool centerCamera) const {
 		m_pCamera->m_pTransform->position.y = m_worldHeight / 2;
 		m_pCamera->m_pTransform->position.z = 0;
 	}
-	m_pCamera->update(true);
 }
 
 void Viewport::setCamera(Camera* camera) {
@@ -30,7 +32,7 @@ float Viewport::getWorldWidth() const {
 }
 
 void Viewport::setWorldWidth(float worldWidth) {
-	Viewport::m_worldWidth = worldWidth;
+	m_worldWidth = worldWidth;
 }
 
 float Viewport::getWorldHeight() const {
@@ -38,20 +40,22 @@ float Viewport::getWorldHeight() const {
 }
 
 void Viewport::setWorldHeight(float worldHeight) {
-	Viewport::m_worldHeight = worldHeight;
+	m_worldHeight = worldHeight;
 }
 
-void Viewport::setWorldSize(float& worldWidth, float& worldHeight) {
+void Viewport::setWorldSize(float worldWidth, float worldHeight) {
 	this->m_worldWidth = worldWidth;
 	this->m_worldHeight = worldHeight;
 }
 
-void Viewport::setScreenBounds(const int x, const int y, const int& width, const int& height) {
+void Viewport::setScreenBounds(const int x, const int y, const int width, const int height) {
 	m_screenX = x;
 	m_screenY = y;
 	m_screenWidth = width;
 	m_screenHeight = height;
 }
+
+
 
 
 

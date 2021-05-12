@@ -18,9 +18,9 @@ void Sprite::init() {
 	}
 	Vertex2d vertices[] = {
 		Vertex2d(Vector2f(0, 0), Vector2f(m_textureRegion.getU(), m_textureRegion.getV2())),
-		Vertex2d(Vector2f(200.0f, 0), Vector2f(m_textureRegion.getU2(), m_textureRegion.getV2())),
-		Vertex2d(Vector2f(200.0f, 200), Vector2f(m_textureRegion.getU2(), m_textureRegion.getV())),
-		Vertex2d(Vector2f(0.0f, 200), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
+		Vertex2d(Vector2f(10, 0), Vector2f(m_textureRegion.getU2(), m_textureRegion.getV2())),
+		Vertex2d(Vector2f(10, 10), Vector2f(m_textureRegion.getU2(), m_textureRegion.getV())),
+		Vertex2d(Vector2f(0.0f, 10), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
 	};
 
 	VertexBuffer vbo;
