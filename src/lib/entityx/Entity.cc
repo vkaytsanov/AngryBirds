@@ -55,6 +55,11 @@ void EntityManager::reset() {
   index_counter_ = 0;
 }
 
+void EntityManager::softReset() {
+	free_list_.clear();
+	index_counter_ = 0;
+}
+
 EntityCreatedEvent::~EntityCreatedEvent() {}
 EntityDestroyedEvent::~EntityDestroyedEvent() {}
 

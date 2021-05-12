@@ -46,6 +46,7 @@ void SceneManager::changeScene(entityx::EntityManager* entityManager, const std:
 	for (auto entity : entityManager->entities_with_components<Transform>()) {
 		entity.destroy();
 	}
+	entityManager->softReset();
 	
 #ifdef _DEBUG
 	if (m_scenes.find(to) == m_scenes.end()) {

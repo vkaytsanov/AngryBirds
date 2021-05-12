@@ -53,7 +53,6 @@ void Scene::load(entityx::EntityManager* entities) {
 
 	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
 		std::cout << "TextName: " << spriteDeserializes[i].component.m_textureRegion.getTexture()->m_name << "\n";
-		// FIXME: When switching 2 scenes back and forth it crashes here with "stale entity id"
 		entities->addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id), std::move(spriteDeserializes[i].component));
 	}
 }

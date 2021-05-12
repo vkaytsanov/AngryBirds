@@ -867,6 +867,12 @@ namespace entityx {
 		 */
 		void reset();
 
+		/**
+		 * All entities should be destroyed prior calling to this and resets
+		 * the entityManager by preserving the ComponentPools
+		 */
+		void softReset();
+
 		// Retrieve the getComponent family for a cubeType.
 		template<typename C>
 		static BaseComponent::Family component_family() {
