@@ -9,7 +9,8 @@
 namespace MathUtils {
 	const float EPS = 0.000001f;
 	const float PI = 3.14159265359f;
-	const float DEG2RADIANS = (PI / 180);
+	const float DEG2RAD = (PI / 180);
+	const float RAD2DEG = (180 / PI);
 
 	float toRadians(float degree);
 	float bilerp(float bottomLeft, float topLeft, float bottomRight, float topRight,

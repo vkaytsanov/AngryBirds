@@ -5,8 +5,8 @@
 #ifndef RIGID_BODY_H
 #define RIGID_BODY_H
 
-#include "../../../lib/entityx/entityx.h"
-#include "../../../lib/utils/geometry/include/vector3.h"
+#include "../../../../lib/entityx/entityx.h"
+#include "../../../../lib/utils/geometry/include/vector3.h"
 
 class RigidBody : public entityx::Component<RigidBody>{
 	friend class PhysicsSystem;

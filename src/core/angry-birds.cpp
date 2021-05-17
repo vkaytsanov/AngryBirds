@@ -4,17 +4,14 @@
 
 #include "include/angry-birds.h"
 #include "../lib/include/lib.h"
-#include "components/include/sprite.h"
+#include "components/2d/include/rigid_body_2d.h"
+#include "components/2d/include/sprite.h"
 #include "systems/include/render_system.h"
 #include "systems/include/debug_system.h"
 
 #include "data/include/asset_manager.h"
 #include "systems/include/transform_system.h"
-#include "systems/include/physics_system.h"
-
-
-
-
+#include "systems/include/physics_system_2d.h"
 
 void GLAPIENTRY
 MessageCallback(GLenum source,
@@ -30,11 +27,12 @@ MessageCallback(GLenum source,
 }
 
 void AngryBirds::create() {
-	//
-	// glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	// glEnable(GL_DEBUG_OUTPUT);
-	// glDebugMessageCallback(MessageCallback, 0);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
+	
 	AssetManager::getInstance();
+	
 	// glEnable(GL_DEPTH_TEST);
 	// glDepthFunc(GL_LEQUAL);
 	// glDisable(GL_CULL_FACE);
@@ -43,12 +41,12 @@ void AngryBirds::create() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_entityX.systems.add<TransformSystem>();
-	m_entityX.systems.add<PhysicsSystem>();
-	m_entityX.systems.add<RenderSystem>();
+	m_entityX.systems.add<PhysicsSystem2D>();
+	m_entityX.systems.add<RenderSystem>(m_entityX.systems.system<PhysicsSystem2D>()->getDebugDraw());
 	m_entityX.systems.add<DebugSystem>();
 	m_entityX.systems.configure();
-	
-#ifdef USE_EDITOR
+
+#if defined(USE_EDITOR)
 	// initializing component pools for this entity manager
 	auto entity = m_entityX.entities.create();
 	entity.addComponent<Transform>();
@@ -57,7 +55,7 @@ void AngryBirds::create() {
 	m_pEditor = std::make_unique<Editor>(&m_entityX);
 	m_pEditor->update(Lib::graphics->getDeltaTime());
 #endif
-	
+
 
 	// {
 	// entityx::Entity ent = m_entityX.entities.create();
@@ -69,11 +67,39 @@ void AngryBirds::create() {
 	// ent.addComponent<Transform>(Vector3f(5, 3, 2));
 	// }
 
-	// auto normalPig = m_entityX.entities.create();
-	// normalPig.addComponent<Transform>();
-	// normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("pigs"), 679, 790, 99, 97));
+	m_bodyDef.type = b2_dynamicBody;
+	
 
-	// deserialize();
+	b2CircleShape circle;
+	circle.m_radius = 5.f;
+	m_fixtureDef.shape = &circle;
+	m_fixtureDef.density = 5.f;
+	m_fixtureDef.friction = 0.3f;
+	m_fixtureDef.restitution = 1.0f;
+	auto normalPig = m_entityX.entities.create();
+	normalPig.addComponent<Transform>();
+	normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("pigs"), 679, 790, 99, 97));
+	normalPig.addComponent<RigidBody2D>(m_bodyDef, m_fixtureDef);
+	
+	auto normalPig2 = m_entityX.entities.create();
+	normalPig2.addComponent<Transform>(Vector3f(0.5, 10, 0));
+	normalPig2.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("pigs"), 679, 790, 99, 97));
+	normalPig2.addComponent<RigidBody2D>(m_bodyDef, m_fixtureDef);
+	
+	m_bodyDef.type = b2_staticBody;
+
+	b2PolygonShape polygon;
+	polygon.SetAsBox(200, 10);
+
+	m_fixtureDef.shape = &polygon;
+	m_fixtureDef.density = 0.f;
+	m_fixtureDef.friction = 0.0f;
+	m_fixtureDef.restitution = 0.0f;
+	auto ground = m_entityX.entities.create();
+	ground.addComponent<Transform>(Vector3f(0, -20, 0));
+	ground.addComponent<RigidBody2D>(m_bodyDef, m_fixtureDef);
+
+	m_entityX.systems.system<PhysicsSystem2D>()->initializeBodies(m_entityX.entities);
 
 }
 
@@ -81,7 +107,7 @@ void AngryBirds::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 
-#ifdef USE_EDITOR
+#if defined(USE_EDITOR)
 	m_pEditor->update(Lib::graphics->getDeltaTime());
 #else
 	m_entityX.systems.updateAll(Lib::graphics->getDeltaTime());
@@ -89,7 +115,7 @@ void AngryBirds::render() {
 }
 
 void AngryBirds::renderImGui() {
-#ifdef USE_EDITOR
+#if defined(USE_EDITOR)
 	m_pEditor->renderImGui();
 #endif
 }
@@ -104,11 +130,4 @@ void AngryBirds::resume() {
 
 void AngryBirds::resize(const int width, const int height) {
 	m_entityX.systems.system<RenderSystem>()->onResize(width, height);
-}
-
-AngryBirds::AngryBirds() {
-}
-
-AngryBirds::~AngryBirds() {
-	// serialize();
 }

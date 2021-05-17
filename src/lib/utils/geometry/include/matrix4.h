@@ -41,7 +41,7 @@
  *
  */
 
-template<typename T>
+template <typename T>
 class Matrix4 {
 public:
 	T a[16];
@@ -68,12 +68,13 @@ public:
 	Matrix4<T> setToProjection(const T fov, const T near, const T far, const T aspectRatio);
 	Matrix4<T>&
 	setToLookAt(const Vector3<T>& eye, const Vector3<T>& center, const Vector3<T>& up = Vector3<T>(0, 1, 0));
-	Matrix4<T> setToTransform(const Vector3<T>& position, const Quaternion<T>& rotation);
+	Matrix4<T> setToTransform(const Vector3<T>& position, const Quaternion<T>& rotation, const Vector3<T>& scale);
 	Matrix4<T>& setForTranslation(T x, T y, T z);
 	Matrix4<T>& setForTranslation(const Vector3<T>& vec);
 	Matrix4<T> noTranslation();
 	Matrix4<T> angleToMatrix(const Vector3<T>& angle);
 	Matrix4<T> fromQuaternion(const Quaternion<T>& q);
+	Matrix4<T> fromScale(const Vector3<T>& scale);
 	Matrix4<T> transpose();
 
 	T& operator[](int idx);
@@ -84,9 +85,9 @@ public:
 };
 
 /**  @link https://docs.microsoft.com/en-us/windows/win32/opengl/glortho */
-template<typename T>
+template <typename T>
 void Matrix4<T>::setToOrthogonal(T left, T right, T bottom, T top, T near, T far) {
-// following the picture and formulas on the Microsoft's OpenGL page - glOrtho() function
+	// following the picture and formulas on the Microsoft's OpenGL page - glOrtho() function
 	identity();
 	a[A00] = 2 / (right - left);
 	a[A11] = 2 / (top - bottom);
@@ -97,7 +98,7 @@ void Matrix4<T>::setToOrthogonal(T left, T right, T bottom, T top, T near, T far
 	a[A32] = -(far + near) / (far - near);
 }
 
-template<typename T>
+template <typename T>
 void Matrix4<T>::identity() {
 	// Create identity matrix with 1's on the diagonal and 0's everywhere else
 	a[A00] = 1;
@@ -119,7 +120,7 @@ void Matrix4<T>::identity() {
 }
 
 /** @link https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml */
-template<typename T>
+template <typename T>
 Matrix4<T>& Matrix4<T>::setToLookAt(const Vector3<T>& eye, const Vector3<T>& center, const Vector3<T>& up) {
 	Vector3<T> forward = (center - eye).normalize();
 	Vector3<T> right = (forward.cross(up)).normalize();
@@ -144,7 +145,7 @@ Matrix4<T>& Matrix4<T>::setToLookAt(const Vector3<T>& eye, const Vector3<T>& cen
 }
 
 
-template<typename T>
+template <typename T>
 Matrix4<T>& Matrix4<T>::setForTranslation(T x, T y, T z) {
 	a[A30] = x;
 	a[A31] = y;
@@ -152,7 +153,7 @@ Matrix4<T>& Matrix4<T>::setForTranslation(T x, T y, T z) {
 	return *this;
 }
 
-template<typename T>
+template <typename T>
 Matrix4<T>& Matrix4<T>::setForTranslation(const Vector3<T>& vec) {
 	a[A30] = vec.x;
 	a[A31] = vec.y;
@@ -160,7 +161,7 @@ Matrix4<T>& Matrix4<T>::setForTranslation(const Vector3<T>& vec) {
 	return *this;
 }
 
-template<typename T>
+template <typename T>
 Matrix4<T> Matrix4<T>::noTranslation() {
 	Matrix4<T> mat(this);
 	mat.a[A30] = 0;
@@ -170,7 +171,7 @@ Matrix4<T> Matrix4<T>::noTranslation() {
 	return mat;
 }
 
-template<typename T>
+template <typename T>
 Matrix4<T> Matrix4<T>::operator*(const Matrix4<T>& mat) {
 	Matrix4<T> result;
 	result[A00] = mat.a[A00] * a[A00] + mat.a[A01] * a[A10] + mat.a[A02] * a[A20] + mat.a[A03] * a[A30];
@@ -192,7 +193,7 @@ Matrix4<T> Matrix4<T>::operator*(const Matrix4<T>& mat) {
 	return result;
 }
 
-template<typename T>
+template <typename T>
 void Matrix4<T>::zerofy() {
 	for (int i = 0; i < 16; i++) {
 		a[i] = 0;
@@ -200,8 +201,7 @@ void Matrix4<T>::zerofy() {
 }
 
 
-
-template<typename T>
+template <typename T>
 Matrix4<T>& Matrix4<T>::operator=(const Matrix4<T>& other) {
 	if (this != &other) {
 		for (int i = 0; i < 16; i++) {
@@ -211,13 +211,13 @@ Matrix4<T>& Matrix4<T>::operator=(const Matrix4<T>& other) {
 	return *this;
 }
 
-template<typename T>
+template <typename T>
 T& Matrix4<T>::operator[](int idx) {
 	return a[idx];
 }
 
 /** https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-m_projection-matrix/opengl-perspective-m_projection-matrix */
-template<typename T>
+template <typename T>
 Matrix4<T> Matrix4<T>::setToProjection(const T fov, const T near, const T far, const T aspectRatio) {
 	const float tanHalfFovy = std::tan(fov / 2.f);
 
@@ -232,26 +232,26 @@ Matrix4<T> Matrix4<T>::setToProjection(const T fov, const T near, const T far, c
 	return *this;
 }
 
-template<typename T>
+template <typename T>
 void Matrix4<T>::debug() {
 	std::cout << "----------------START OF DEBUG-------------" << std::endl;
 	std::cout << "\t[" << a[A00] << "]""\t[" << a[A01] << "]""\t[" << a[A02] << "]""\t[" << a[A03] << "]"
-	          << std::endl;
+		<< std::endl;
 	std::cout << "\t[" << a[A10] << "]""\t[" << a[A11] << "]""\t[" << a[A12] << "]""\t[" << a[A13] << "]"
-	          << std::endl;
+		<< std::endl;
 	std::cout << "\t[" << a[A20] << "]""\t[" << a[A21] << "]""\t[" << a[A22] << "]""\t[" << a[A23] << "]"
-	          << std::endl;
+		<< std::endl;
 	std::cout << "\t[" << a[A30] << "]""\t[" << a[A31] << "]""\t[" << a[A32] << "]""\t[" << a[A33] << "]"
-	          << std::endl;
+		<< std::endl;
 	std::cout << "------------------END OF DEBUG-------------" << std::endl;
 }
 
-template<typename T>
+template <typename T>
 Matrix4<T> Matrix4<T>::angleToMatrix(const Vector3<T>& angle) {
 	return Matrix4<T>().fromQuaternion(Quaternion<T>().fromEulers(angle));
 }
 
-template<typename T>
+template <typename T>
 Matrix4<T> Matrix4<T>::fromQuaternion(const Quaternion<T>& q) {
 	Matrix4<T> result;
 
@@ -279,18 +279,32 @@ Matrix4<T> Matrix4<T>::fromQuaternion(const Quaternion<T>& q) {
 	return result;
 }
 
-template<typename T>
-Matrix4<T> Matrix4<T>::setToTransform(const Vector3<T>& position, const Quaternion<T>& rotation) {
-	// TODO FIX THIS FUNCTION TO RETURN BY REFERENCE BY CHANGING THIS MATRIX'S CONTENTS
-	return Matrix4<T>().fromQuaternion(rotation) * Matrix4<T>().setForTranslation(position);
+template <typename T>
+Matrix4<T> Matrix4<T>::fromScale(const Vector3<T>& scale) {
+	Matrix4<T> result;
+	result.a[A00] = scale.x;
+	result.a[A11] = scale.y;
+	result.a[A22] = scale.z;
+	return result;
 }
 
-template<typename T>
+template <typename T>
+Matrix4<T> Matrix4<T>::setToTransform(const Vector3<T>& position, const Quaternion<T>& rotation,
+                                      const Vector3<T>& scale) {
+	// TODO FIX THIS FUNCTION TO RETURN BY REFERENCE BY CHANGING THIS MATRIX'S CONTENTS
+	return Matrix4<T>().setForTranslation(position) *
+		Matrix4<T>().fromQuaternion(rotation) *
+		Matrix4<T>().fromScale(scale);
+}
+
+template <typename T>
 Matrix4<T> Matrix4<T>::transpose() {
-	return Matrix4<T>(a[A00], a[A10], a[A20], a[A30],
-	                  a[A01], a[A11], a[A21], a[A31],
-	                  a[A02], a[A12], a[A22], a[A32],
-	                  a[A03], a[A13], a[A23], a[A33]);
+	return Matrix4<T>({
+		a[A00], a[A10], a[A20], a[A30],
+		a[A01], a[A11], a[A21], a[A31],
+		a[A02], a[A12], a[A22], a[A32],
+		a[A03], a[A13], a[A23], a[A33]
+	});
 }
 
 

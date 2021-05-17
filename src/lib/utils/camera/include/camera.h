@@ -14,6 +14,10 @@
  *  @link https://en.wikipedia.org/wiki/Viewing_frustum
  */
 
+// if (0, 0) should be in the middle of the screen
+#define ORIGIN_IS_MIDDLE
+// if (0, 0) should be in the bottom-left of the screen
+// #define ORIGIN_IS_BOTTOM_LEFT
 
 class Camera {
 protected:

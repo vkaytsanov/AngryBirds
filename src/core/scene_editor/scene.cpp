@@ -7,8 +7,8 @@
 #include <cereal/types/memory.hpp>
 
 #include "../components/include/serializable.h"
-#include "../components/include/sprite.h"
-#include "../components/include/rigid_body.h"
+#include "../components/2d/include/sprite.h"
+#include "../components/3d/include/rigid_body.h"
 
 
 Scene::Scene(std::string name) : m_fileName(std::move(name)) {

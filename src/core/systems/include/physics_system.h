@@ -8,8 +8,8 @@
 
 #include "../../../lib/entityx/System.h"
 #include "../../components/include/transform.h"
-#include "../../components/include/rigid_body.h"
-#include "../../components/include/box_collider.h"
+#include "../../components/3d/include/rigid_body.h"
+#include "../../components/3d/include/box_collider.h"
 
 class PhysicsSystem : public entityx::System<PhysicsSystem>{
 private:

@@ -6,8 +6,8 @@
 #define BOX_COLLIDER_H
 
 #include <array>
-#include "transform.h"
-#include "../../../lib/entityx/entityx.h"
+#include "../../include/transform.h"
+#include "../../../../lib/entityx/entityx.h"
 
 struct BoundingBox{
 	Vector3f min;

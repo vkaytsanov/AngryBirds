@@ -18,6 +18,7 @@ OrthographicCamera::OrthographicCamera(const float viewportWidth, const float vi
 }
 
 void OrthographicCamera::update(bool updateFrustum) {
+#if defined(ORIGIN_IS_MIDDLE)
 	m_projection.setToOrthogonal(
 			-m_viewportWidth / 2,
 			m_viewportWidth / 2,
@@ -26,6 +27,17 @@ void OrthographicCamera::update(bool updateFrustum) {
 			m_nearPlane,
 			m_farPlane
 	);
+#elif defined(ORIGIN_IS_BOTTOM_LEFT)
+	m_projection.setToOrthogonal(
+			0,
+			m_viewportWidth,
+			0,
+			m_viewportHeight,
+			m_nearPlane,
+			m_farPlane
+	);
+#endif
+	
 	
 	m_combined = m_projection * m_pTransform->transformMatrix;
 

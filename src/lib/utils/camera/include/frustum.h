@@ -8,7 +8,7 @@
 #include <array>
 #include "../../geometry/include/vector3.h"
 #include "../../geometry/include/matrix4.h"
-#include "../../../../core/components/include/chunk_aabb.h"
+#include "../../../../core/components/3d/include/chunk_aabb.h"
 
 
 enum PlaneType{

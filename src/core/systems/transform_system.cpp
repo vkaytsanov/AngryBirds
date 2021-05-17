@@ -11,12 +11,12 @@ void TransformSystem::update(entityx::EntityManager& entities, entityx::EventMan
 			entityx::ComponentHandle<Transform> transform = entity.getComponent<Transform>();
 
 			// rotation order Z -> Y -> X
-			transform->rotation = Quaternionf().fromEulers(transform->eulerAngles.x * MathUtils::DEG2RADIANS, 0, 0) *
-		                          Quaternionf().fromEulers(0, transform->eulerAngles.y * MathUtils::DEG2RADIANS, 0) *
-		                          Quaternionf().fromEulers(0, 0, transform->eulerAngles.z * MathUtils::DEG2RADIANS);
+			transform->rotation = Quaternionf().fromEulers(transform->eulerAngles.x * MathUtils::DEG2RAD, 0, 0) *
+		                          Quaternionf().fromEulers(0, transform->eulerAngles.y * MathUtils::DEG2RAD, 0) *
+		                          Quaternionf().fromEulers(0, 0, transform->eulerAngles.z * MathUtils::DEG2RAD);
 
 			// Cache the transform matrix
-			transform->transformMatrix = Matrix4f().setToTransform(transform->position, transform->rotation);
+			transform->transformMatrix = Matrix4f().setToTransform(transform->position, transform->rotation, transform->scale);
 
 			// Update the entity right, up, forward vectors, normalized
 			transform->right   = Vector3f(transform->transformMatrix[A00], transform->transformMatrix[A10], transform->transformMatrix[A20]).normalize();

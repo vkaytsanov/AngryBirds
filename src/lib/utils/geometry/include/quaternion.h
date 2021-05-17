@@ -131,28 +131,6 @@ public:
 		return (x * q.x + y * q.y + z * q.z + w * q.w);
 	}
 
-	static Quaternion<T> slerp(Quaternion<T>& q1, Quaternion<T>& q2, double alpha) {
-		float dotproduct = q1.dot(q2);
-		float theta, st, sut, sout, coeff1, coeff2;
-
-		// algorithm adapted from Shoemake's paper
-		alpha = alpha / 2.0;
-
-		theta = (float) acos(dotproduct);
-		if (theta < 0.0) theta = -theta;
-
-		st = (float) sin(theta);
-		sut = (float) sin(alpha * theta);
-		sout = (float) sin((1 - alpha) * theta);
-		coeff1 = sout / st;
-		coeff2 = sut / st;
-
-		return Quaternion<T>(coeff1 * q1.x + coeff2 * q2.x,
-		                     coeff1 * q1.y + coeff2 * q2.y,
-		                     coeff1 * q1.z + coeff2 * q2.z,
-		                     coeff1 * q1.w + coeff2 * q2.w).normalize();
-	}
-
 	void debug(){
 		Lib::app->log("quaternion", (std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z) + " " +
 		                             std::to_string(w)).c_str());

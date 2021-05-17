@@ -6,8 +6,8 @@
 #define CHUNK_AABB_H
 
 
-#include "transform.h"
-#include "../../../lib/entityx/entityx.h"
+#include "../../include/transform.h"
+#include "../../../../lib/entityx/entityx.h"
 
 class ChunkAABB : public entityx::Component<ChunkAABB>{
 private:
