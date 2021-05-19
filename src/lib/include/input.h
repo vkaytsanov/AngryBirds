@@ -12,6 +12,7 @@
 #include <SDL2/SDL.h>
 #endif
 #include "../utils/include/input_processor.h"
+#include "utils/geometry/include/vector2.h"
 
 
 class Input {
@@ -46,6 +47,7 @@ public:
 	float getLastMousePosY() const;
 	float getCurrMousePosX() const;
 	float getCurrMousePosY() const;
+	Vector2i getCurrMousePos() const;
 	float getMouseMoveX() const;
 	float getMouseMoveY() const;
 	float getMouseDeltaX() const;

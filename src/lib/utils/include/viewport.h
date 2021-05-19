@@ -13,16 +13,17 @@
 #endif
 
 #include "../camera/include/camera.h"
+#include "utils/geometry/include/vector2.h"
 
 class Viewport {
 private:
 	Camera* m_pCamera = nullptr;
-	float m_worldWidth = 0;
-	float m_worldHeight = 0;
-	int m_screenX = 0;
-	int m_screenY = 0;
-	int m_screenWidth = 0;
-	int m_screenHeight = 0;
+	static float m_worldWidth;
+	static float m_worldHeight;
+	static int m_screenX;
+	static int m_screenY;
+	static int m_screenWidth;
+	static int m_screenHeight;
 protected:
 	void setScreenBounds(int x, int y, const int width, const int height);
 public:
@@ -38,6 +39,7 @@ public:
 	Camera* getCamera() const;
 	float getWorldWidth() const;
 	float getWorldHeight() const;
+	static Vector2i fromScreenToViewport(const Vector2i& pos);
 };
 
 

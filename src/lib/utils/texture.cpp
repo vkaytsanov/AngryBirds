@@ -5,19 +5,25 @@
 #include "include/texture.h"
 #include "../include/lib.h"
 
+Texture::Texture(const std::string& dir, const std::string& name) :
+	Texture(dir, name, GL_REPEAT) {
 
-Texture::Texture(const std::string& dir, const std::string& name) : m_dir(dir),
-                                                                    m_name(name) {
-	init();
+}
+
+Texture::Texture(const std::string& dir, const std::string& name, GLint wrapFlags) :
+	m_dir(dir),
+	m_name(name) {
+
+	init(wrapFlags);
 }
 
 Texture::~Texture() {
 	glDeleteBuffers(1, &m_textureBuffer);
 }
 
-void Texture::init() {
+void Texture::init(GLint flags) {
 	m_surface = IMG_Load((m_dir + m_name).c_str());
-	
+
 	performChecks();
 
 	glGenTextures(1, &m_textureBuffer);
@@ -25,7 +31,9 @@ void Texture::init() {
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, flags);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, flags);
+	
 	glTexImage2D(GL_TEXTURE_2D,
 	             0,
 	             m_textureFormat,
@@ -35,6 +43,11 @@ void Texture::init() {
 	             m_textureFormat,
 	             GL_UNSIGNED_BYTE,
 	             m_surface->pixels);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
 	SDL_FreeSurface(m_surface);
 	m_surface = nullptr;
 }

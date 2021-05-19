@@ -59,7 +59,7 @@ PrimitiveRenderer::PrimitiveRenderer(PrimitiveRenderer&& other) noexcept
 	,	m_polygonSizes{std::move(other.m_polygonSizes)}
 	,	m_tmpCircleBuffer{std::move(other.m_tmpCircleBuffer)}
 	,	m_vbo{other.m_vbo}
-	,	m_vao{other.m_vao}
+	,	m_vao{std::move(other.m_vao)}
  {
 }
 

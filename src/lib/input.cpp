@@ -26,9 +26,8 @@ void Input::update() {
 	//    m_mouseRightClick = false;
 
 	while (SDL_PollEvent(&e) != 0) {
-		if(ImGui_ImplSDL2_ProcessEvent(&e)) {
-			continue;
-		}
+		ImGui_ImplSDL2_ProcessEvent(&e);
+		
 		//User requests m_quit
 		if (e.type == SDL_QUIT) {
 			m_quit = true;
@@ -189,6 +188,10 @@ float Input::getCurrMousePosX() const {
 
 float Input::getCurrMousePosY() const {
 	return m_currMousePosY;
+}
+
+Vector2i Input::getCurrMousePos() const {
+	return Vector2i(m_currMousePosX, m_currMousePosY);
 }
 
 

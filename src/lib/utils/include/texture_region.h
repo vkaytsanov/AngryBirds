@@ -13,11 +13,14 @@ class TextureRegion {
 private:
 	std::shared_ptr<Texture> texture;
 	/** bottom-left corner */
-	float u, v;
+	float u = 0, v = 0;
 	/** front-right corner */
-	float u2, v2;
-	int regionWidth;
-	int regionHeight;
+	float u2 = 1, v2 = 1;
+	int regionWidth = 0;
+	int regionHeight = 0;
+public:
+	int m_tilingX = 1;
+	int m_tilingY = 1;
 public:
 	TextureRegion() = default;
 	explicit TextureRegion(std::shared_ptr<Texture> texture);
@@ -38,6 +41,7 @@ public:
 	int getRegionWidth() const;
 	int getRegionHeight() const;
 	float* getUVs();
+	void setTiling(int x, int y);
 	TextureRegion** split(int blockWidth, int blockHeight);
 
 	TextureRegion& operator+(const TextureRegion& tR);

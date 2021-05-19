@@ -7,46 +7,50 @@
 
 
 #include <vector>
-#include "texture_region.h"
-#include <cmath>
-#include <algorithm>
+#include "../core/components/2d/include/sprite.h"
 
-template<typename T>
+/** Animation class consists of frames, each representing
+ * a sprite, which is 4 vertices and 4 uvs.
+ *
+ * Frames are changed based on the #m_frameDuration for the corresponding sprite.
+ * When the #m_currentTime has passed in value the frame duration, it switches the
+ * #m_currentFrame and resets the timer.
+ */
 class Animation {
 private:
-	std::vector<T> frames;
-	float frameDuration;
-	float animationDuration;
-	bool looping;
-
+	std::vector<Sprite> m_frames;
+	std::vector<float> m_frameDuration;
+	bool m_looping = false;
+	float m_currentTime = 0.0f;
+	unsigned m_currentFrame = 0;
 public:
 	Animation() = default;
+	Animation(const std::vector<float>& frameDuration, std::vector<Sprite>&& frames, bool looping = false);
+	Animation(float frameDuration, std::vector<Sprite>&& frames, bool looping = false);
+	void loadFrames(const float frameDuration, std::vector<Sprite>&& frames, bool looping = false);
+	void loadFrames(const std::vector<float>& frameDuration, std::vector<Sprite>&& frames, bool looping = false);
+	void update(float dt);
+	bool isFinished() const;
+	Sprite& getFrame();
 
-	void loadFrames(const float frameDuration, const std::vector<T>& frames, bool looping = false) {
-		this->frameDuration = frameDuration;
-		this->frames = frames;
-		this->looping = looping;
-		animationDuration = frameDuration * frames.size();
-	}
+	template <typename Archive>
+	void save(Archive& archive);
 
-	T getFrame(float stateTime, bool looping) const {
-		int frameNumber = (int) (stateTime / frameDuration);
-		if (looping) {
-			frameNumber = frameNumber % frames.size();
-		}
-		else {
-			frameNumber = frames.size() - 1 > frameNumber ? frameNumber : frames.size() - 1;
-		}
-		const int idx = frameNumber;
-
-		return frames[idx];
-	}
-
-	T getFrame(float stateTime) const {
-		return getFrame(stateTime, looping);
-	}
-
+	template <typename Archive>
+	void load(Archive& archive);
 };
+
+template <typename Archive>
+void Animation::save(Archive& archive) {
+	// TODO
+	archive(m_frames);
+	archive(m_frameDuration);
+}
+
+template <typename Archive>
+void Animation::load(Archive& archive) {
+	
+}
 
 
 #endif //ANIMATION_H

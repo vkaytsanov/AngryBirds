@@ -16,11 +16,15 @@ void Sprite::init() {
 		ibo.bind();
 		ibo.bufferData(6 * sizeof(GLuint), indices, GL_STATIC_DRAW);
 	}
+
+
+	const float width = static_cast<float>(m_textureRegion.getRegionWidth()) / 15.f;
+	const float height =  static_cast<float>(m_textureRegion.getRegionHeight()) / 15.f;
 	Vertex2d vertices[] = {
-		Vertex2d(Vector2f(-5, -5), Vector2f(m_textureRegion.getU(), m_textureRegion.getV2())),
-		Vertex2d(Vector2f(5, -5), Vector2f(m_textureRegion.getU2(), m_textureRegion.getV2())),
-		Vertex2d(Vector2f(5, 5), Vector2f(m_textureRegion.getU2(), m_textureRegion.getV())),
-		Vertex2d(Vector2f(-5, 5), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
+		Vertex2d(Vector2f(-width, -height), Vector2f(m_textureRegion.getU(), m_textureRegion.getV2() * static_cast<float>(m_textureRegion.m_tilingY))),
+		Vertex2d(Vector2f(width, -height), Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX), m_textureRegion.getV2() * static_cast<float>(m_textureRegion.m_tilingY))),
+		Vertex2d(Vector2f(width, height), Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX), m_textureRegion.getV())),
+		Vertex2d(Vector2f(-width, height), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
 	};
 
 	VertexBuffer vbo;
@@ -45,25 +49,11 @@ Sprite::Sprite(const TextureRegion& tR) : m_textureRegion(tR) {
 }
 
 
-Sprite::Sprite(Sprite&& other) noexcept {
-	std::swap(m_vao, other.m_vao);
-	std::swap(m_textureRegion, other.m_textureRegion);
-	std::swap(m_color, other.m_color);
-	std::swap(m_flipX, other.m_flipX);
-	std::swap(m_flipY, other.m_flipY);
-	// unsigned int tmp = other.m_vao.arrayObject;
-	// other.m_vao.arrayObject = m_vao.arrayObject;
-	// m_vao.arrayObject = tmp;
-}
-
-Sprite& Sprite::operator=(Sprite&& other) noexcept{
-	unsigned int tmp = other.m_vao.arrayObject;
-	other.m_vao.arrayObject = m_vao.arrayObject;
-	m_vao.arrayObject = tmp;
-	return *this;
-}
-
-const VertexArray* Sprite::getVao() const {
+VertexArray* Sprite::getVao() {
 	return &m_vao;
+}
+
+void Sprite::setVao(VertexArray* vao) {
+	m_vao = *vao;
 }
 

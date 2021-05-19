@@ -12,14 +12,15 @@ AssetManager::AssetManager() {
 		"birds.png",
 		"pigs.png",
 		"background.png",
-		"ground.png"
+		"ground.png",
+		"all-in-one.png"
 	};
-
 	int c = 0;
 	for (const std::string& path : spritePaths) {
 		m_spriteSheets[stripName(path)] = std::make_shared<Texture>(ASSETS_LOCATION, path);
 		c++;
 	}
+	
 
 	std::cout << c << " sprites loaded\n";
 

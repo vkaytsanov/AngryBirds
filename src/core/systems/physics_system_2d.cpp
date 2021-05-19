@@ -1,7 +1,8 @@
 ﻿#include "include/physics_system_2d.h"
 #include "../components/2d/include/rigid_body_2d.h"
 #include "../components/include/transform.h"
-
+#include "box2d/b2_contact.h"
+#include "box2d/b2_mouse_joint.h"
 
 PhysicsSystem2D::PhysicsSystem2D() : m_world(b2Vec2(0, -9.8f)),
                                     m_debugDraw(0, 1) {
@@ -20,10 +21,10 @@ void PhysicsSystem2D::initializeBodies(entityx::EntityManager& entities) {
 	for (auto entity : entities.entities_with_components<RigidBody2D>()) {
 		Vector3f& position = entity.getComponent<Transform>()->position;
 		entityx::ComponentHandle<RigidBody2D> ch = entity.getComponent<RigidBody2D>();
-		ch->bodyDef.position = b2Vec2(position.x, position.y);
-		ch->body = m_world.CreateBody(&ch->bodyDef);
+		ch->bodyInfo.bodyDef.position = b2Vec2(position.x, position.y);
+		ch->body = m_world.CreateBody(&ch->bodyInfo.bodyDef);
 
-		ch->body->CreateFixture(&ch->fixtureDef);
+		ch->body->CreateFixture(&ch->bodyInfo.fixtureDef);
 	}
 }
 
@@ -34,12 +35,26 @@ void PhysicsSystem2D::preUpdate(entityx::EntityManager& entities, entityx::Event
                                 entityx::TimeDelta dt) {
 	static const int32_t velocityIterations = 5;
 	static const int32_t positionIterations = 3;
-	// static const float fixedDeltaTime = 0.0016f;
-	m_world.Step(dt, velocityIterations, positionIterations);
+	static const float fixedDeltaTime = 0.016f;
+	if(dt == 0.0f) return;
+	
+	m_world.Step(fixedDeltaTime, velocityIterations, positionIterations);
 
 	for (auto entity : entities.entities_with_components<RigidBody2D>()) {
 		entityx::ComponentHandle<RigidBody2D> rb = entity.getComponent<RigidBody2D>();
-
+		// check if has collisions
+		// if (rb->body->GetContactList()) {
+		// 	
+		// 	const b2Vec2 velocity = rb->body->GetLinearVelocity();
+		// 	// if has velocity, aka moving -> destroy it
+		// 	if(std::abs(velocity.x) > 20 || std::abs(velocity.y) > 20){
+		// 		m_world.DestroyBody(rb->body);
+		// 		entity.destroy();
+		// 		break;
+		// 	}
+		// 	
+		// }
+		
 		if (rb->body->IsAwake()) {
 			entityx::ComponentHandle<Transform> t = entity.getComponent<Transform>();
 			b2Vec2 p = rb->body->GetPosition();
@@ -48,7 +63,6 @@ void PhysicsSystem2D::preUpdate(entityx::EntityManager& entities, entityx::Event
 			t->eulerAngles = Vector3f(0, 0, rb->body->GetAngle() * MathUtils::RAD2DEG);
 			t->hasChanged = true;
 
-			// Lib::app->log("Rotation: ", (rb->body->GetAngle()));
 		}
 	}
 

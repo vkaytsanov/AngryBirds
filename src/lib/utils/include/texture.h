@@ -27,12 +27,13 @@ private:
 	int m_width;
 	int m_height;
 private:
-	void init();
+	void init(GLint flags);
 public:
 	std::string m_dir;
 	std::string m_name;
 public:
 	explicit Texture(const std::string& dir, const std::string& name);
+	explicit Texture(const std::string& dir, const std::string& name, GLint wrapFlags);
 	Texture() = default;
 	~Texture();
 	void performChecks();

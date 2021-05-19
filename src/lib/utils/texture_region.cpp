@@ -7,14 +7,10 @@
 #include <cmath>
 
 
-TextureRegion::TextureRegion(std::shared_ptr<Texture> texture) : texture(texture){
-	regionWidth = texture->getWidth();
-	regionHeight = texture->getHeight();
+TextureRegion::TextureRegion(std::shared_ptr<Texture> texture) : TextureRegion(texture, 0, 0, texture->getWidth(), texture->getHeight()){
 }
 
-TextureRegion::TextureRegion(std::shared_ptr<Texture> texture, int width, int height) {
-	this->texture = texture;
-	setRegionXY(0, 0, width, height);
+TextureRegion::TextureRegion(std::shared_ptr<Texture> texture, int width, int height) : TextureRegion(texture, 0, 0, width, height){
 }
 
 TextureRegion::TextureRegion(std::shared_ptr<Texture> texture, int x, int y, int width, int height) : texture(texture){
@@ -130,6 +126,11 @@ float* TextureRegion::getUVs() {
 	};
 
 
+}
+
+void TextureRegion::setTiling(int x, int y) {
+	m_tilingX = x;
+	m_tilingY = y;
 }
 
 int TextureRegion::getRegionX() const {

@@ -4,17 +4,23 @@
 
 #include "include/vertex_array.h"
 
+#include <algorithm>
+
+#include "include/lib.h"
+
 
 VertexArray::VertexArray() {
 	arrayObject = 0;
 	glGenVertexArrays(1, &arrayObject);
 }
 
-VertexArray::VertexArray(const VertexArray& other) : arrayObject(other.arrayObject){
+VertexArray::VertexArray(VertexArray&& other) noexcept : arrayObject(other.arrayObject){
+	other.arrayObject = 0;
 }
 
 VertexArray::~VertexArray() {
 	glDeleteVertexArrays(1, &arrayObject);
+	arrayObject = 0;
 	unbind();
 }
 

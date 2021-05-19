@@ -26,10 +26,11 @@ public:
 public:
 	Sprite() = default;
 	Sprite(const TextureRegion& tR);
-	Sprite(Sprite&& other) noexcept;
+	Sprite(Sprite&& other) = default;
 	Sprite(const Sprite& other) = default;
-	Sprite& operator=(Sprite&& other) noexcept;
-	const VertexArray* getVao() const;
+	Sprite& operator=(Sprite&& other) = default;
+	VertexArray* getVao();
+	void setVao(VertexArray* vao);
 
 	template <typename Archive>
 	inline void save(Archive& archive) const;

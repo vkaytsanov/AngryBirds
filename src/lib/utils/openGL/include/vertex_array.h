@@ -13,8 +13,9 @@ public:
 	unsigned int arrayObject;
 public:
 	VertexArray();
-	VertexArray(const VertexArray& other);
-
+	VertexArray(const VertexArray& other) = default;
+	VertexArray(VertexArray&& other) noexcept;
+	VertexArray& operator=(const VertexArray& other) = default;
 	~VertexArray();
 	void bind() const;
 	void unbind() const;

@@ -4,6 +4,8 @@
 #include <algorithm>
 #include "include/transform.h"
 
+Transform::Transform(const Vector3f& position) : position(position){}
+
 void Transform::translate(const float x, const float y, const float z) {
 	position.x += x;
 	position.y += y;

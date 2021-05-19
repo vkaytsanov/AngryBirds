@@ -9,11 +9,6 @@
 #include "../../geometry/include/vector3.h"
 #include "frustum.h"
 
-/**
- *  @pdf https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjz_Y71-t7tAhVCPuwKHVgYCCoQFjACegQIARAC&url=https%3A%2F%2Fweb.cs.wpi.edu%2F~emmanuel%2Fcourses%2Fcs543%2Ff13%2Fslides%2Flecture04_p3.pdf&usg=AOvVaw3DhRKP2d1wamu2osZL4Ibp
- *  @link https://en.wikipedia.org/wiki/Viewing_frustum
- */
-
 // if (0, 0) should be in the middle of the screen
 #define ORIGIN_IS_MIDDLE
 // if (0, 0) should be in the bottom-left of the screen

@@ -27,8 +27,8 @@ struct Transform : public entityx::Component<Transform>{
 	// has changed since the last frame
 	bool hasChanged = true;
 
-	Transform(){}
-	Transform(const Vector3f& position) : position(position){}
+	Transform() = default;
+	Transform(const Vector3f& position);
 
 	void translate(const float x, const float y, const float z);
 	void translate(const Vector3f& vec);

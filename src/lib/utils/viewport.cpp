@@ -5,7 +5,14 @@
 #include <cmath>
 #include "include/viewport.h"
 
-Viewport::Viewport(Camera* camera) : m_pCamera(camera){
+float Viewport::m_worldWidth;
+float Viewport::m_worldHeight;
+int   Viewport::m_screenX;
+int	  Viewport::m_screenY;
+int   Viewport::m_screenWidth;
+int   Viewport::m_screenHeight;
+
+Viewport::Viewport(Camera* camera) : m_pCamera(camera) {
 }
 
 void Viewport::apply(bool centerCamera) const {
@@ -39,6 +46,18 @@ float Viewport::getWorldHeight() const {
 	return m_worldHeight;
 }
 
+Vector2i Viewport::fromScreenToViewport(const Vector2i& pos) {
+	static float widthRatio = static_cast<float>(m_screenWidth) / m_worldWidth;
+	static float heightRatio = static_cast<float>(m_screenHeight) / m_worldHeight;
+#if defined(ORIGIN_IS_MIDDLE)
+	return Vector2i(static_cast<float>(pos.x) / widthRatio - m_worldWidth / 2,
+	                static_cast<float>(pos.y) / heightRatio - m_worldHeight / 2);
+#elif defined(ORIGIN_IS_BOTTOM_LEFT)
+	Lib::app->error("fromScreenToViewport", "not implemented function");
+	return Vector2i();
+#endif
+}
+
 void Viewport::setWorldHeight(float worldHeight) {
 	m_worldHeight = worldHeight;
 }
@@ -54,11 +73,3 @@ void Viewport::setScreenBounds(const int x, const int y, const int width, const 
 	m_screenWidth = width;
 	m_screenHeight = height;
 }
-
-
-
-
-
-
-
-

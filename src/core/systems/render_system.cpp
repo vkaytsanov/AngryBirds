@@ -28,7 +28,6 @@ void RenderSystem::preUpdate(entityx::EntityManager& entities, entityx::EventMan
 }
 
 void RenderSystem::update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
-
 }
 
 void RenderSystem::postUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
