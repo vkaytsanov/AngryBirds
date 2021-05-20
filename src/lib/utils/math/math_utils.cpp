@@ -11,29 +11,13 @@ namespace MathUtils {
 		return degree * (PI / 180);
 	}
 
-	float bilerp(float bottomLeft, float topLeft, float bottomRight, float topRight, float xMin, float xMax, float yMin,
-	             float yMax, float xToCalc, float yToCalc) {
-		float   width,          //x2x1
-		height,         //y2y1
-		xDistanceToMax, //x2x
-		yDistanceToMax, //y2y
-		xDistanceToMin, //yy1
-		yDistanceToMin; //xx1
+	b2Vec2 clamp(b2Vec2 val, const b2Vec2& min, const b2Vec2 max)  {
+		if(val.x < min.x) val.x = min.x;
+		else if(val.x > max.x) val.x = max.x;
+		
+		if(val.y < min.y) val.y = min.y;
+		else if(val.y > max.y) val.y = max.y;
 
-		width   = xMax - xMin;
-		height  = yMax - yMin;
-		xDistanceToMax = xMax - xToCalc;
-		yDistanceToMax = yMax - yToCalc;
-
-		xDistanceToMin = xToCalc - xMin;
-		yDistanceToMin = yToCalc - yMin;
-
-		return 1.0f / (width * height) *
-		       (
-				       bottomLeft  * xDistanceToMax * yDistanceToMax +
-				       bottomRight * xDistanceToMin * yDistanceToMax +
-				       topLeft     * xDistanceToMax * yDistanceToMin +
-				       topRight    * xDistanceToMin * yDistanceToMin
-		       );
+		return val;
 	}
 }

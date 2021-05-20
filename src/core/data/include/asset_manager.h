@@ -6,6 +6,9 @@
 #define MOD_ASSETS_H
 
 #include <unordered_map>
+#include <array>
+
+#include "utils/include/texture.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -15,11 +18,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #endif
-#include "../../../lib/utils/include/texture.h"
 
 
 // TODO Don't know how to use project path
 const std::string ASSETS_LOCATION = __FILE__ "/../../../../assets/sprites/";
+
 
 class AssetManager {
 private:

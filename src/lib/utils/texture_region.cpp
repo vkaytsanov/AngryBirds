@@ -88,6 +88,15 @@ TextureRegion** TextureRegion::split(int blockWidth, int blockHeight) {
 	return blocks;
 }
 
+std::array<float, 8> TextureRegion::getPackedUvs() const{
+	return {
+		u, v2,
+		u2, v2,
+		u2, v,
+		u, v
+	};
+}
+
 
 float* TextureRegion::getUVs() {
 	return new float[6 * 4 * 2]{

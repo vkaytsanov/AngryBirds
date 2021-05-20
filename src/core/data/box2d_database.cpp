@@ -1,5 +1,7 @@
 ﻿#include "include/box2d_database.h"
 
+#include "include/lib.h"
+
 void Box2dDatabase::createShapes() {
 	m_boxShape.SetAsBox(5, 5);
 
@@ -94,6 +96,17 @@ b2Shape* Box2dDatabase::fromTypeToShape(DatabaseShapeTypes type) {
 		return &m_groundShape;
 	default:
 		return nullptr;
+	}
+}
+
+BodyInfo& Box2dDatabase::fromTypeToBody(PrefabType type) {
+	switch(type) {
+	case Pig:
+	case RedBirdBig:
+		return m_circleBody;
+	default:
+		Lib::app->error("Box2dDatabase", "couldn't deserialize type");
+		return m_circleBody;
 	}
 }
 

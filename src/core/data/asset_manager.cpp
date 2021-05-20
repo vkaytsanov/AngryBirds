@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include "include/asset_manager.h"
+#include "utils/include/texture_region.h"
+
 
 
 AssetManager::AssetManager() {
@@ -23,7 +25,7 @@ AssetManager::AssetManager() {
 	
 
 	std::cout << c << " sprites loaded\n";
-
+	
 }
 
 std::shared_ptr<Texture> AssetManager::getSprite(const std::string name) const {
@@ -34,6 +36,8 @@ std::shared_ptr<Texture> AssetManager::getSprite(const std::string name) const {
 #endif
 	return m_spriteSheets.at(name);
 }
+
+
 
 AssetManager::~AssetManager() {
 }

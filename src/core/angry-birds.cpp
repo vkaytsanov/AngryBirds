@@ -7,6 +7,7 @@
 #include "components/2d/include/animator.h"
 #include "components/2d/include/rigid_body_2d.h"
 #include "components/2d/include/sprite.h"
+#include "components/include/particle_emitter.h"
 #include "systems/include/render_system.h"
 #include "systems/include/debug_system.h"
 
@@ -19,6 +20,7 @@
 
 #include "data/include/animators_database.h"
 #include "systems/include/bird_system.h"
+#include "systems/include/particle_system.h"
 
 void GLAPIENTRY
 MessageCallback(GLenum source,
@@ -34,15 +36,12 @@ MessageCallback(GLenum source,
 }
 
 void AngryBirds::create() {
+#if defined(_DEBUG)
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
-
+#endif
 	AssetManager::getInstance();
-
-	// glEnable(GL_DEPTH_TEST);
-	// glDepthFunc(GL_LEQUAL);
-	// glDisable(GL_CULL_FACE);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -51,6 +50,7 @@ void AngryBirds::create() {
 	m_entityX.systems.add<PhysicsSystem2D>();
 	m_entityX.systems.add<BirdSystem>();
 	m_entityX.systems.add<AnimatorSystem>();
+	m_entityX.systems.add<ParticleSystem>();
 	m_entityX.systems.add<RenderSystem>(m_entityX.systems.system<PhysicsSystem2D>()->getDebugDraw());
 	m_entityX.systems.add<DebugSystem>();
 	
@@ -65,10 +65,10 @@ void AngryBirds::create() {
 	m_pEditor->update(Lib::graphics->getDeltaTime());
 #endif
 	{
-		auto background = m_entityX.entities.create();
-		auto ts = background.addComponent<Transform>();
-		ts->scale = Vector3f(25, 20, 1);
-		background.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("background")));
+		// auto background = m_entityX.entities.create();
+		// auto ts = background.addComponent<Transform>();
+		// ts->scale = Vector3f(25, 20, 1);
+		// background.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("background")));
 	}
 	// {
 	// entityx::Entity ent = m_entityX.entities.create();
@@ -99,12 +99,11 @@ void AngryBirds::create() {
 	//                                                      20));
 	// plankObstacleWood.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_plankBody);
 
-	auto normalPig = m_entityX.entities.create();
-	normalPig.addComponent<Transform>()->position = Vector3f(0, -17, 0);
-	normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 683, 684, 95, 96));
-	normalPig.addComponent<Animator>(AnimatorsDatabase::getInstance().m_pigAnimator);
-
-	normalPig.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_circleBody);
+	// auto normalPig = m_entityX.entities.create();
+	// normalPig.addComponent<Transform>()->position = Vector3f(0, -17, 0);
+	// normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 683, 684, 95, 96));
+	// normalPig.addComponent<Animator>(AnimatorsDatabase::getInstance().m_pigAnimator);
+	// normalPig.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_circleBody);
 	
 	// auto normalPig2 = m_entityX.entities.create();
 	// normalPig2.addComponent<Transform>(Vector3f(0.5, 10, 0));
@@ -112,21 +111,21 @@ void AngryBirds::create() {
 	// normalPig2.addComponent<RigidBody2D>(m_bodyDef, m_fixtureDef);
 	
 	{
-		auto ground = m_entityX.entities.create();
-		auto ts = ground.addComponent<Transform>(Vector3f(0, -50, 0));
-		ts->scale = Vector3f(10, 1.4f, 1);
-		TextureRegion groundTR = TextureRegion(AssetManager::getInstance().getSprite("ground"));
-		groundTR.setTiling(10, 1);
-		ground.addComponent<Sprite>(std::move(groundTR));
-		ground.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_groundBody);
+		// auto ground = m_entityX.entities.create();
+		// auto ts = ground.addComponent<Transform>(Vector3f(0, -50, 0));
+		// ts->scale = Vector3f(10, 1.4f, 1);
+		// TextureRegion groundTR = TextureRegion(AssetManager::getInstance().getSprite("ground"));
+		// groundTR.setTiling(10, 1);
+		// ground.addComponent<Sprite>(std::move(groundTR));
+		// ground.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_groundBody);
 	}
 
 	
-	auto backSling = m_entityX.entities.create();
-	auto ts = backSling.addComponent<Transform>();
-	ts->position = Vector3f(-60, -16, 0);
-	backSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 563, 0, 40, 200));
-
+	// auto backSling = m_entityX.entities.create();
+	// auto ts = backSling.addComponent<Transform>();
+	// ts->position = Vector3f(-60, -16, 0);
+	// backSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 563, 0, 40, 200));
+	//
 	std::vector<entityx::Entity> birds;
 	{
 		auto redBird = m_entityX.entities.create();
@@ -137,12 +136,12 @@ void AngryBirds::create() {
 		birds.emplace_back(redBird);
 	}
 
-	auto frontSling = m_entityX.entities.create();
-	auto ts2 = frontSling.addComponent<Transform>();
-	ts2->position = Vector3f(-64.f, -10.5f, 0);
-
-	frontSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 733, 160, 43, 125));
-	
+	// auto frontSling = m_entityX.entities.create();
+	// auto ts2 = frontSling.addComponent<Transform>();
+	// ts2->position = Vector3f(-63.7f, -10.4f, 0);
+	//
+	// frontSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 733, 160, 43, 125));
+	//
 	m_entityX.systems.configure();
 	m_entityX.systems.system<PhysicsSystem2D>()->initializeBodies(m_entityX.entities);
 	m_entityX.systems.system<BirdSystem>()->initializeCurrentRound(birds);

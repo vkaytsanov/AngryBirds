@@ -5,6 +5,7 @@
 #ifndef MATH_UTILS_H
 #define MATH_UTILS_H
 
+#include "box2d/b2_math.h"
 
 namespace MathUtils {
 	const float EPS = 0.000001f;
@@ -13,10 +14,8 @@ namespace MathUtils {
 	const float RAD2DEG = (180 / PI);
 
 	float toRadians(float degree);
-	float bilerp(float bottomLeft, float topLeft, float bottomRight, float topRight,
-	             float xMin,       float xMax,
-	             float yMin,       float yMax,
-	             float xToCalc,    float yToCalc);
+	
+	b2Vec2 clamp(b2Vec2 val, const b2Vec2& min, const b2Vec2 max);
 
 }
 

@@ -1,11 +1,6 @@
 ﻿#pragma once
-#include "utils/include/animation.h"
+#include "prefab_database.h"
 #include "../../components/2d/include/animator.h"
-
-enum AnimationType {
-	Pig,
-	RedBirdBig
-};
 
 enum PigStates : int {
 	PigIdle,
@@ -29,5 +24,6 @@ public:
 	Animator m_redBirdBigAnimator;
 public:
 	AnimatorsDatabase();
+	Animator& fromTypeToAnimator(PrefabType type);
 	static AnimatorsDatabase& getInstance();
 };

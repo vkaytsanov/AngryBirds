@@ -5,6 +5,8 @@
 #include <box2d/b2_polygon_shape.h>
 #include <box2d/b2_body.h>
 
+#include "prefab_database.h"
+
 
 enum DatabaseShapeTypes {
 	Box,
@@ -17,14 +19,18 @@ enum DatabaseShapeTypes {
 struct BodyInfo {
 	b2BodyDef bodyDef;
 	b2FixtureDef fixtureDef;
-
+	
+	// Serialization
+	PrefabType prefabType;
+	
 	template <typename Archive>
-	void save(Archive& archive);
-
-	template <typename Archive>
-	void load(Archive& archive);
-
+	void serialize(Archive& archive) {
+		archive(prefabType);
+	}
+	
 };
+
+
 
 
 class Box2dDatabase {
@@ -45,26 +51,7 @@ public:
 public:
 	Box2dDatabase();
 	b2Shape* fromTypeToShape(DatabaseShapeTypes type);
+	BodyInfo& fromTypeToBody(PrefabType type);
 
 	static Box2dDatabase& getInstance();
 };
-
-
-template <typename Archive>
-void BodyInfo::save(Archive& archive) {
-	archive(bodyDef.type);
-	// the shape type
-	archive(fixtureDef.userData.pointer);
-	archive(fixtureDef.density, fixtureDef.friction, fixtureDef.restitution);
-}
-
-template <typename Archive>
-void BodyInfo::load(Archive& archive) {
-	archive(bodyDef.type);
-	// getting the shape enum type
-	archive(fixtureDef.userData.pointer);
-	// getting it from the database
-	fixtureDef.shape = Box2dDatabase::getInstance().fromTypeToShape(
-		static_cast<DatabaseShapeTypes>(fixtureDef.userData.pointer));
-	archive(fixtureDef.density, fixtureDef.friction, fixtureDef.restitution);
-}

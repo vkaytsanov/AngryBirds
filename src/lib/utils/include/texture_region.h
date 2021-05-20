@@ -43,7 +43,7 @@ public:
 	float* getUVs();
 	void setTiling(int x, int y);
 	TextureRegion** split(int blockWidth, int blockHeight);
-
+	std::array<float, 8> getPackedUvs() const;
 	TextureRegion& operator+(const TextureRegion& tR);
 
 	template<typename Archive>

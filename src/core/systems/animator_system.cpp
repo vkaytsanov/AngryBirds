@@ -3,14 +3,7 @@
 
 
 void AnimatorSystem::configure(entityx::EntityManager& entities, entityx::EventManager& events) {
-	for(auto entity : entities.entities_with_components<Animator>()) {
-		if(auto ch = entity.getComponent<Sprite>()) {
-			glDeleteVertexArrays(1, &ch->getVao()->arrayObject);
-		}
-		else {
-			entity.addComponent<Sprite>();
-		}
-	}
+	
 }
 
 void AnimatorSystem::configure(entityx::EventManager& events) {

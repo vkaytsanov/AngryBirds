@@ -1,13 +1,26 @@
-﻿#include "include/animators_database.h"
+﻿
+
 
 #include <box2d/b2_contact.h>
 
+#include "include/animators_database.h"
 #include "../components/2d/include/rigid_body_2d.h"
-
 
 AnimatorsDatabase::AnimatorsDatabase() {
 	initializePig();
 	initializeRedBirdBig();
+}
+
+Animator& AnimatorsDatabase::fromTypeToAnimator(PrefabType type) {
+	switch(type) {
+	case Pig:
+		return m_pigAnimator;
+	case RedBirdBig:
+		return m_redBirdBigAnimator;
+	default:
+		Lib::app->error("AnimatorsDatabase", "couldn't deserialize type");
+		return m_pigAnimator;
+	}
 }
 
 void AnimatorsDatabase::initializePig() {
@@ -41,17 +54,17 @@ void AnimatorsDatabase::initializePig() {
 		m_pigAnimator.animations.push_back(std::move(collidingPigAnimation));
 	}
 	
-	ConditionalDef idleHandler = [](entityx::Entity entity, int& currentState) {
+	StateHandler idleHandler = [](entityx::Entity entity, int& currentState) {
 		if (entity.getComponent<RigidBody2D>()->body->GetContactList() != nullptr) {
 			currentState = PigColliding;
 		}
 	};
-	ConditionalDef laughingHandler = [](entityx::Entity entity, int& currentState) {
+	StateHandler laughingHandler = [](entityx::Entity entity, int& currentState) {
 		if (entity.getComponent<Animator>()->animations[currentState].isFinished()) {
 			currentState = PigIdle;
 		}
 	};
-	ConditionalDef collidingHandler = [](entityx::Entity entity, int& currentState) {
+	StateHandler collidingHandler = [](entityx::Entity entity, int& currentState) {
 	};
 	m_pigAnimator.conditions.push_back(std::move(idleHandler));
 	m_pigAnimator.conditions.push_back(std::move(laughingHandler));
@@ -86,17 +99,17 @@ void AnimatorsDatabase::initializeRedBirdBig() {
 		m_redBirdBigAnimator.animations.push_back(std::move(redBirdBigCollidingAnimation));
 	}
 	{
-		ConditionalDef idleHandler = [](entityx::Entity entity, int& currentState) {
+		StateHandler idleHandler = [](entityx::Entity entity, int& currentState) {
 			if (entity.getComponent<RigidBody2D>()->body->GetLinearVelocity().y != 0.0f) {
 				currentState = BirdFlying;
 			}
 		};
-		ConditionalDef flyingHandler = [](entityx::Entity entity, int& currentState) {
+		StateHandler flyingHandler = [](entityx::Entity entity, int& currentState) {
 			if (entity.getComponent<RigidBody2D>()->body->GetContactList() != nullptr) {
 				currentState = BirdColliding;
 			}
 		};
-		ConditionalDef collidingHandler = [](entityx::Entity entity, int& currentState) {
+		StateHandler collidingHandler = [](entityx::Entity entity, int& currentState) {
 		};
 		m_redBirdBigAnimator.conditions.push_back(std::move(idleHandler));
 		m_redBirdBigAnimator.conditions.push_back(std::move(flyingHandler));

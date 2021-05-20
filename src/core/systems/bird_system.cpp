@@ -12,9 +12,10 @@ void BirdSystem::handleInput() {
 		const Vector2i mousePos = Viewport::fromScreenToViewport(Lib::input->getCurrMousePos());
 		auto rigidBody = nextBird.getComponent<RigidBody2D>();
 		const b2Fixture fixture = rigidBody->body->GetFixtureList()[0];
-		const b2Vec2 newPositon = {static_cast<float>(mousePos.x), -static_cast<float>(mousePos.y)};
-		if(fixture.TestPoint(newPositon)) {
+		b2Vec2 newPositon = {static_cast<float>(mousePos.x), -static_cast<float>(mousePos.y)};
+		if(fixture.TestPoint(newPositon) || m_selected) {
 			m_selected = true;
+			newPositon = MathUtils::clamp(newPositon, m_slingShotStartPos - m_maxStretchDistance, m_slingShotStartPos + m_maxStretchDistance);
 			rigidBody->body->SetTransform(newPositon, rigidBody->body->GetAngle());
 			nextBird.getComponent<Transform>()->position = Vector3f(newPositon.x, newPositon.y, 0);
 			nextBird.getComponent<Transform>()->hasChanged = true;
@@ -31,7 +32,7 @@ void BirdSystem::handleInput() {
 			entityx::Entity nextBird = m_birds.front();
 			m_birds.pop();
 			Vector2i mouse = Viewport::fromScreenToViewport(Lib::input->getCurrMousePos());
-			Vector3f force = (Vector3f(mouse.x, -mouse.y, 0) - m_slingShotStartPos) * -forceMultiplier;
+			b2Vec2 force = -forceMultiplier * (b2Vec2(static_cast<float>(mouse.x), -static_cast<float>(mouse.y)) - m_slingShotStartPos);
 			auto rigidBody = nextBird.getComponent<RigidBody2D>()->body;
 			rigidBody->ApplyForceToCenter({force.x, force.y}, true);
 			rigidBody->SetGravityScale(1);
@@ -40,7 +41,7 @@ void BirdSystem::handleInput() {
 }
 
 void BirdSystem::initializeCurrentRound(std::vector<entityx::Entity>& birds) {
-	Vector3f tmp = m_slingShotStartPos;
+	Vector3f tmp = Vector3f(m_slingShotStartPos.x, m_slingShotStartPos.y, 0);
 	for(unsigned i = 0; i < birds.size(); i++) {
 		m_birds.push(birds[i]);
 		tmp.x -= 1;

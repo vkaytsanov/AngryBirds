@@ -22,9 +22,9 @@ void Sprite::init() {
 	const float height =  static_cast<float>(m_textureRegion.getRegionHeight()) / 15.f;
 	Vertex2d vertices[] = {
 		Vertex2d(Vector2f(-width, -height), Vector2f(m_textureRegion.getU(), m_textureRegion.getV2() * static_cast<float>(m_textureRegion.m_tilingY))),
-		Vertex2d(Vector2f(width, -height), Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX), m_textureRegion.getV2() * static_cast<float>(m_textureRegion.m_tilingY))),
-		Vertex2d(Vector2f(width, height), Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX), m_textureRegion.getV())),
-		Vertex2d(Vector2f(-width, height), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
+		Vertex2d(Vector2f(width,  -height),  Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX), m_textureRegion.getV2() * static_cast<float>(m_textureRegion.m_tilingY))),
+		Vertex2d(Vector2f(width,   height),   Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX), m_textureRegion.getV())),
+		Vertex2d(Vector2f(-width,  height),  Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
 	};
 
 	VertexBuffer vbo;

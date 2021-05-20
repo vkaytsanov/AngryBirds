@@ -19,7 +19,11 @@ class RenderSystem : public entityx::System<RenderSystem> {
 private:
 	UniversalViewport m_viewport;
 	Shaders m_spriteShader;
-	b2draw::DebugDraw* m_pDebugDraw;
+	Shaders m_particleShader;
+	b2draw::DebugDraw* m_pDebugDraw = nullptr;
+private:
+	void renderSprites(entityx::EntityManager& entities);
+	void renderParticles(entityx::EntityManager& entities);
 public:
 	OrthographicCamera m_camera;
 	RenderSystem();

@@ -690,6 +690,21 @@
     <ClInclude Include="src\core\data\include\animators_database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\data\include\prefab_database.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\components\include\particle_emitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\components\include\particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\systems\include\particle_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\data\include\particle_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\components\transform.cpp">
@@ -1037,11 +1052,30 @@
     <ClCompile Include="src\core\data\animators_database.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\data\prefab_database.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\components\particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\components\particle_emitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\systems\particle_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\data\particle_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\lib\cereal\external\rapidxml\manual.html" />
     <None Include="src\assets\shaders\b2draw\shader.vert" />
     <None Include="src\assets\shaders\b2draw\shader.frag" />
+    <None Include="src\assets\shaders\textures\shader.frag" />
+    <None Include="src\assets\shaders\textures\shader.vert" />
+    <None Include="src\assets\shaders\particle\shader.vert" />
+    <None Include="src\assets\shaders\particle\shader.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="D:\Downloads\bin-file-format.png">
