@@ -19,12 +19,18 @@ void Sprite::init() {
 
 
 	const float width = static_cast<float>(m_textureRegion.getRegionWidth()) / 15.f;
-	const float height =  static_cast<float>(m_textureRegion.getRegionHeight()) / 15.f;
+	const float height = static_cast<float>(m_textureRegion.getRegionHeight()) / 15.f;
 	Vertex2d vertices[] = {
-		Vertex2d(Vector2f(-width, -height), Vector2f(m_textureRegion.getU(), m_textureRegion.getV2() * static_cast<float>(m_textureRegion.m_tilingY))),
-		Vertex2d(Vector2f(width,  -height),  Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX), m_textureRegion.getV2() * static_cast<float>(m_textureRegion.m_tilingY))),
-		Vertex2d(Vector2f(width,   height),   Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX), m_textureRegion.getV())),
-		Vertex2d(Vector2f(-width,  height),  Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
+		Vertex2d(Vector2f(-width, -height), Vector2f(m_textureRegion.getU(),
+		                                             m_textureRegion.getV2() * static_cast<float>(m_textureRegion.
+			                                             m_tilingY))),
+		Vertex2d(Vector2f(width, -height),
+		         Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX),
+		                  m_textureRegion.getV2() * static_cast<float>(m_textureRegion.m_tilingY))),
+		Vertex2d(Vector2f(width, height),
+		         Vector2f(m_textureRegion.getU2() * static_cast<float>(m_textureRegion.m_tilingX),
+		                  m_textureRegion.getV())),
+		Vertex2d(Vector2f(-width, height), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
 	};
 
 	VertexBuffer vbo;
@@ -40,12 +46,15 @@ void Sprite::init() {
 	m_vao.unbind();
 }
 
-Sprite::Sprite(const TextureRegion& tR) : m_textureRegion(tR) {
+Sprite::Sprite(const TextureRegion& tR, bool hasAnimator) : m_textureRegion(tR) {
 	// std::cout << "size: " << sizeof(*this);
-	// assert(sizeof(*this) % 16 == 0); // memory alignment
+	// assert(sizeof(Sprite) % 16 == 0), "Size is " + std::to_string(sizeof(Sprite)); // memory alignment
 
-	init();
-
+	// if the entity has animator, we don't need to generate buffers since
+	// they will be overwritten by the animator
+	if (!hasAnimator) {
+		init();
+	}
 }
 
 
@@ -56,4 +65,3 @@ VertexArray* Sprite::getVao() {
 void Sprite::setVao(VertexArray* vao) {
 	m_vao = *vao;
 }
-

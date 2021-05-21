@@ -25,7 +25,7 @@ public:
 	bool m_flipY = false;
 public:
 	Sprite() = default;
-	Sprite(const TextureRegion& tR);
+	Sprite(const TextureRegion& tR, bool hasAnimator = false);
 	Sprite(Sprite&& other) = default;
 	Sprite(const Sprite& other) = default;
 	Sprite& operator=(Sprite&& other) = default;

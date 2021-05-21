@@ -690,9 +690,6 @@
     <ClInclude Include="src\core\data\include\animators_database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\data\include\prefab_database.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\components\include\particle_emitter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -703,6 +700,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\data\include\particle_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\components\include\bird.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\data\include\entity_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1052,9 +1055,6 @@
     <ClCompile Include="src\core\data\animators_database.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\data\prefab_database.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\components\particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1065,6 +1065,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\data\particle_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\components\bird.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

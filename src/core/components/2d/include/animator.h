@@ -5,12 +5,11 @@
 
 #include "entityx/Entity.h"
 #include "utils/include/animation.h"
-#include "../../../data/include/prefab_database.h"
+#include "../../../data/include/entity_type.h"
 
 typedef std::function<void(entityx::Entity, int&)> StateHandler;
 
-class Animator : public entityx::Component<Animator> {
-public:
+struct Animator : public entityx::Component<Animator> {
 	int currentAnimation = 0;
 	// the assigned animations 
 	std::vector<Animation> animations;
@@ -21,7 +20,7 @@ public:
 	std::vector<StateHandler> conditions;
 
 	// Serialization
-	PrefabType prefabType = Undefined;
+	EntityType entityType = Undefined;
 	
 	Animator() = default;
 	Animator(const Animator& other) = default;
@@ -40,13 +39,13 @@ public:
 
 template <typename Archive>
 void Animator::save(Archive& archive) {
-	archive(prefabType);
+	archive(entityType);
 }
 
 template <typename Archive>
 void Animator::load(Archive& archive) {
 	// loading only the type of the prefab
-	archive(prefabType);
+	archive(entityType);
 	// will load the real in the SerializeComponent<Animator>
 }
 

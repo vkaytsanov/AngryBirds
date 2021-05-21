@@ -66,9 +66,9 @@ void PhysicsSystem2D::preUpdate(entityx::EntityManager& entities, entityx::Event
 		}
 	}
 
-	// m_debugDraw.Clear();
-	// m_world.DebugDraw();
-	// m_debugDraw.BufferData();
+	m_debugDraw.Clear();
+	m_world.DebugDraw();
+	m_debugDraw.BufferData();
 }
 
 void PhysicsSystem2D::postUpdate(entityx::EntityManager& entities, entityx::EventManager& events,

@@ -4,10 +4,6 @@
 
 #include "include/vertex_array.h"
 
-#include <algorithm>
-
-#include "include/lib.h"
-
 
 VertexArray::VertexArray() {
 	arrayObject = 0;
@@ -19,8 +15,12 @@ VertexArray::VertexArray(VertexArray&& other) noexcept : arrayObject(other.array
 }
 
 VertexArray::~VertexArray() {
-	glDeleteVertexArrays(1, &arrayObject);
+	free();
 	arrayObject = 0;
+}
+
+void VertexArray::free() const {
+	glDeleteVertexArrays(1, &arrayObject);
 	unbind();
 }
 

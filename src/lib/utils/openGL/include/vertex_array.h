@@ -17,6 +17,7 @@ public:
 	VertexArray(VertexArray&& other) noexcept;
 	VertexArray& operator=(const VertexArray& other) = default;
 	~VertexArray();
+	void free() const;
 	void bind() const;
 	void unbind() const;
 };

@@ -12,20 +12,21 @@
  * One is for the constant vertices and uvs that are shared between all the particles,
  * and one vertex buffer that has the position and size of each instanced particle */
 ParticleEmitter::ParticleEmitter(ParticleType type) : particleType(type) {
+	VertexBuffer vbo;
 	vao.bind();
 	vbo.bind();
 
 	vbo.vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleVertex),
 	                        (void*)(offsetof(ParticleVertex, vertices)));
-	vbo.vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleVertex),
+	vbo.vertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, sizeof(ParticleVertex),
 	                        (void*)(offsetof(ParticleVertex, uvs)));
 
-	positionsVbo.bind();
-	positionsVbo.vertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex),
+	instancedVbo.bind();
+	instancedVbo.vertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex),
 	                                 (void*)(offsetof(ParticleInstancedVertex, position)));
-	positionsVbo.vertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex),
+	instancedVbo.vertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex),
 	                                 (void*)(offsetof(ParticleInstancedVertex, size)));
-	positionsVbo.unbind();
+	instancedVbo.unbind();
 
 	glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices
 	glVertexAttribDivisor(1, 0); // uvs : always reuse
@@ -36,8 +37,8 @@ ParticleEmitter::ParticleEmitter(ParticleType type) : particleType(type) {
 	unsigned int verticesCounter = 0;
 
 	const TextureRegion& tR = ParticleManager::getInstance().getParticle(type);
-	const float width = static_cast<float>(tR.getRegionWidth()) / 4.f;
-	const float height = static_cast<float>(tR.getRegionHeight()) / 4.f;
+	const float width = static_cast<float>(tR.getRegionWidth()) / 5.f;
+	const float height = static_cast<float>(tR.getRegionHeight()) / 5.f;
 	
 	const float particleVertices[] = {
 		-width, -height,
@@ -59,9 +60,9 @@ ParticleEmitter::ParticleEmitter(ParticleType type) : particleType(type) {
 	}
 
 	vbo.bind();
-	vbo.bufferData(sizeof(ParticleVertex) * 4, &vertices[0], GL_STATIC_DRAW);
+	vbo.bufferData(sizeof(ParticleVertex) * 4, &vertices[0], GL_STREAM_DRAW);
 	vbo.unbind();
-
+	vao.unbind();
 }
 
 void ParticleEmitter::update(float dt) {
@@ -78,10 +79,10 @@ void ParticleEmitter::update(float dt) {
 		counter += 4;
 	}
 
-	positionsVbo.bind();
-	positionsVbo.bufferData(particlesInstances.size() * sizeof(ParticleInstancedVertex), nullptr, GL_DYNAMIC_DRAW);
-	positionsVbo.bufferSubData(0, particlesInstances.size() * sizeof(ParticleInstancedVertex), &particlesInstances[0]);
-	positionsVbo.unbind();
+	instancedVbo.bind();
+	instancedVbo.bufferData(particlesInstances.size() * sizeof(ParticleInstancedVertex), nullptr, GL_DYNAMIC_DRAW);
+	instancedVbo.bufferSubData(0, particlesInstances.size() * sizeof(ParticleInstancedVertex), &particlesInstances[0]);
+	instancedVbo.unbind();
 }
 
 void ParticleEmitter::setToExplosionEmitter() {
@@ -101,4 +102,8 @@ void ParticleEmitter::setToExplosionEmitter() {
 		particle.size = Vector2f(1, 1);
 	}
 
+}
+
+bool ParticleEmitter::isAlive() const {
+	return lifetime > 0.0f;
 }

@@ -25,7 +25,7 @@ void ParticleSystem::preUpdate(entityx::EntityManager& entities, entityx::EventM
 	for(entityx::Entity entity : entities.entities_with_components<ParticleEmitter>()){
 		entityx::ComponentHandle<ParticleEmitter> emitter = entity.getComponent<ParticleEmitter>();
 		emitter->lifetime -= dt;
-		 if(emitter->lifetime < 0){
+		 if(!emitter->isAlive()){
 		 	entity.destroy();
 		 	continue;
 		 }

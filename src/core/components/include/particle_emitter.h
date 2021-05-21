@@ -21,12 +21,12 @@ struct ParticleEmitter : public entityx::Component<ParticleEmitter>{
 	ParticleType particleType;
 	float lifetime = 3.0f;
 	VertexArray vao;
-	VertexBuffer vbo;
-	VertexBuffer positionsVbo;
+	VertexBuffer instancedVbo;
 
 	ParticleEmitter(ParticleType type);
 	void update(float dt);
 	void setToExplosionEmitter();
+	bool isAlive() const;
 
 };
 

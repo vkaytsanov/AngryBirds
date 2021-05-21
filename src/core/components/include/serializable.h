@@ -32,6 +32,6 @@ struct SerializableAnimatorComponent {
 	void load(Archive& archive) {
 		archive(id, component);
 		// getting the real component from the database, not just the type of it
-		component = AnimatorsDatabase::getInstance().fromTypeToAnimator(component.prefabType);
+		component = AnimatorsDatabase::getInstance().fromTypeToAnimator(component.entityType);
 	}
 };

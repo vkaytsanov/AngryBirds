@@ -43,9 +43,9 @@ void RenderSystem::postUpdate(entityx::EntityManager& entities, entityx::EventMa
 	renderParticles(entities);
 
 #if defined(_DEBUG)
-	// if (m_pDebugDraw) {
-	// 	m_pDebugDraw->Render(&m_camera.getCombinedMatrix());
-	// }
+	if (m_pDebugDraw) {
+		m_pDebugDraw->Render(&m_camera.getCombinedMatrix());
+	}
 #endif
 }
 

@@ -26,5 +26,5 @@ void RigidBody2D::load(Archive& archive) {
 	// loading only the prefab type
 	archive(bodyInfo);
 	// loading the real body info
-	bodyInfo = Box2dDatabase::getInstance().fromTypeToBody(bodyInfo.prefabType);
+	bodyInfo = Box2dDatabase::getInstance().fromTypeToBody(bodyInfo.entityType);
 }

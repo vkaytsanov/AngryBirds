@@ -99,11 +99,11 @@ void AngryBirds::create() {
 	//                                                      20));
 	// plankObstacleWood.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_plankBody);
 
-	// auto normalPig = m_entityX.entities.create();
-	// normalPig.addComponent<Transform>()->position = Vector3f(0, -17, 0);
-	// normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 683, 684, 95, 96));
-	// normalPig.addComponent<Animator>(AnimatorsDatabase::getInstance().m_pigAnimator);
-	// normalPig.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_circleBody);
+	auto normalPig = m_entityX.entities.create();
+	normalPig.addComponent<Transform>()->position = Vector3f(0, -17, 0);
+	normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one")), true);
+	normalPig.addComponent<Animator>(AnimatorsDatabase::getInstance().m_pigAnimator);
+	normalPig.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_terenceBody);
 	
 	// auto normalPig2 = m_entityX.entities.create();
 	// normalPig2.addComponent<Transform>(Vector3f(0.5, 10, 0));
@@ -111,40 +111,38 @@ void AngryBirds::create() {
 	// normalPig2.addComponent<RigidBody2D>(m_bodyDef, m_fixtureDef);
 	
 	{
-		// auto ground = m_entityX.entities.create();
-		// auto ts = ground.addComponent<Transform>(Vector3f(0, -50, 0));
-		// ts->scale = Vector3f(10, 1.4f, 1);
-		// TextureRegion groundTR = TextureRegion(AssetManager::getInstance().getSprite("ground"));
-		// groundTR.setTiling(10, 1);
-		// ground.addComponent<Sprite>(std::move(groundTR));
-		// ground.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_groundBody);
+		auto ground = m_entityX.entities.create();
+		auto ts = ground.addComponent<Transform>(Vector3f(0, -50, 0));
+		ts->scale = Vector3f(10, 1.4f, 1);
+		TextureRegion groundTR = TextureRegion(AssetManager::getInstance().getSprite("ground"));
+		groundTR.setTiling(10, 1);
+		ground.addComponent<Sprite>(std::move(groundTR));
+		ground.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_groundBody);
 	}
-
-	
-	// auto backSling = m_entityX.entities.create();
-	// auto ts = backSling.addComponent<Transform>();
-	// ts->position = Vector3f(-60, -16, 0);
-	// backSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 563, 0, 40, 200));
-	//
-	std::vector<entityx::Entity> birds;
 	{
-		auto redBird = m_entityX.entities.create();
-		redBird.addComponent<Transform>()->position = Vector3f(-64.f, -9.5f, 0);
-		redBird.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 470, 783, 102, 94));
-		redBird.addComponent<Animator>(AnimatorsDatabase::getInstance().m_redBirdBigAnimator);
-		redBird.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_circleBody);
-		birds.emplace_back(redBird);
+		// auto entity = m_entityX.entities.create();
+		// entity.addComponent<Transform>();
+		// entity.addComponent<Sprite>();
+		//
+		// entity.addComponent<Animator>();
 	}
+	
+	auto backSling = m_entityX.entities.create();
+	auto ts = backSling.addComponent<Transform>();
+	ts->position = Vector3f(-60, -16, 0);
+	backSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 563, 0, 40, 200));
+	
+	m_entityX.systems.system<BirdSystem>()->addBird(m_entityX.entities, Red);
+	m_entityX.systems.system<BirdSystem>()->addBird(m_entityX.entities, Terence);
 
-	// auto frontSling = m_entityX.entities.create();
-	// auto ts2 = frontSling.addComponent<Transform>();
-	// ts2->position = Vector3f(-63.7f, -10.4f, 0);
-	//
-	// frontSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 733, 160, 43, 125));
-	//
+	auto frontSling = m_entityX.entities.create();
+	auto ts2 = frontSling.addComponent<Transform>();
+	ts2->position = Vector3f(-63.7f, -10.4f, 0);
+	
+	frontSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 733, 160, 43, 125));
+	
 	m_entityX.systems.configure();
 	m_entityX.systems.system<PhysicsSystem2D>()->initializeBodies(m_entityX.entities);
-	m_entityX.systems.system<BirdSystem>()->initializeCurrentRound(birds);
 	
 }
 

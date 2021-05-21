@@ -3,7 +3,9 @@
 
 
 void AnimatorSystem::configure(entityx::EntityManager& entities, entityx::EventManager& events) {
-	
+	for(auto entity : entities.entities_with_components<Animator>()) {
+		entity.getComponent<Sprite>()->getVao()->free();
+	}
 }
 
 void AnimatorSystem::configure(entityx::EventManager& events) {
@@ -17,11 +19,11 @@ void AnimatorSystem::update(entityx::EntityManager& entities, entityx::EventMana
 	for(auto entity : entities.entities_with_components<Animator>()) {
 		auto sprite = entity.getComponent<Sprite>();
 		auto animator = entity.getComponent<Animator>();
-
-		animator->animations[animator->currentAnimation].update(dt);
-		animator->conditions[animator->currentAnimation](entity, animator->currentAnimation);
 		
 		sprite->setVao(animator->getFrame().getVao());
+		
+		animator->animations[animator->currentAnimation].update(dt);
+		animator->conditions[animator->currentAnimation](entity, animator->currentAnimation);
 	}
 }
 
