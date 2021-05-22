@@ -38,13 +38,7 @@ private:
 private:
 	void createShapes();
 public:
-	BodyInfo m_boxBody;
-	BodyInfo m_triangleBody;
-	BodyInfo m_plankBody;
 	BodyInfo m_groundBody;
-	BodyInfo m_terenceBody;
-	BodyInfo m_chuckBody;
-	BodyInfo m_redBody;
 public:
 	Box2dDatabase();
 	BodyInfo& fromTypeToBody(EntityType type);
