@@ -5,12 +5,32 @@
 #include "include/particle_system.h"
 #include "../components/include/particle_emitter.h"
 
+
 ParticleSystem::ParticleSystem()  {
 
 }
 
 void ParticleSystem::configure(entityx::EntityManager& entities, entityx::EventManager& events) {
-	m_queuedEvents.push(std::make_pair(Vector3f(0, 0, 0), RedBirdFeathers));
+	// m_queuedEvents.push(std::make_pair(Vector3f(0, 0, 0), RedBirdFeathers));
+
+	events.subscribe<TheBirdIsGone>(*this);
+}
+
+void ParticleSystem::configure(entityx::EventManager& events) {
+}
+
+void ParticleSystem::receive(const TheBirdIsGone& event) {
+	ParticleType type;
+	switch(event.birdType) {
+	case Terence:
+	case Red:
+		type = RedBirdFeathers;
+		break;
+	default:
+		Lib::app->error("TheBirdIsGoneEvent", "particle type not defined");
+	}
+	m_queuedEvents.push(std::make_pair(Vector3f(event.position.x, event.position.y, 0), type));
+	
 }
 
 void ParticleSystem::preUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {

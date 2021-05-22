@@ -1,23 +1,21 @@
-
 #ifndef ANGRY_BIRDS
 #define ANGRY_BIRDS
 
 #include "../../lib/include/listener.h"
-#include "game_state_manager.h"
-#include "../../lib/entityx/entityx.h"
 #include "../scene_editor/include/editor.h"
+#include "../screens/include/screen_manager.h"
 
 #ifdef _DEBUG
 // #define USE_EDITOR
 #endif
 
 class AngryBirds : public Listener {
+private:
+	std::unique_ptr<ScreenManager> m_pScreenManager;
 public:
-	entityx::EntityX m_entityX;
 #ifdef USE_EDITOR
 	std::unique_ptr<Editor> m_pEditor;
 #endif
-	GameStateManager m_gameStateManager;
 	// Inherited via Listener
 	void create() override;
 	void render() override;
@@ -25,7 +23,7 @@ public:
 	void pause() override;
 	void resume() override;
 	void resize(const int width, const int height) override;
-	
+
 };
 
 #endif

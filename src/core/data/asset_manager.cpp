@@ -15,7 +15,8 @@ AssetManager::AssetManager() {
 		"pigs.png",
 		"background.png",
 		"ground.png",
-		"all-in-one.png"
+		"all-in-one.png",
+		"ui.png"
 	};
 	int c = 0;
 	for (const std::string& path : spritePaths) {

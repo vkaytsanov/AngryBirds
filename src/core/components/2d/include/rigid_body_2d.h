@@ -6,8 +6,10 @@ struct RigidBody2D : public entityx::Component<RigidBody2D>{
 	// to be initialized from #PhysicsSystem2D
 	b2Body* body;
 	BodyInfo bodyInfo;
+
+	RigidBody2D() = default;
 	explicit RigidBody2D(const BodyInfo& bodyInfo);
-	
+
 	template<typename Archive>
 	void save(Archive& archive);
 	

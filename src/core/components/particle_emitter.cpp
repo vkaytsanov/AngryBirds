@@ -72,8 +72,8 @@ void ParticleEmitter::update(float dt) {
 	// update the particles positions' buffer
 	for (auto& particle : particles) {
 		particle.update(dt);
-		particlesInstances[counter + 0] = particle.position.x;
-		particlesInstances[counter + 1] = particle.position.y;
+		particlesInstances[counter + 0] = emittingPosition.x + particle.position.x;
+		particlesInstances[counter + 1] = emittingPosition.y + particle.position.y;
 		particlesInstances[counter + 2] = particle.size.x;
 		particlesInstances[counter + 3] = particle.size.y;
 		counter += 4;

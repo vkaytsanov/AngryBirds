@@ -23,6 +23,7 @@ struct ParticleEmitter : public entityx::Component<ParticleEmitter>{
 	VertexArray vao;
 	VertexBuffer instancedVbo;
 
+	ParticleEmitter() = default;
 	ParticleEmitter(ParticleType type);
 	void update(float dt);
 	void setToExplosionEmitter();

@@ -1,6 +1,9 @@
 ﻿#include <box2d/b2_contact.h>
 
 #include "include/animators_database.h"
+
+#include <box2d/b2_world.h>
+
 #include "../components/2d/include/rigid_body_2d.h"
 
 AnimatorsDatabase::AnimatorsDatabase() {
@@ -26,7 +29,7 @@ void AnimatorsDatabase::initializePig() {
 		std::vector<Sprite> frames;
 		frames.emplace_back(Sprite(TextureRegion(texture, 373, 981, 95, 96)));
 
-		Animation laughingPigAnimation = Animation(1.0f, std::move(frames), false);
+		Animation laughingPigAnimation = Animation(2.0f, std::move(frames), false);
 		m_pigAnimator.animations.push_back(std::move(laughingPigAnimation));
 	}
 
@@ -50,6 +53,12 @@ void AnimatorsDatabase::initializePig() {
 		}
 	};
 	StateHandler collidingHandler = [](entityx::Entity entity, int& currentState) {
+		auto rb = entity.getComponent<RigidBody2D>()->body;
+		// TODO
+		if(rb->GetLinearVelocity().x > 3.0f || rb->GetLinearVelocity().y > 3.0f) {
+			rb->GetWorld()->DestroyBody(rb);
+			currentState = PigDisappearing;
+		}
 	};
 	m_pigAnimator.conditions.push_back(std::move(idleHandler));
 	m_pigAnimator.conditions.push_back(std::move(laughingHandler));
@@ -80,21 +89,16 @@ void AnimatorsDatabase::initializeRed() {
 }
 
 void AnimatorsDatabase::initializePuffCloud() {
+	const std::shared_ptr<Texture> texture = AssetManager::getInstance().getSprite("all-in-one");
 	std::vector<Sprite> frames;
-	frames.emplace_back(
-		Sprite(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 87, 1416, 40, 40)));
-	frames.emplace_back(
-		Sprite(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 1061, 83, 80, 73)));
-	frames.emplace_back(
-		Sprite(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 556, 877, 96, 93)));
-	frames.emplace_back(
-		Sprite(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 132, 933, 115, 111)));
-	frames.emplace_back(
-		Sprite(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 601, 161, 131, 129)));
-	frames.emplace_back(
-		Sprite(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 130, 445, 143, 137)));
+	frames.emplace_back(Sprite(TextureRegion(texture, 87, 1416, 40, 40)));
+	frames.emplace_back(Sprite(TextureRegion(texture, 1061, 83, 80, 73)));
+	frames.emplace_back(Sprite(TextureRegion(texture, 556, 877, 96, 93)));
+	frames.emplace_back(Sprite(TextureRegion(texture, 132, 933, 115, 111)));
+	frames.emplace_back(Sprite(TextureRegion(texture, 601, 161, 131, 129)));
+	frames.emplace_back(Sprite(TextureRegion(texture, 130, 445, 143, 137)));
 
-	Animation puffAnimation = Animation(0.1f, std::move(frames), false);
+	Animation puffAnimation = Animation(0.2f, std::move(frames), false);
 
 	StateHandler puffHandler = [](entityx::Entity entity, int& currentState) {
 		if (entity.getComponent<Animator>()->animations[currentState].isFinished()) {

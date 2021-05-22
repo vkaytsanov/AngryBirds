@@ -13,10 +13,14 @@ private:
 	b2Vec2 m_maxStretchDistance = b2Vec2(7.5f, 7.5f);
 	float forceMultiplier = 25'000;
 	bool m_selected = false;
-	void handleInput();
+	bool m_canSlingshot = true;
+	bool m_isFlying = false;
+	void handleSlingshotInput();
+	void handleBirdAbilityInput();
+	void updateCurrentBird(entityx::EventManager& events);
 	void useChuckAbility();
-public:
-	static bool m_canSlingshot;
+	void useRedAbility();
+	void prepareNewBird(entityx::EventManager& events);
 public:
 	void addBird(entityx::EntityManager& entities, EntityType type);
 	void configure(entityx::EntityManager& entities, entityx::EventManager& events) override;

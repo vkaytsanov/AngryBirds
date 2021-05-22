@@ -7,12 +7,14 @@
 
 
 enum GameState {
+	Menu,
 	Playing,
 };
 
 
 class GameStateManager {
 private:
+	GameState m_lastState;
 	GameState m_currentState;
 public:
 	GameStateManager();
@@ -20,6 +22,8 @@ public:
 	GameState getCurrentState() const;
 	const char* getCurrentStateName() const;
 	void changeState(GameState nextState);
+	void update();
+	bool hasChanged() const;
 };
 
 #endif //GAME_STATE_MANAGER_H

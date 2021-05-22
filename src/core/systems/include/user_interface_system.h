@@ -1,15 +1,16 @@
 ﻿#pragma once
 #include "entityx/System.h"
-#include "../../events/the_bird_is_gone.h"
+#include "utils/geometry/include/vector2.h"
 
-class AnimatorSystem : public entityx::System<AnimatorSystem>,
-                       public entityx::Receiver<AnimatorSystem> {
+struct Transform;
+class Sprite;
+
+class UserInterfaceSystem : public entityx::System<UserInterfaceSystem> {
 private:
-	bool m_shouldSwitchAllPigsToLaughing = false;
+	bool isButtonHit(entityx::ComponentHandle<Transform> transform, entityx::ComponentHandle<Sprite> sprite, Vector2i& mousePos);
 public:
 	void configure(entityx::EntityManager& entities, entityx::EventManager& events) override;
 	void configure(entityx::EventManager& events) override;
-	void receive(const TheBirdIsGone& event);
 	void preUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
 	void update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
 	void postUpdate(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;

@@ -5,6 +5,8 @@
 #include "utils/include/texture_region.h"
 #include "utils/openGL/include/vertex_array.h"
 
+#define SPRITE_DESCALE 15
+
 struct Vertex2d {
 	Vector2f position;
 	Vector2f uvs;

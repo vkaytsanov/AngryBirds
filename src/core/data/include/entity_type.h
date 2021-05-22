@@ -10,3 +10,11 @@ enum EntityType {
 
 	PigMinion = 1
 };
+
+inline bool isBird(EntityType type) {
+	return type < Undefined;
+}
+
+inline bool isPig(EntityType type) {
+	return type > Undefined;
+}

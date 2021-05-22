@@ -1,8 +1,13 @@
 ﻿#include "include/scene_manager.h"
+
+#include <box2d/b2_world.h>
+
 #include "utils/include/dirent.h"
 #include "include/lib.h"
+#include "../components/2d/include/rigid_body_2d.h"
 
-struct Transform;
+struct Pig;
+struct Bird;
 
 SceneManager::SceneManager() : m_pCurrentScene(nullptr) {
 	DIR* dir;
@@ -37,13 +42,23 @@ Scene& SceneManager::getScene(const std::string& name) {
 }
 
 void SceneManager::changeScene(entityx::EntityManager* entityManager, const std::string& to) {
+	// saving the scene when in editor, otherwise we will have to remake
+	// every scene from the start after finishing a level
+#if defined(USE_EDITOR)
 	if (m_pCurrentScene) {
 		m_pCurrentScene->save(entityManager);
 	}
-	
+#endif
 	// cleaning up the last entites to load the new,
 	// entityManager.reset() does hard cleanup of the whole ECS
-	for (auto entity : entityManager->entities_with_components<Transform>()) {
+	for (auto entity : entityManager->entities_with_components<Bird>()) {
+		auto rb = entity.getComponent<RigidBody2D>()->body;
+		rb->GetWorld()->DestroyBody(rb);
+		entity.destroy();
+	}
+	for (auto entity : entityManager->entities_with_components<Pig>()) {
+		auto rb = entity.getComponent<RigidBody2D>()->body;
+		rb->GetWorld()->DestroyBody(rb);
 		entity.destroy();
 	}
 	entityManager->softReset();
@@ -64,7 +79,6 @@ void SceneManager::createScene(entityx::EntityManager* entityManager, const std:
 	}
 
 	m_scenes.emplace(name, Scene(name));
-	// m_scenes[name].save(entityManager);
 }
 
 void SceneManager::saveCurrentScene(entityx::EntityManager* entityManager) {

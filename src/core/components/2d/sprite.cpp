@@ -18,8 +18,8 @@ void Sprite::init() {
 	}
 
 
-	const float width = static_cast<float>(m_textureRegion.getRegionWidth()) / 15.f;
-	const float height = static_cast<float>(m_textureRegion.getRegionHeight()) / 15.f;
+	const float width = static_cast<float>(m_textureRegion.getRegionWidth()) / SPRITE_DESCALE;
+	const float height = static_cast<float>(m_textureRegion.getRegionHeight()) / SPRITE_DESCALE;
 	Vertex2d vertices[] = {
 		Vertex2d(Vector2f(-width, -height), Vector2f(m_textureRegion.getU(),
 		                                             m_textureRegion.getV2() * static_cast<float>(m_textureRegion.
@@ -38,11 +38,11 @@ void Sprite::init() {
 	vbo.bind();
 	ibo.bind();
 	vbo.vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (GLvoid*)offsetof(Vertex2d, position));
-	vbo.vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (GLvoid*)offsetof(Vertex2d, uvs));
+	vbo.vertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, sizeof(Vertex2d), (GLvoid*)offsetof(Vertex2d, uvs));
 
-	vbo.bind();
 	vbo.bufferData(sizeof(Vertex2d) * 4, vertices, GL_STATIC_DRAW);
-
+	vbo.unbind();
+	
 	m_vao.unbind();
 }
 
