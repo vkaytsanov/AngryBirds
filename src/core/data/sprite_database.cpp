@@ -7,7 +7,6 @@ SpriteDatabase::SpriteDatabase() {
 	m_sprites[Red		] = Sprite(TextureRegion(animatedTexture), true);
 	m_sprites[Chuck		] = Sprite(TextureRegion(animatedTexture), true);
 	m_sprites[JayJakeJim] = Sprite(TextureRegion(animatedTexture), true);
-	m_sprites[Undefined ] = Sprite();
 	m_sprites[PigMinion ] = Sprite(TextureRegion(animatedTexture), true);
 
 	const std::shared_ptr<Texture> blocksTexture = AssetManager::getInstance().getSprite("blocks");

@@ -168,7 +168,7 @@ class SystemManager : entityx::help::NonCopyable {
   void update(TimeDelta dt) {
     assert(initialized_ && "SystemManager::configure() not called");
     std::shared_ptr<S> s = system<S>();
-	  s->update(0);
+	  s->update(entity_manager_, event_manager_, dt);
   }
 
   template <typename S>

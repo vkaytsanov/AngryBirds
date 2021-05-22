@@ -9,12 +9,12 @@
 
 class ScreenManager {
 private:
-	entityx::EntityX m_entityX;
 	GameStateManager m_gameStateManager;
 	MenuScreen m_menuScreen;
 	PlayingScreen m_playingScreen;
 	std::array<AbstractScreen*, 2> m_screens;
 public:
+	entityx::EntityX m_entityX;
 	ScreenManager();
 	void update();
 };

@@ -3,26 +3,25 @@
 
 
 enum EntityType {
+	Undefined = -1,
+	
 	Terence = 0,
 	Red = 1,
 	Chuck = 2,
 	JayJakeJim = 3,
 
-	Undefined = 4,
+	PigMinion = 4,
 
-	PigMinion = 5,
-
-	WoodTriangle = 6,
-	WoodSquare = 7,
-	WoodRectangle = 8
+	WoodTriangle = 5,
+	WoodSquare = 6,
+	WoodRectangle = 7
 	
 };
-
 
 constexpr int ENTITY_TYPE_SIZE = WoodRectangle + 1;
 
 inline bool isBird(EntityType type) {
-	return type < Undefined;
+	return type <= JayJakeJim;
 }
 
 inline bool isPig(EntityType type) {

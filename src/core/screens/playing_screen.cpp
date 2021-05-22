@@ -98,8 +98,8 @@ void PlayingScreen::start(entityx::EntityX* entityX) {
 	// load the background, ground and back sling
 	// load the birds, pigs, collision objects
 	// add the birds to the bird system
-	// initialize bodies
 	
+	// initialize bodies
 	entityX->systems.system<PhysicsSystem2D>()->initializeBodies(entityX->entities);
 }
 

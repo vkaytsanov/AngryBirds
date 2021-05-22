@@ -64,6 +64,7 @@ void AnimatorsDatabase::initializePig() {
 	m_animators[PigMinion].conditions.push_back(std::move(laughingHandler));
 	m_animators[PigMinion].conditions.push_back(std::move(collidingHandler));
 	m_animators[PigMinion].currentAnimation = 0;
+	m_animators[PigMinion].entityType = PigMinion;
 
 }
 

@@ -21,7 +21,7 @@ MessageCallback(GLenum source,
 }
 
 void AngryBirds::create() {
-#if defined(_DEBUG)
+#if defined(_DEBUG) && !defined(USE_EDITOR)
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
@@ -36,11 +36,7 @@ void AngryBirds::create() {
 
 #if defined(USE_EDITOR)
 	// initializing component pools for this entity manager
-	auto entity = m_entityX.entities.create();
-	entity.addComponent<Transform>();
-	entity.addComponent<Sprite>();
-	entity.destroy();
-	m_pEditor = std::make_unique<Editor>(&m_entityX);
+	m_pEditor = std::make_unique<Editor>(&m_pScreenManager->m_entityX);
 	m_pEditor->update(Lib::graphics->getDeltaTime());
 #endif
 }

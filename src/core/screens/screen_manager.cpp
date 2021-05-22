@@ -46,8 +46,10 @@ ScreenManager::ScreenManager() : m_menuScreen(&m_gameStateManager),
 
 	m_entityX.systems.configure();
 
-	m_gameStateManager.changeState(Menu);
+#if 0
+	// m_gameStateManager.changeState(Playing);
 	m_screens[m_gameStateManager.getCurrentState()]->start(&m_entityX);
+#endif
 }
 
 void ScreenManager::update() {

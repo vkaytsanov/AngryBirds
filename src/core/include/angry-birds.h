@@ -6,7 +6,7 @@
 #include "../screens/include/screen_manager.h"
 
 #ifdef _DEBUG
-// #define USE_EDITOR
+#define USE_EDITOR
 #endif
 
 class AngryBirds : public Listener {

@@ -12,7 +12,9 @@
 #include "../components/include/serializable.h"
 #include "../components/2d/include/sprite.h"
 #include "../components/3d/include/rigid_body.h"
-
+#include "../data/include/entity_factory.h"
+#include "../systems/include/transform_system.h"
+#include "../systems/include/render_system.h"
 
 Editor::Editor(entityx::EntityX* entityX) : m_pEntityX(entityX),
                                             m_prefabs(m_eventManager) {
@@ -20,33 +22,20 @@ Editor::Editor(entityx::EntityX* entityX) : m_pEntityX(entityX),
 }
 
 void Editor::loadPrefabs() {
-	std::ifstream is("prefabs.bin");
-	cereal::BinaryInputArchive archive(is);
-
-
-	std::vector<SerializableComponent<Transform>> transforms;
-	std::vector<SerializableComponent<RigidBody>> rigidBodys;
-	std::vector<SerializableComponent<Sprite>> spriteDeserializes;
-
-	archive(transforms);
-	archive(rigidBodys);
-	archive(spriteDeserializes);
-
-	for (unsigned i = 0; i < transforms.size(); i++) {
-		std::cout << "TransformX: " << transforms[i].component.position.x << "\n";
-		auto entity = m_prefabs.create();
-		entity.addComponent<Transform>(transforms[i].component);
+	for(int i = Terence; i < JayJakeJim; i++) {
+		auto ent = EntityFactory::createEntityFromType(m_prefabs, static_cast<EntityType>(i));
+		auto tr = ent.getComponent<Animator>()->getFrame().m_textureRegion;
+		ent.getComponent<Sprite>()->m_textureRegion.setRegionUV(tr.getU(), tr.getV(), tr.getU2(), tr.getV2());
+		ent.getComponent<Sprite>()->setVao(ent.getComponent<Animator>()->getFrame().getVao());
 	}
-
-	for (unsigned i = 0; i < rigidBodys.size(); i++) {
-		std::cout << "RigidBodyUseG: " << rigidBodys[i].component.m_useGravity << "\n";
-		m_prefabs.addComponent<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].component);
+	{
+		auto ent = EntityFactory::createEntityFromType(m_prefabs, PigMinion);
+		auto tr = ent.getComponent<Animator>()->getFrame().m_textureRegion;
+		ent.getComponent<Sprite>()->m_textureRegion.setRegionUV(tr.getU(), tr.getV(), tr.getU2(), tr.getV2());
+		ent.getComponent<Sprite>()->setVao(ent.getComponent<Animator>()->getFrame().getVao());
 	}
-
-	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
-		std::cout << "TextName: " << spriteDeserializes[i].component.m_textureRegion.getTexture()->m_name << "\n";
-		m_prefabs.addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id),
-		                               std::move(spriteDeserializes[i].component));
+	for(int i = PigMinion + 1; i < ENTITY_TYPE_SIZE; i++) {
+		EntityFactory::createEntityFromType(m_prefabs, static_cast<EntityType>(i));
 	}
 }
 
@@ -61,18 +50,20 @@ void Editor::addToCurrentScene(const entityx::Entity entity) {
 	                              (gameWindowBottomRightPos.y + gameWindowTopLeftPos.y) / 2);
 	dropPos.x = pos.x - gameWindowCenter.x;
 	dropPos.y = gameWindowCenter.y - pos.y;
-	ch->position = Vector3f(dropPos.x, dropPos.y, 0);
+	Vector2i transformed = Viewport::fromScreenToViewport(Lib::input->getCurrMousePos());
+	ch->position = Vector3f(transformed.x, transformed.y, 0);
 
 	isDirty = true;
 }
 
 void Editor::update(float dt) {
-	if (isDirty) {
+	//if (isDirty) {
 		m_fbo.bind();
-		m_pEntityX->systems.updateAll(0);
+		m_pEntityX->systems.update<TransformSystem>(0);
+		m_pEntityX->systems.postUpdate<RenderSystem>(0);
 		m_fbo.unbind();
 		isDirty = false;
-	}
+	//}
 }
 
 
@@ -234,12 +225,14 @@ void Editor::drawPrefabsWindow() {
 			ImGui::PushID(entity.id().index());
 			ImGui::SameLine();
 			ImGui::BeginGroup();
-			const TextureRegion* tR = &entity.getComponent<Sprite>()->m_textureRegion;
-
+			TextureRegion* tR = &entity.getComponent<Sprite>()->m_textureRegion;
+			// if(entity.has_component<Animator>()) {
+			// 	tR = &entity.getComponent<Animator>()->getFrame().m_textureRegion;
+			// }
 			ImGui::ImageButton(
-				(void*)tR->getTexture()->getBuffer(), {64, 64}, {tR->getU(), tR->getU2()}, {tR->getV(), tR->getV2()});
+				(void*)tR->getTexture()->getBuffer(), {64, 64}, {tR->getU(), tR->getV()}, {tR->getU2(), tR->getV2()});
 
-			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
 				ImGui::SetDragDropPayload("Prefab", &entity, sizeof(entity));
 				ImGui::Text("Add to Scene");
 				ImGui::EndDragDropSource();

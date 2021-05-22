@@ -34,7 +34,7 @@ Box2dDatabase::Box2dDatabase() {
 	createShapes();
 
 	// birds
-	for(int i = Terence; i < Undefined; i++) {
+	for(int i = Terence; i < PigMinion; i++) {
 		m_bodies[i].bodyDef.type = b2_dynamicBody;
 		m_bodies[i].bodyDef.linearDamping = 0.2f;
 		m_bodies[i].bodyDef.gravityScale = 0.0f;
