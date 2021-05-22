@@ -1,5 +1,6 @@
 ﻿#pragma once
-#include <string>
+
+#include <array>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_circle_shape.h>
 #include <box2d/b2_polygon_shape.h>
@@ -8,13 +9,6 @@
 #include "entity_type.h"
 
 
-enum DatabaseShapeTypes {
-	Box,
-	Circle,
-	Triangle,
-	Plank,
-	Ground
-};
 
 struct BodyInfo {
 	b2BodyDef bodyDef;
@@ -33,6 +27,7 @@ struct BodyInfo {
 
 class Box2dDatabase {
 private:
+	std::array<BodyInfo, ENTITY_TYPE_SIZE> m_bodies;
 	b2PolygonShape m_boxShape;
 	b2CircleShape m_circleShape;
 	b2PolygonShape m_triangleShape;
@@ -52,7 +47,6 @@ public:
 	BodyInfo m_redBody;
 public:
 	Box2dDatabase();
-	b2Shape* fromTypeToShape(DatabaseShapeTypes type);
 	BodyInfo& fromTypeToBody(EntityType type);
 
 	static Box2dDatabase& getInstance();

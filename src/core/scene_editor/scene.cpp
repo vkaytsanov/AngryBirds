@@ -53,9 +53,15 @@ void Scene::load(entityx::EntityManager* entities) {
 
 	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
 		std::cout << "TextName: " << spriteDeserializes[i].component.m_textureRegion.getTexture()->m_name << "\n";
-		entities->addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id), std::move(spriteDeserializes[i].component));
+		entities->addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id),
+		                               std::move(spriteDeserializes[i].component));
 	}
 }
+
+/**
+ * we need to serialize only object types with transform components
+ * the rest we are gonna initialize run-time
+ */
 
 void Scene::save(entityx::EntityManager* entities) {
 	std::ofstream os(SCENES_PATH + m_fileName + ".bin");

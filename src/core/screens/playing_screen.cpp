@@ -11,6 +11,7 @@
 
 #include "../data/include/asset_manager.h"
 #include "../data/include/box2d_database.h"
+#include "../data/include/entity_factory.h"
 #include "utils/include/animation.h"
 #include "../data/include/animators_database.h"
 #include "../systems/include/physics_system_2d.h"
@@ -52,13 +53,7 @@ PlayingScreen::PlayingScreen(GameStateManager* gameStateManager) : AbstractScree
 	//                                                      20));
 	// plankObstacleWood.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_plankBody);
 
-	auto normalPig = m_entities.create();
-	normalPig.addComponent<Transform>()->position = Vector3f(0, -17, 0);
-	normalPig.addComponent<Pig>();
-	normalPig.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one")), true);
-	normalPig.addComponent<Animator>(AnimatorsDatabase::getInstance().m_pigAnimator);
-	normalPig.addComponent<RigidBody2D>(Box2dDatabase::getInstance().m_terenceBody);
-	
+	EntityFactory::createEntityFromType(m_entities, PigMinion);
 	// auto normalPig2 = m_entities.create();
 	// normalPig2.addComponent<Transform>(Vector3f(0.5, 10, 0));
 	// normalPig2.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("pigs"), 679, 790, 99, 97));
@@ -99,6 +94,11 @@ PlayingScreen::PlayingScreen(GameStateManager* gameStateManager) : AbstractScree
 
 void PlayingScreen::start(entityx::EntityX* entityX) {
 	AbstractScreen::start(entityX);
+	// clear all entities
+	// load the background, ground and back sling
+	// load the birds, pigs, collision objects
+	// add the birds to the bird system
+	// initialize bodies
 	
 	entityX->systems.system<PhysicsSystem2D>()->initializeBodies(entityX->entities);
 }

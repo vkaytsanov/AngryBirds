@@ -7,8 +7,11 @@
 
 
 #include "abstract_screen.h"
+#include "../../scene_editor/include/scene_manager.h"
 
-class PlayingScreen : public AbstractScreen{
+class PlayingScreen : public AbstractScreen {
+private:
+	SceneManager m_sceneManager;
 public:
 	PlayingScreen(GameStateManager* gameStateManager);
 	void start(entityx::EntityX* entityX) override;

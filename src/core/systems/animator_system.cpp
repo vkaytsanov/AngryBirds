@@ -15,7 +15,7 @@ void AnimatorSystem::configure(entityx::EntityManager& entities, entityx::EventM
 void AnimatorSystem::configure(entityx::EventManager& events) {
 }
 
-void AnimatorSystem::receive(const TheBirdIsGone& event) {
+void AnimatorSystem::receive(const TheBirdIsGone&) {
 	m_shouldSwitchAllPigsToLaughing = true;
 }
 

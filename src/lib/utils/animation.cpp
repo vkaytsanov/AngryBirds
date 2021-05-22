@@ -41,6 +41,15 @@ void Animation::update(float dt) {
 	m_currentTime += dt;
 }
 
+void Animation::resetTime() {
+	m_currentTime = 0;
+}
+
+void Animation::reset() {
+	m_currentTime = 0;
+	m_currentFrame = 0;
+}
+
 bool Animation::isFinished() const {
 	return m_currentFrame == m_frames.size() - 1 && m_currentTime > m_frameDuration[m_currentFrame];
 }

@@ -23,14 +23,14 @@ void AnimatorsDatabase::initializePig() {
 		frames.emplace_back(Sprite(TextureRegion(texture, 585, 684, 95, 96)));
 
 		Animation idlePigAnimation = Animation({5.0f, 1.0f}, std::move(frames), true);
-		m_pigAnimator.animations.push_back(std::move(idlePigAnimation));
+		m_animators[PigMinion].animations.push_back(std::move(idlePigAnimation));
 	}
 	{
 		std::vector<Sprite> frames;
 		frames.emplace_back(Sprite(TextureRegion(texture, 373, 981, 95, 96)));
 
 		Animation laughingPigAnimation = Animation(2.0f, std::move(frames), false);
-		m_pigAnimator.animations.push_back(std::move(laughingPigAnimation));
+		m_animators[PigMinion].animations.push_back(std::move(laughingPigAnimation));
 	}
 
 	{
@@ -39,7 +39,7 @@ void AnimatorsDatabase::initializePig() {
 		frames.emplace_back(Sprite(TextureRegion(texture, 373, 782, 96, 96)));
 
 		Animation collidingPigAnimation = Animation({5.0f, 1.0f}, std::move(frames), true);
-		m_pigAnimator.animations.push_back(std::move(collidingPigAnimation));
+		m_animators[PigMinion].animations.push_back(std::move(collidingPigAnimation));
 	}
 
 	StateHandler idleHandler = [](entityx::Entity entity, int& currentState) {
@@ -60,32 +60,32 @@ void AnimatorsDatabase::initializePig() {
 			currentState = PigDisappearing;
 		}
 	};
-	m_pigAnimator.conditions.push_back(std::move(idleHandler));
-	m_pigAnimator.conditions.push_back(std::move(laughingHandler));
-	m_pigAnimator.conditions.push_back(std::move(collidingHandler));
-	m_pigAnimator.currentAnimation = 0;
+	m_animators[PigMinion].conditions.push_back(std::move(idleHandler));
+	m_animators[PigMinion].conditions.push_back(std::move(laughingHandler));
+	m_animators[PigMinion].conditions.push_back(std::move(collidingHandler));
+	m_animators[PigMinion].currentAnimation = 0;
 
 }
 
 void AnimatorsDatabase::initializeTerence() {
-	addBirdIdleAnimation(m_terenceAnimator, 470, 783, 102, 94);
-	addBirdFlyingAnimation(m_terenceAnimator, 675, 783, 102, 94);
-	addBirdCollidingAnimation(m_terenceAnimator, 572, 783, 102, 94);
-	m_terenceAnimator.entityType = Terence;
+	addBirdIdleAnimation(m_animators[Terence], 470, 783, 102, 94);
+	addBirdFlyingAnimation(m_animators[Terence], 675, 783, 102, 94);
+	addBirdCollidingAnimation(m_animators[Terence], 572, 783, 102, 94);
+	m_animators[Terence].entityType = Terence;
 }
 
 void AnimatorsDatabase::initializeChuck() {
-	addBirdIdleAnimation(m_chuckAnimator, 734, 1305, 63, 54);
-	addBirdFlyingAnimation(m_chuckAnimator, 734, 1247, 63, 54);
-	addBirdCollidingAnimation(m_chuckAnimator, 734, 1363, 63, 54);
-	m_chuckAnimator.entityType = Chuck;
+	addBirdIdleAnimation(m_animators[Chuck], 734, 1305, 63, 54);
+	addBirdFlyingAnimation(m_animators[Chuck], 734, 1247, 63, 54);
+	addBirdCollidingAnimation(m_animators[Chuck], 734, 1363, 63, 54);
+	m_animators[Chuck].entityType = Chuck;
 }
 
 void AnimatorsDatabase::initializeRed() {
-	addBirdIdleAnimation(m_redAnimator, 1021, 1238, 44, 44);
-	addBirdFlyingAnimation(m_redAnimator, 1067, 1238, 44, 44);
-	addBirdCollidingAnimation(m_redAnimator, 961, 1283, 44, 44);
-	m_redAnimator.entityType = Red;
+	addBirdIdleAnimation(m_animators[Red], 1021, 1238, 44, 44);
+	addBirdFlyingAnimation(m_animators[Red], 1067, 1238, 44, 44);
+	addBirdCollidingAnimation(m_animators[Red], 961, 1283, 44, 44);
+	m_animators[Red].entityType = Red;
 }
 
 void AnimatorsDatabase::initializePuffCloud() {
@@ -98,15 +98,15 @@ void AnimatorsDatabase::initializePuffCloud() {
 	frames.emplace_back(Sprite(TextureRegion(texture, 601, 161, 131, 129)));
 	frames.emplace_back(Sprite(TextureRegion(texture, 130, 445, 143, 137)));
 
-	Animation puffAnimation = Animation(0.2f, std::move(frames), false);
+	Animation puffAnimation = Animation({0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.3f}, std::move(frames), false);
 
 	StateHandler puffHandler = [](entityx::Entity entity, int& currentState) {
 		if (entity.getComponent<Animator>()->animations[currentState].isFinished()) {
 			entity.destroy();
 		}
 	};
-	m_pigAnimator.animations.push_back(std::move(puffAnimation));
-	m_pigAnimator.conditions.push_back(std::move(puffHandler));
+	m_animators[PigMinion].animations.push_back(std::move(puffAnimation));
+	m_animators[PigMinion].conditions.push_back(std::move(puffHandler));
 }
 
 void AnimatorsDatabase::addBirdIdleAnimation(Animator& animator, int x, int y, int width, int height) {
@@ -155,19 +155,7 @@ void AnimatorsDatabase::addBirdCollidingAnimation(Animator& animator, int x, int
 }
 
 Animator& AnimatorsDatabase::fromTypeToAnimator(EntityType type) {
-	switch (type) {
-		case PigMinion:
-			return m_pigAnimator;
-		case Terence:
-			return m_terenceAnimator;
-		case Chuck:
-			return m_chuckAnimator;
-		case Red:
-			return m_redAnimator;
-		default:
-			Lib::app->error("AnimatorsDatabase", "couldn't deserialize type");
-			return m_pigAnimator;
-	}
+	return m_animators[type];
 }
 
 

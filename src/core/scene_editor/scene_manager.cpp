@@ -67,8 +67,9 @@ void SceneManager::changeScene(entityx::EntityManager* entityManager, const std:
 	if (m_scenes.find(to) == m_scenes.end()) {
 		Lib::app->error("SceneManager", "couldn't get scene");
 	}
-#endif
 	Lib::app->log("SceneManager", ("changed scene to " + to).c_str());
+#endif
+	
 	m_pCurrentScene = &m_scenes[to];
 	m_pCurrentScene->load(entityManager);
 }

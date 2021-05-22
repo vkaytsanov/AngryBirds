@@ -18,6 +18,7 @@ enum BirdStates : int {
 
 class AnimatorsDatabase {
 private:
+	std::array<Animator, ENTITY_TYPE_SIZE> m_animators;
 	void initializePig();
 	void initializeTerence();
 	void initializeChuck();
@@ -27,11 +28,6 @@ private:
 	void addBirdIdleAnimation(Animator& animator, int x, int y, int width, int height);
 	void addBirdFlyingAnimation(Animator& animator, int x, int y, int width, int height);
 	void addBirdCollidingAnimation(Animator& animator, int x, int y, int width, int height);
-public:
-	Animator m_pigAnimator;
-	Animator m_terenceAnimator;
-	Animator m_chuckAnimator;
-	Animator m_redAnimator;
 public:
 	AnimatorsDatabase();
 	Animator& fromTypeToAnimator(EntityType type);

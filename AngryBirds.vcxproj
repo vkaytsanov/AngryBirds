@@ -35,8 +35,10 @@
     <ClInclude Include="src\core\components\include\pig.h" />
     <ClInclude Include="src\core\data\include\animators_database.h" />
     <ClInclude Include="src\core\data\include\box2d_database.h" />
+    <ClInclude Include="src\core\data\include\entity_factory.h" />
     <ClInclude Include="src\core\data\include\entity_type.h" />
     <ClInclude Include="src\core\data\include\particle_manager.h" />
+    <ClInclude Include="src\core\data\include\sprite_database.h" />
     <ClInclude Include="src\core\events\game_over.h" />
     <ClInclude Include="src\core\events\round_over.h" />
     <ClInclude Include="src\core\events\the_bird_is_gone.h" />
@@ -277,7 +279,9 @@
     <ClCompile Include="src\core\components\pig.cpp" />
     <ClCompile Include="src\core\data\animators_database.cpp" />
     <ClCompile Include="src\core\data\box2d_database.cpp" />
+    <ClCompile Include="src\core\data\entity_factory.cpp" />
     <ClCompile Include="src\core\data\particle_manager.cpp" />
+    <ClCompile Include="src\core\data\sprite_database.cpp" />
     <ClCompile Include="src\core\scene_editor\editor.cpp" />
     <ClCompile Include="src\core\components\transform.cpp" />
     <ClCompile Include="src\core\data\asset_manager.cpp" />
