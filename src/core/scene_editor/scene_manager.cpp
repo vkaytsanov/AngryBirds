@@ -6,8 +6,12 @@
 #include "include/lib.h"
 #include "../components/2d/include/rigid_body_2d.h"
 
+#define USE_EDITOR
+
+struct Transform;
 struct Pig;
 struct Bird;
+struct Obstacle;
 
 SceneManager::SceneManager() : m_pCurrentScene(nullptr) {
 	DIR* dir;
@@ -42,34 +46,26 @@ Scene& SceneManager::getScene(const std::string& name) {
 }
 
 void SceneManager::changeScene(entityx::EntityManager* entityManager, const std::string& to) {
-	// saving the scene when in editor, otherwise we will have to remake
-	// every scene from the start after finishing a level
-#if defined(USE_EDITOR)
-	if (m_pCurrentScene) {
-		m_pCurrentScene->save(entityManager);
-	}
+	if(m_pCurrentScene == &m_scenes[to]) return;
+	
+	for (auto entity : entityManager->entities_with_components<Transform>()) {
+#if !defined(USE_EDITOR)
+		if(auto rb = entity.getComponent<RigidBody2D>()->body) {
+			rb->GetWorld()->DestroyBody(rb);
+		}
 #endif
-	// cleaning up the last entites to load the new,
-	// entityManager.reset() does hard cleanup of the whole ECS
-	for (auto entity : entityManager->entities_with_components<Bird>()) {
-		auto rb = entity.getComponent<RigidBody2D>()->body;
-		rb->GetWorld()->DestroyBody(rb);
 		entity.destroy();
-	}
-	for (auto entity : entityManager->entities_with_components<Pig>()) {
-		auto rb = entity.getComponent<RigidBody2D>()->body;
-		rb->GetWorld()->DestroyBody(rb);
-		entity.destroy();
+
 	}
 	entityManager->softReset();
-	
+
 #ifdef _DEBUG
 	if (m_scenes.find(to) == m_scenes.end()) {
 		Lib::app->error("SceneManager", "couldn't get scene");
 	}
 	Lib::app->log("SceneManager", ("changed scene to " + to).c_str());
 #endif
-	
+
 	m_pCurrentScene = &m_scenes[to];
 	m_pCurrentScene->load(entityManager);
 }
@@ -83,8 +79,8 @@ void SceneManager::createScene(entityx::EntityManager* entityManager, const std:
 }
 
 void SceneManager::saveCurrentScene(entityx::EntityManager* entityManager) {
-	if(m_pCurrentScene) {
+	if (m_pCurrentScene) {
 		m_pCurrentScene->save(entityManager);
+		Lib::app->log("SceneManager", ("Scene " + m_pCurrentScene->m_fileName + " saved.").c_str());
 	}
 }
-

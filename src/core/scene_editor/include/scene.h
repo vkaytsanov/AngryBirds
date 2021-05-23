@@ -6,8 +6,8 @@
 class Scene {
 private:
 	const std::string SCENES_PATH = "scenes/";
-	std::string m_fileName;
 public:
+	std::string m_fileName;
 	Scene() = default;
 	Scene(std::string name);
 	void load(entityx::EntityManager* entities);

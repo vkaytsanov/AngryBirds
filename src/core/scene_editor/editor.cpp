@@ -22,6 +22,7 @@ Editor::Editor(entityx::EntityX* entityX) : m_pEntityX(entityX),
 }
 
 void Editor::loadPrefabs() {
+	// we dont have the blues(the 3 little blue birds)
 	for(int i = Terence; i < JayJakeJim; i++) {
 		auto ent = EntityFactory::createEntityFromType(m_prefabs, static_cast<EntityType>(i));
 		auto tr = ent.getComponent<Animator>()->getFrame().m_textureRegion;
@@ -39,31 +40,46 @@ void Editor::loadPrefabs() {
 	}
 }
 
+void Editor::onSceneChange() {
+	// Create ground
+	auto ground = m_pEntityX->entities.create();
+	auto ts = ground.addComponent<Transform>(Vector3f(0, -50, 0));
+	ts->scale = Vector3f(10, 1.4f, 1);
+	TextureRegion groundTR = TextureRegion(AssetManager::getInstance().getSprite("ground"));
+	groundTR.setTiling(10, 1);
+	ground.addComponent<Sprite>(std::move(groundTR));
+
+	// update the current sprite for the entities with animators, since it is null when loaded
+	for(auto ent : m_pEntityX->entities.entities_with_components<Animator>()) {
+		auto tr = ent.getComponent<Animator>()->getFrame().m_textureRegion;
+		ent.getComponent<Sprite>()->m_textureRegion.setRegionUV(tr.getU(), tr.getV(), tr.getU2(), tr.getV2());
+		ent.getComponent<Sprite>()->setVao(ent.getComponent<Animator>()->getFrame().getVao());
+	}
+}
+
 void Editor::addToCurrentScene(const entityx::Entity entity) {
 	auto clone = m_pEntityX->entities.create_from_copy(entity);
 
 	entityx::ComponentHandle<Transform> ch = clone.getComponent<Transform>();
-	ImVec2 pos = ImGui::GetMousePos();
-	ImVec2 dropPos;
 
-	const ImVec2 gameWindowCenter((gameWindowBottomRightPos.x + gameWindowTopLeftPos.x) / 2,
-	                              (gameWindowBottomRightPos.y + gameWindowTopLeftPos.y) / 2);
-	dropPos.x = pos.x - gameWindowCenter.x;
-	dropPos.y = gameWindowCenter.y - pos.y;
-	Vector2i transformed = Viewport::fromScreenToViewport(Lib::input->getCurrMousePos());
-	ch->position = Vector3f(transformed.x, transformed.y, 0);
+	const Vector2i windowPos = Vector2i(gameWindowTopLeftPos.x, gameWindowTopLeftPos.y);
+	const Vector2i windowSize = Vector2i(gameWindowBottomRightPos.x, gameWindowBottomRightPos.y) - windowPos;
+	const Vector2i transformed = Viewport::fromScreenToWindowedViewport(windowPos, windowSize, Lib::input->getCurrMousePos());
+	ch->position = Vector3f(static_cast<float>(transformed.x), static_cast<float>(-transformed.y), 0);
 
 	isDirty = true;
 }
 
 void Editor::update(float dt) {
-	//if (isDirty) {
+	// if (isDirty) {
+		isDirty = false;
+		
 		m_fbo.bind();
 		m_pEntityX->systems.update<TransformSystem>(0);
 		m_pEntityX->systems.postUpdate<RenderSystem>(0);
 		m_fbo.unbind();
-		isDirty = false;
-	//}
+		
+	// }
 }
 
 
@@ -151,6 +167,12 @@ void Editor::drawMenuBar() {
 			}
 			ImGui::EndMenu();
 		}
+		if(m_sceneManager.m_pCurrentScene){
+			ImGui::Text(m_sceneManager.m_pCurrentScene->m_fileName.c_str());
+		}
+		else {
+			ImGui::Text("Empty Scene");
+		}
 		ImGui::EndMainMenuBar();
 	}
 }
@@ -195,9 +217,10 @@ void Editor::drawSceneWindow() {
 	ImGui::InvisibleButton("Prefab Payload", gameWindowArea);
 	if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Prefab")) {
-			IM_ASSERT(payload->DataSize == sizeof(entityx::Entity));
-
-			addToCurrentScene(*(const entityx::Entity*)payload->Data);
+			if(payload->DataSize != sizeof(entityx::Entity)) return;
+			auto entity = *(const entityx::Entity*)payload->Data;
+			if(!entity.valid()) return;
+			addToCurrentScene(entity);
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -254,6 +277,7 @@ void Editor::drawAvailableScenesWindow() {
 		ImGui::ImageButton((void*)icon->getBuffer(), {64, 64}, {0, 0}, {1, 1});
 		if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 			m_sceneManager.changeScene(&m_pEntityX->entities, it.first);
+			onSceneChange();
 			isDirty = true;
 		}
 		ImGui::Text("%s", it.first.c_str());

@@ -40,6 +40,8 @@ public:
 	float getWorldWidth() const;
 	float getWorldHeight() const;
 	static Vector2i fromScreenToViewport(const Vector2i& pos);
+	static Vector2i fromScreenToWindowedViewport(const Vector2i& windowPos, const Vector2i& windowSize, Vector2i pos);
+	
 };
 
 

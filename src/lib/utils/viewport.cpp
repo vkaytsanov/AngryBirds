@@ -7,10 +7,10 @@
 
 float Viewport::m_worldWidth;
 float Viewport::m_worldHeight;
-int   Viewport::m_screenX;
-int	  Viewport::m_screenY;
-int   Viewport::m_screenWidth;
-int   Viewport::m_screenHeight;
+int Viewport::m_screenX;
+int Viewport::m_screenY;
+int Viewport::m_screenWidth;
+int Viewport::m_screenHeight;
 
 Viewport::Viewport(Camera* camera) : m_pCamera(camera) {
 }
@@ -49,6 +49,21 @@ float Viewport::getWorldHeight() const {
 Vector2i Viewport::fromScreenToViewport(const Vector2i& pos) {
 	static float widthRatio = static_cast<float>(m_screenWidth) / m_worldWidth;
 	static float heightRatio = static_cast<float>(m_screenHeight) / m_worldHeight;
+#if defined(ORIGIN_IS_MIDDLE)
+	return Vector2i(static_cast<float>(pos.x) / widthRatio - m_worldWidth / 2,
+	                static_cast<float>(pos.y) / heightRatio - m_worldHeight / 2);
+#elif defined(ORIGIN_IS_BOTTOM_LEFT)
+	Lib::app->error("fromScreenToViewport", "not implemented function");
+	return Vector2i();
+#endif
+}
+
+Vector2i Viewport::fromScreenToWindowedViewport(const Vector2i& windowPos, const Vector2i& windowSize,
+                                                Vector2i pos) {
+	static float widthRatio = static_cast<float>(windowSize.x) / m_worldWidth;
+	static float heightRatio = static_cast<float>(windowSize.y) / m_worldHeight;
+
+	pos -= windowPos;
 #if defined(ORIGIN_IS_MIDDLE)
 	return Vector2i(static_cast<float>(pos.x) / widthRatio - m_worldWidth / 2,
 	                static_cast<float>(pos.y) / heightRatio - m_worldHeight / 2);

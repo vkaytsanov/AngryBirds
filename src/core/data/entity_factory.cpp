@@ -3,6 +3,7 @@
 #include "../components/include/transform.h"
 #include "../components/include/pig.h"
 #include "../components/include/bird.h"
+#include "../components/include/obstacle.h"
 #include "../components/2d/include/rigid_body_2d.h"
 #include "../components/2d/include/sprite.h"
 #include "../components/2d/include/animator.h"
@@ -15,14 +16,55 @@ entityx::Entity EntityFactory::createEntityFromType(entityx::EntityManager& enti
 	entity.addComponent<Transform>();
 	entity.addComponent<RigidBody2D>(Box2dDatabase::getInstance().fromTypeToBody(type));
 	entity.addComponent<Sprite>(SpriteDatabase::getInstance().fromTypeToSprite(type));
-	if(isAnimated(type)) {
+	// TODO can be made better
+	if (isAnimated(type)) {
 		entity.addComponent<Animator>(AnimatorsDatabase::getInstance().fromTypeToAnimator(type));
-		if(isPig(type)) {
+		if (isPig(type)) {
 			entity.addComponent<Pig>(type);
 		}
 		else {
 			entity.addComponent<Bird>(type);
 		}
 	}
+	else {
+		entity.addComponent<Obstacle>(type);
+	}
 	return entity;
+}
+
+entityx::Entity EntityFactory::createBackground(entityx::EntityManager& entities) {
+	auto background = entities.create();
+	auto ts = background.addComponent<Transform>();
+	ts->scale = Vector3f(25, 20, 1);
+	background.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("background")));
+	return background;
+}
+
+entityx::Entity EntityFactory::createGround(entityx::EntityManager& entities) {
+	auto ground = entities.create();
+	auto ts = ground.addComponent<Transform>(Vector3f(0, -50, 0));
+	ts->scale = Vector3f(10, 1.4f, 1);
+	TextureRegion groundTR = TextureRegion(AssetManager::getInstance().getSprite("ground"));
+	groundTR.setTiling(10, 1);
+	ground.addComponent<Sprite>(std::move(groundTR));
+	return ground;
+}
+
+entityx::Entity EntityFactory::createBackSling(entityx::EntityManager& entities) {
+	auto backSling = entities.create();
+	auto ts = backSling.addComponent<Transform>();
+	ts->position = Vector3f(-60, -16, 0);
+	backSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 563, 0, 40, 200));
+	
+	return backSling;
+}
+
+
+entityx::Entity EntityFactory::createFrontSling(entityx::EntityManager& entities) {
+	auto frontSling = entities.create();
+	auto ts2 = frontSling.addComponent<Transform>();
+	ts2->position = Vector3f(-63.7f, -10.4f, 0);
+	frontSling.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one"), 733, 160, 43, 125));
+	
+	return frontSling;
 }

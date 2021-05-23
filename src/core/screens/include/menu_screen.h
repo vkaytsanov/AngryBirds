@@ -10,6 +10,7 @@
 class MenuScreen : public AbstractScreen {
 public:
 	MenuScreen(GameStateManager* gameStateManager);
+	void start(entityx::EntityX* entityX) override;
 };
 
 

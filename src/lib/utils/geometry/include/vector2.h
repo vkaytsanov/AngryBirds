@@ -47,6 +47,12 @@ public:
 		this->y += vec.y;
 		return *this;
 	}
+
+	Vector2<T>& operator-=(const Vector2<T>& vec) {
+		this->x -= vec.x;
+		this->y -= vec.y;
+		return *this;
+	}
 };
 
 

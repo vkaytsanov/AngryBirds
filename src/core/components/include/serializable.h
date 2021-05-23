@@ -4,15 +4,15 @@
 
 template <typename T>
 struct SerializableComponent {
-	int64_t id = -1;
+	EntityType type = Undefined;
 	T component;
 
 	SerializableComponent() = default;
-	SerializableComponent(int64_t id, const T& component) : id(id), component(component){}
+	SerializableComponent(EntityType type, const T& component) : type(type), component(component){}
 	
 	template <typename Archive>
 	void serialize(Archive& archive) {
-		archive(id, component);
+		archive(type, component);
 	}
 };
 

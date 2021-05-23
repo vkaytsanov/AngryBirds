@@ -31,6 +31,8 @@ public:
 	Sprite(Sprite&& other) = default;
 	Sprite(const Sprite& other) = default;
 	Sprite& operator=(Sprite&& other) = default;
+	~Sprite() = default;
+public:
 	VertexArray* getVao();
 	void setVao(VertexArray* vao);
 

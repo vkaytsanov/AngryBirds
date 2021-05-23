@@ -4,9 +4,9 @@
 
 class SpriteDatabase {
 private:
-	std::array<Sprite, ENTITY_TYPE_SIZE> m_sprites;
+	const std::array<Sprite, ENTITY_TYPE_SIZE> m_sprites;
 public:
 	SpriteDatabase();
-	Sprite& fromTypeToSprite(EntityType type);
+	const Sprite& fromTypeToSprite(EntityType type) const;
 	static SpriteDatabase& getInstance();
 };

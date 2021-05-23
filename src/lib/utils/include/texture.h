@@ -21,7 +21,6 @@
 class Texture {
 private:
 	unsigned int m_textureBuffer;
-	SDL_Surface* m_surface;
 	GLenum m_textureFormat;
 	int m_colorCount;
 	int m_width;
@@ -36,7 +35,7 @@ public:
 	explicit Texture(const std::string& dir, const std::string& name, GLint wrapFlags);
 	Texture() = default;
 	~Texture();
-	void performChecks();
+	void performChecks(SDL_Surface* surface);
 	unsigned int getBuffer() const;
 	int getWidth() const;
 	int getHeight() const;

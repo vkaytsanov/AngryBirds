@@ -7,8 +7,11 @@
 #include <cereal/types/memory.hpp>
 
 #include "../components/include/serializable.h"
-#include "../components/2d/include/sprite.h"
-#include "../components/3d/include/rigid_body.h"
+#include "../components/include/bird.h"
+#include "../components/include/pig.h"
+#include "../components/include/obstacle.h"
+#include "../components/include/transform.h"
+#include "../data/include/entity_factory.h"
 
 
 Scene::Scene(std::string name) : m_fileName(std::move(name)) {
@@ -20,47 +23,32 @@ void Scene::load(entityx::EntityManager* entities) {
 
 
 	std::vector<SerializableComponent<Transform>> transforms;
-	std::vector<SerializableComponent<RigidBody>> rigidBodys;
-	std::vector<SerializableComponent<Sprite>> spriteDeserializes;
+	transforms.reserve(64);
 
 #ifdef _DEBUG
 	// we can have empty file when we are developing the scenes
 	try {
 		archive(transforms);
-		archive(rigidBodys);
-		archive(spriteDeserializes);
 	}
 	catch (std::exception&) {
 		return;
 	}
 #else
 	archive(transforms);
-	archive(rigidBodys);
-	archive(spriteDeserializes);
 #endif
 
 
 	for (unsigned i = 0; i < transforms.size(); i++) {
-		std::cout << "TransformX: " << transforms[i].component.position.x << "\n";
-		auto entity = entities->create();
-		entity.addComponent<Transform>(transforms[i].component);
+		auto entity = EntityFactory::createEntityFromType(*entities, transforms[i].type);
+		entity.replace<Transform>(transforms[i].component);
 	}
-
-	for (unsigned i = 0; i < rigidBodys.size(); i++) {
-		std::cout << "RigidBodyUseG: " << rigidBodys[i].component.m_useGravity << "\n";
-		entities->addComponent<RigidBody>(entityx::Entity::Id(rigidBodys[i].id), rigidBodys[i].component);
-	}
-
-	for (unsigned i = 0; i < spriteDeserializes.size(); i++) {
-		std::cout << "TextName: " << spriteDeserializes[i].component.m_textureRegion.getTexture()->m_name << "\n";
-		entities->addComponent<Sprite>(entityx::Entity::Id(spriteDeserializes[i].id),
-		                               std::move(spriteDeserializes[i].component));
-	}
+	Lib::app->log("SceneManager", ("Scene " + m_fileName + " loaded with " + std::to_string(transforms.size()) + " entities.").c_str());
+	glGetError();
 }
 
 /**
  * we need to serialize only object types with transform components
- * the rest we are gonna initialize run-time
+ * the rest we are gonna initialize run-time from #EntityFactory::createEntityFromType
  */
 
 void Scene::save(entityx::EntityManager* entities) {
@@ -68,30 +56,28 @@ void Scene::save(entityx::EntityManager* entities) {
 	cereal::BinaryOutputArchive archive(os);
 
 	std::vector<SerializableComponent<Transform>> transforms;
-	std::vector<SerializableComponent<RigidBody>> rigidBodys;
-	std::vector<SerializableComponent<Sprite>> spritesSerialization;
+	transforms.reserve(entities->size());
 
-	for (auto entity : entities->entities_with_components<Transform>()) {
-		entityx::ComponentHandle<Transform> ch = entity.getComponent<Transform>();
-		SerializableComponent<Transform> td(ch.entity().id().id(), *ch);
+	for (auto entity : entities->entities_with_components<Bird>()) {
+		auto transform = entity.getComponent<Transform>();
+		auto birdType = entity.getComponent<Bird>()->type;
+		SerializableComponent<Transform> td(birdType, *transform);
 		transforms.emplace_back(td);
 	}
 
-	for (auto entity : entities->entities_with_components<RigidBody>()) {
-		entityx::ComponentHandle<RigidBody> ch = entity.getComponent<RigidBody>();
-		SerializableComponent<RigidBody> rbd(ch.entity().id().id(), *ch);
-
-		rigidBodys.emplace_back(rbd);
+	for (auto entity : entities->entities_with_components<Pig>()) {
+		auto transform = entity.getComponent<Transform>();
+		auto pigType = entity.getComponent<Pig>()->type;
+		SerializableComponent<Transform> td(pigType, *transform);
+		transforms.emplace_back(td);
 	}
 
-	for (auto entity : entities->entities_with_components<Sprite>()) {
-		entityx::ComponentHandle<Sprite> ch = entity.getComponent<Sprite>();
-		SerializableComponent<Sprite> sc = SerializableComponent<Sprite>(ch.entity().id().id(), *ch);
-
-		spritesSerialization.emplace_back(sc);
+	for (auto entity : entities->entities_with_components<Obstacle>()) {
+		auto transform = entity.getComponent<Transform>();
+		auto obstacleType = entity.getComponent<Obstacle>()->type;
+		SerializableComponent<Transform> td(obstacleType, *transform);
+		transforms.emplace_back(td);
 	}
 
 	archive(transforms);
-	archive(rigidBodys);
-	archive(spritesSerialization);
 }

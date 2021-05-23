@@ -12,7 +12,7 @@ void Box2dDatabase::createShapes() {
 		};
 		m_triangleShape.Set(vertices, 3);
 	}
-	m_plankShape.SetAsBox(10, 2);
+	m_plankShape.SetAsBox(13.0f, 0.7f);
 
 	m_circleShape.m_radius = 5.f;
 	m_redShape.m_radius = 2.5f;

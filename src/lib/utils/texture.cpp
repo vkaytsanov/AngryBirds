@@ -22,9 +22,9 @@ Texture::~Texture() {
 }
 
 void Texture::init(GLint flags) {
-	m_surface = IMG_Load((m_dir + m_name).c_str());
+	SDL_Surface* surface = IMG_Load((m_dir + m_name).c_str());
 
-	performChecks();
+	performChecks(surface);
 
 	glGenTextures(1, &m_textureBuffer);
 	glBindTexture(GL_TEXTURE_2D, m_textureBuffer);
@@ -33,51 +33,51 @@ void Texture::init(GLint flags) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, flags);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, flags);
+
 	
 	glTexImage2D(GL_TEXTURE_2D,
 	             0,
 	             m_textureFormat,
-	             m_surface->w,
-	             m_surface->h,
+	             surface->w,
+	             surface->h,
 	             0,
 	             m_textureFormat,
 	             GL_UNSIGNED_BYTE,
-	             m_surface->pixels);
+	             surface->pixels);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
-	SDL_FreeSurface(m_surface);
-	m_surface = nullptr;
+	SDL_FreeSurface(surface);
 }
 
-void Texture::performChecks() {
-	if (m_surface == nullptr) {
+void Texture::performChecks(SDL_Surface* surface) {
+	if (surface == nullptr) {
 		Lib::app->error("TextureError", SDL_GetError());
 		exit(-1);
 	}
-	if ((m_surface->w & (m_surface->w - 1)) != 0) {
+	if ((surface->w & (surface->w - 1)) != 0) {
 		Lib::app->error("TextureError", "BMP's width is not a power of 2");
 	}
-	if ((m_surface->h & (m_surface->h - 1)) != 0) {
+	if ((surface->h & (surface->h - 1)) != 0) {
 		Lib::app->error("TextureError", "BMP's height is not a power of 2");
 	}
-	m_colorCount = m_surface->format->BytesPerPixel;
+	m_colorCount = surface->format->BytesPerPixel;
 	if (m_colorCount == 4) {
 		// contains alpha channel
-		m_textureFormat = m_surface->format->Rmask == 0x000000ff ? GL_RGBA : GL_BGRA;
+		m_textureFormat = surface->format->Rmask == 0x000000ff ? GL_RGBA : GL_BGRA;
 	}
 	else if (m_colorCount == 3) {
-		m_textureFormat = m_surface->format->Rmask == 0x000000ff ? GL_RGB : GL_BGR;
+		m_textureFormat = surface->format->Rmask == 0x000000ff ? GL_RGB : GL_BGR;
 	}
 	else {
 		Lib::app->error("TextureError", "Colors arent right");
 		exit(-1);
 	}
 
-	m_width = m_surface->w;
-	m_height = m_surface->h;
+	m_width = surface->w;
+	m_height = surface->h;
 
 }
 

@@ -19,8 +19,8 @@ private:
 	int regionWidth = 0;
 	int regionHeight = 0;
 public:
-	int m_tilingX = 1;
-	int m_tilingY = 1;
+	float m_tilingX = 1;
+	float m_tilingY = 1;
 public:
 	TextureRegion() = default;
 	explicit TextureRegion(std::shared_ptr<Texture> texture);

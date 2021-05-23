@@ -33,6 +33,7 @@
     <ClInclude Include="src\core\components\include\particle_emitter.h" />
     <ClInclude Include="src\core\components\include\serializable.h" />
     <ClInclude Include="src\core\components\include\pig.h" />
+    <ClInclude Include="src\core\components\include\obstacle.h" />
     <ClInclude Include="src\core\data\include\animators_database.h" />
     <ClInclude Include="src\core\data\include\box2d_database.h" />
     <ClInclude Include="src\core\data\include\entity_factory.h" />
@@ -274,6 +275,7 @@
     <ClCompile Include="src\core\components\3d\chunk_aabb.cpp" />
     <ClCompile Include="src\core\components\3d\rigid_body.cpp" />
     <ClCompile Include="src\core\components\bird.cpp" />
+    <ClCompile Include="src\core\components\obstacle.cpp" />
     <ClCompile Include="src\core\components\particle.cpp" />
     <ClCompile Include="src\core\components\particle_emitter.cpp" />
     <ClCompile Include="src\core\components\pig.cpp" />

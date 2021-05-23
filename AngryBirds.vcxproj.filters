@@ -744,6 +744,9 @@
     <ClInclude Include="src\core\data\include\entity_factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\components\include\obstacle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\components\transform.cpp">
@@ -1131,6 +1134,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\data\entity_factory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\components\obstacle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

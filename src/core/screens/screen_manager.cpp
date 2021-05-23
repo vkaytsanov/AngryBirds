@@ -15,6 +15,7 @@
 #include "../components/2d/include/button.h"
 #include "../components/include/particle_emitter.h"
 #include "../components/include/pig.h"
+#include "../components/include/obstacle.h"
 
 ScreenManager::ScreenManager() : m_menuScreen(&m_gameStateManager),
                                  m_playingScreen(&m_gameStateManager) {
@@ -26,7 +27,7 @@ ScreenManager::ScreenManager() : m_menuScreen(&m_gameStateManager),
 	m_entityX.systems.add<ParticleSystem>();
 	m_entityX.systems.add<RenderSystem>(m_entityX.systems.system<PhysicsSystem2D>()->getDebugDraw());
 	m_entityX.systems.add<UserInterfaceSystem>();
-	m_entityX.systems.add<DebugSystem>();
+	//m_entityX.systems.add<DebugSystem>();
 
 	// TODO fix this in more convenient way
 	// initializing component pools for all the components
@@ -36,6 +37,7 @@ ScreenManager::ScreenManager() : m_menuScreen(&m_gameStateManager),
 	entity.addComponent<RigidBody2D>();
 	entity.addComponent<Bird>();
 	entity.addComponent<Pig>();
+	entity.addComponent<Obstacle>();
 	entity.addComponent<ParticleEmitter>();
 	entity.addComponent<Animator>();
 	entity.addComponent<Button>();
@@ -47,7 +49,6 @@ ScreenManager::ScreenManager() : m_menuScreen(&m_gameStateManager),
 	m_entityX.systems.configure();
 
 #if 0
-	// m_gameStateManager.changeState(Playing);
 	m_screens[m_gameStateManager.getCurrentState()]->start(&m_entityX);
 #endif
 }

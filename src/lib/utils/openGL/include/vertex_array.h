@@ -19,7 +19,7 @@ public:
 	~VertexArray();
 	void free() const;
 	void bind() const;
-	void unbind() const;
+	static void unbind();
 };
 
 

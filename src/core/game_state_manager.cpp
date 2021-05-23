@@ -5,7 +5,7 @@
 #include "include/game_state_manager.h"
 
 GameStateManager::GameStateManager() {
-	m_currentState = m_lastState = Menu;
+	m_currentState = m_lastState = Playing;
 }
 
 

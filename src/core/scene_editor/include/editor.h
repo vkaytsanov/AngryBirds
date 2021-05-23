@@ -24,6 +24,7 @@ private:
 	ImVec2 gameWindowTopLeftPos;
 private:
 	void loadPrefabs();
+	void onSceneChange();
 	void addToCurrentScene(const entityx::Entity entity);
 	void showDockSpace(bool* open);
 	void drawMenuBar();

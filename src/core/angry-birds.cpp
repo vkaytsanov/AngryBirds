@@ -4,7 +4,9 @@
 
 #include "include/angry-birds.h"
 #include "../lib/include/lib.h"
+#include "components/2d/include/sprite.h"
 #include "data/include/asset_manager.h"
+#include "utils/include/texture_region.h"
 
 
 void GLAPIENTRY
@@ -35,7 +37,13 @@ void AngryBirds::create() {
 	m_pScreenManager = std::make_unique<ScreenManager>();
 
 #if defined(USE_EDITOR)
-	// initializing component pools for this entity manager
+	auto ground = m_pScreenManager->m_entityX.entities.create();
+	auto ts = ground.addComponent<Transform>(Vector3f(0, -50, 0));
+	ts->scale = Vector3f(10, 1.4f, 1);
+	TextureRegion groundTR = TextureRegion(AssetManager::getInstance().getSprite("ground"));
+	groundTR.setTiling(10, 1);
+	ground.addComponent<Sprite>(std::move(groundTR));
+
 	m_pEditor = std::make_unique<Editor>(&m_pScreenManager->m_entityX);
 	m_pEditor->update(Lib::graphics->getDeltaTime());
 #endif

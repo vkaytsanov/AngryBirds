@@ -8,7 +8,6 @@
 IndexBuffer::IndexBuffer() {
 	buffer = 0;
 	glGenBuffers(1, &buffer);
-	bind();
 }
 
 IndexBuffer::~IndexBuffer() {
