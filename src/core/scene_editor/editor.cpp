@@ -162,9 +162,9 @@ void Editor::drawMenuBar() {
 			else if (ImGui::MenuItem("Save Scene")) {
 				m_sceneManager.saveCurrentScene(&m_pEntityX->entities);
 			}
-			else if (ImGui::MenuItem("Save Scene As")) {
-				m_saveAsPopUp = true;
-			}
+			// else if (ImGui::MenuItem("Save Scene As")) {
+			// 	m_saveAsPopUp = true;
+			// }
 			ImGui::EndMenu();
 		}
 		if(m_sceneManager.m_pCurrentScene){
