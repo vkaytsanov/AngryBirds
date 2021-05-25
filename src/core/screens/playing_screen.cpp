@@ -30,7 +30,15 @@ void PlayingScreen::start(entityx::EntityX* entityX) {
 	
 	// load the birds, pigs, collision objects
 	m_sceneManager.changeScene(&entityX->entities, std::to_string(m_pGameStateManager->m_currentLevel));
+
 	
+	
+	// FIXME: we should create event for round start
+	// and clear the birds queue inside the system
+	auto& birdsQueue = entityX->systems.system<BirdSystem>()->m_birds;
+	while(!birdsQueue.empty()) {
+		birdsQueue.pop();
+	}
 	// add the birds to the bird system
 	entityX->systems.system<BirdSystem>()->addBird(entityX->entities, Red);
 	entityX->systems.system<BirdSystem>()->addBird(entityX->entities, Terence);

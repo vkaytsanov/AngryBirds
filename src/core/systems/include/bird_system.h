@@ -9,6 +9,7 @@ struct TheBirdIsGone;
 
 class BirdSystem : public entityx::System<BirdSystem>,
                    public entityx::Receiver<BirdSystem> {
+	friend class PlayingScreen;
 private:
 	std::queue<entityx::Entity> m_birds;
 	entityx::Entity m_currentBird;
