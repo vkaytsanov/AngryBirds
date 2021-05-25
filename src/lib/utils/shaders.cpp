@@ -6,21 +6,30 @@
 #include <sstream>
 #include "include/shaders.h"
 #include "../include/lib.h"
+#include "../../src/core/data/include/config_development.h"
 
 
 Shaders::Shaders(const std::string& vertexShaderPath, const std::string& fragShaderPath) {
 	std::cout << shadersPath + vertexShaderPath << "\n";
-	std::string parsedVertexShader = readFromFile(shadersPath + vertexShaderPath);
+#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
+	const std::string subFolder = "emscripten/";
+#else
+	const std::string subFolder = "core/";
+#endif
+
+	std::string parsedVertexShader = readFromFile(shadersPath + subFolder + vertexShaderPath);
 	vertexShader = parsedVertexShader.c_str();
 
-	std::string parsedFragmentShader = readFromFile(shadersPath + fragShaderPath);
+	std::string parsedFragmentShader = readFromFile(shadersPath + subFolder + fragShaderPath);
 	fragShader = parsedFragmentShader.c_str();
 
 	geomShader = nullptr;
 	compile();
+
 }
 
-Shaders::Shaders(const std::string& vertexShaderPath, const std::string& fragShaderPath, const std::string& geomShaderPath) {
+Shaders::Shaders(const std::string& vertexShaderPath, const std::string& fragShaderPath,
+                 const std::string& geomShaderPath) {
 	std::string parsedVertexShader = readFromFile(shadersPath + vertexShaderPath);
 	vertexShader = parsedVertexShader.c_str();
 
@@ -72,7 +81,7 @@ void Shaders::compile() {
 	checkForCompileError(fragShaderID);
 
 	// if there is geometry shader
-	if(geomShader){
+	if (geomShader) {
 		geomShaderID = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(geomShaderID, 1, &geomShader, nullptr);
 		glCompileShader(geomShaderID);
@@ -82,7 +91,7 @@ void Shaders::compile() {
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShaderID);
 	glAttachShader(shaderProgram, fragShaderID);
-	if(geomShader){
+	if (geomShader) {
 		glAttachShader(shaderProgram, geomShaderID);
 	}
 
@@ -97,7 +106,7 @@ void Shaders::compile() {
 		// Write the error to a log
 		Lib::app->error("The shader", fragShader);
 		Lib::app->error("LinkingShaderProgramError", message);
-		
+
 		exit(-1);
 	}
 	else {
@@ -171,17 +180,3 @@ void Shaders::setVector3f(std::string name, float x, float y, float z) {
 void Shaders::setVector3f(std::string name, const Vector3f& vec) {
 	setVector3f(name, vec.x, vec.y, vec.z);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -13,11 +13,12 @@ struct Obstacle;
 struct Bird;
 struct Pig;
 
-PhysicsSystem2D::PhysicsSystem2D() : m_world(b2Vec2(0, -9.8f)),
-                                     m_debugDraw(0, 1) {
+PhysicsSystem2D::PhysicsSystem2D() : m_world(b2Vec2(0, -9.8f)){
+#if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
+	m_debugDraw.SetAttribLocations(0,1);
 	m_debugDraw.SetFlags(0xff);
 	m_world.SetDebugDraw(&m_debugDraw);
-	//m_world.SetContactListener(&m_collisionListener);
+#endif
 }
 
 
@@ -58,42 +59,43 @@ void PhysicsSystem2D::preUpdate(entityx::EntityManager& entities, entityx::Event
 			// if a pig has velocity, aka moving -> destroy it
 			if (entity.has_component<Pig>()) {
 				if (std::abs(velocity.x) > 8 || std::abs(velocity.y) > 8) {
-					if(!AudioDatabase::getInstance().isPlaying(SOUND_PIG_DESTROYED)){
+					if (!AudioDatabase::getInstance().isPlaying(SOUND_PIG_DESTROYED)) {
 						AudioDatabase::getInstance().play(SOUND_PIG_DESTROYED);
 					}
 					entity.getComponent<Animator>()->currentAnimation = PigDisappearing;
 					events.post<PigKilledEvent>();
 					break;
 				}
-				else if(std::abs(velocity.x) > 2 || std::abs(velocity.y) > 2){
+				else if (std::abs(velocity.x) > 2 || std::abs(velocity.y) > 2) {
 					// change to damaged
 					entity.getComponent<Animator>()->currentAnimation = PigColliding;
 				}
 			}
-			else if(entity.has_component<Bird>()) {
+			else if (entity.has_component<Bird>()) {
 				// if a bird has almost no velocity, we destroy it
 				if (std::abs(velocity.x) < 1 || std::abs(velocity.y) < 1) {
 					// submit event for the particle system
-					events.post<TheBirdIsGone>(TheBirdIsGone(entity.getComponent<Bird>()->type, rb->body->GetPosition()));
+					events.post<TheBirdIsGone>(
+						TheBirdIsGone(entity.getComponent<Bird>()->type, rb->body->GetPosition()));
 					// play death sound
-					if(!AudioDatabase::getInstance().isPlaying(SOUND_BIRD_YELL)) {
+					if (!AudioDatabase::getInstance().isPlaying(SOUND_BIRD_YELL)) {
 						AudioDatabase::getInstance().play(SOUND_BIRD_YELL);
 					}
 					// destroy it
 					m_world.DestroyBody(rb->body);
 					entity.destroy();
-						
+
 					break;
 				}
 				else {
-					if(!AudioDatabase::getInstance().isPlaying(SOUND_BIRD_COLLISION)){
+					if (!AudioDatabase::getInstance().isPlaying(SOUND_BIRD_COLLISION)) {
 						AudioDatabase::getInstance().play(SOUND_BIRD_COLLISION);
 					}
 				}
 			}
-			else if(entity.has_component<Obstacle>()) {
+			else if (entity.has_component<Obstacle>()) {
 				if (std::abs(velocity.x) > 10 || std::abs(velocity.y) > 10) {
-					if(!AudioDatabase::getInstance().isPlaying(SOUND_WOOD_DESTROYED)){
+					if (!AudioDatabase::getInstance().isPlaying(SOUND_WOOD_DESTROYED)) {
 						AudioDatabase::getInstance().play(SOUND_WOOD_DESTROYED);
 					}
 					// creating a puff effect when an obstacle is destroyed.
@@ -101,13 +103,15 @@ void PhysicsSystem2D::preUpdate(entityx::EntityManager& entities, entityx::Event
 					// we are creating a new entity with a sprite from the puff effect's texture
 					auto puffCloud = entities.create();
 					puffCloud.addComponent<Transform>(entity.getComponent<Transform>()->position);
-					puffCloud.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one")), true);
-					auto animator = puffCloud.addComponent<Animator>(AnimatorsDatabase::getInstance().fromTypeToAnimator(PigMinion));
+					puffCloud.addComponent<Sprite>(TextureRegion(AssetManager::getInstance().getSprite("all-in-one")),
+					                               true);
+					auto animator = puffCloud.addComponent<Animator>(
+						AnimatorsDatabase::getInstance().fromTypeToAnimator(PigMinion));
 					animator->currentAnimation = PigDisappearing;
 
 					m_world.DestroyBody(rb->body);
 					entity.destroy();
-					
+
 					break;
 				}
 			}
@@ -123,13 +127,15 @@ void PhysicsSystem2D::preUpdate(entityx::EntityManager& entities, entityx::Event
 
 		}
 	}
-
+#if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
 	m_debugDraw.Clear();
 	m_world.DebugDraw();
 	m_debugDraw.BufferData();
+#endif
 }
 
-
+#if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
 b2draw::DebugDraw* PhysicsSystem2D::getDebugDraw() {
 	return &m_debugDraw;
 }
+#endif

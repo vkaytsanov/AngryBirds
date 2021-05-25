@@ -4,6 +4,11 @@
 #include "utils/openGL/include/index_buffer.h"
 #include "utils/openGL/include/vertex_buffer.h"
 
+#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
+	GLint Sprite::m_positionLocation = 0;
+	GLint Sprite::m_uvLocation = 0;
+#endif
+
 void Sprite::init() {
 	static bool indexBufferInitialized = false;
 	static IndexBuffer ibo;
@@ -37,9 +42,15 @@ void Sprite::init() {
 	m_vao.bind();
 	vbo.bind();
 	ibo.bind();
+
+#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
+	vbo.vertexAttribPointer(m_positionLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (GLvoid*)offsetof(Vertex2d, position));
+	vbo.vertexAttribPointer(m_uvLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (GLvoid*)offsetof(Vertex2d, uvs));
+#else
 	vbo.vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (GLvoid*)offsetof(Vertex2d, position));
 	vbo.vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (GLvoid*)offsetof(Vertex2d, uvs));
-
+#endif
+	
 	vbo.bufferData(sizeof(Vertex2d) * 4, vertices, GL_STATIC_DRAW);
 	vbo.unbind();
 

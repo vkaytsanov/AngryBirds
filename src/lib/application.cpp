@@ -9,10 +9,15 @@
 
 #include <typeinfo>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#include <SDL/SDL.h>
+#else
 #include <SDL2/SDL.h>
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_sdl.h"
+#endif
 
 
 #if defined(_DEBUG)
@@ -21,6 +26,11 @@
 #include <crtdbg.h>
 #endif
 
+#if defined(__EMSCRIPTEN__)
+void emscriptenLoop(void* arg) {
+	static_cast<Application*>(arg)->gameLoop();
+}
+#endif
 
 Application::Application(Listener* listener) :
 	Application(listener, new Configuration()) {
@@ -64,8 +74,15 @@ Application::Application(Listener* listener, Configuration* config, Graphics* gr
 
 	running = true;
 
+#if defined(__EMSCRIPTEN__)
+	emscripten_set_main_loop_arg(&emscriptenLoop, this, -1, 1);
+#else
 	gameLoop();
+#endif
+
 }
+
+
 
 void Application::gameLoop() {
 	int lastWidth = graphics->getWidth();
@@ -107,7 +124,7 @@ void Application::gameLoop() {
 		if (!isPaused) {
 			graphics->updateTime();
 			listener->render();
-
+#if !defined(__EMSCRIPTEN__)
 			// imgui
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplSDL2_NewFrame(graphics->getWindow());
@@ -124,6 +141,7 @@ void Application::gameLoop() {
 				ImGui::RenderPlatformWindowsDefault();
 				SDL_GL_MakeCurrent(graphics->getWindow(), graphics->getContext());
 			}
+#endif
 			SDL_GL_SwapWindow(graphics->getWindow());
 
 			/* So we don't use 100% CPU */
@@ -141,6 +159,7 @@ void Application::gameLoop() {
 
 
 void Application::initImgui() {
+#if !defined(__EMSCRIPTEN__)
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -220,6 +239,7 @@ void Application::initImgui() {
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForOpenGL(graphics->getWindow(), graphics->getContext());
 	ImGui_ImplOpenGL3_Init(graphics->getGlslVersion());
+#endif
 }
 
 void Application::exitApp() {
@@ -227,10 +247,11 @@ void Application::exitApp() {
 }
 
 Application::~Application() {
+#if !defined(__EMSCRIPTEN__)
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-
+#endif
 	delete listener;
 	delete audio;
 	delete logger;

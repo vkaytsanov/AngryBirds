@@ -17,6 +17,7 @@ public:
 #if defined(USE_EDITOR)
 	std::unique_ptr<Editor> m_pEditor;
 #endif
+	AngryBirds() = default;
 	~AngryBirds() override;
 public:
 	// Inherited via Listener

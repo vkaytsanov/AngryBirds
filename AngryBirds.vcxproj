@@ -188,14 +188,6 @@
     <ClInclude Include="src\lib\entityx\quick.h" />
     <ClInclude Include="src\lib\entityx\System.h" />
     <ClInclude Include="src\lib\entityx\tags\TagsComponent.h" />
-    <ClInclude Include="src\lib\imgui\imconfig.h" />
-    <ClInclude Include="src\lib\imgui\imgui.h" />
-    <ClInclude Include="src\lib\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="src\lib\imgui\imgui_impl_sdl.h" />
-    <ClInclude Include="src\lib\imgui\imgui_internal.h" />
-    <ClInclude Include="src\lib\imgui\imstb_rectpack.h" />
-    <ClInclude Include="src\lib\imgui\imstb_textedit.h" />
-    <ClInclude Include="src\lib\imgui\imstb_truetype.h" />
     <ClInclude Include="src\lib\include\application.h" />
     <ClInclude Include="src\lib\include\audio.h" />
     <ClInclude Include="src\lib\include\configuration.h" />
@@ -204,9 +196,6 @@
     <ClInclude Include="src\lib\include\lib.h" />
     <ClInclude Include="src\lib\include\listener.h" />
     <ClInclude Include="src\lib\include\logger.h" />
-    <ClInclude Include="src\lib\utils\box2d\b2draw\algorithm.h" />
-    <ClInclude Include="src\lib\utils\box2d\b2draw\DebugDraw.h" />
-    <ClInclude Include="src\lib\utils\box2d\b2draw\PrimitiveRenderer.h" />
     <ClInclude Include="src\lib\utils\camera\include\camera.h" />
     <ClInclude Include="src\lib\utils\camera\include\first_person_camera_controller.h" />
     <ClInclude Include="src\lib\utils\camera\include\frustum.h" />
@@ -345,19 +334,10 @@
     <ClCompile Include="src\lib\entityx\help\Timer.cc" />
     <ClCompile Include="src\lib\entityx\System.cc" />
     <ClCompile Include="src\lib\graphics.cpp" />
-    <ClCompile Include="src\lib\imgui\imgui.cpp" />
-    <ClCompile Include="src\lib\imgui\imgui_demo.cpp" />
-    <ClCompile Include="src\lib\imgui\imgui_draw.cpp" />
-    <ClCompile Include="src\lib\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\lib\imgui\imgui_impl_sdl.cpp" />
-    <ClCompile Include="src\lib\imgui\imgui_tables.cpp" />
-    <ClCompile Include="src\lib\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\lib\input.cpp" />
     <ClCompile Include="src\lib\lib.cpp" />
     <ClCompile Include="src\lib\logger.cpp" />
     <ClCompile Include="src\lib\utils\animation.cpp" />
-    <ClCompile Include="src\lib\utils\box2d\DebugDraw.cpp" />
-    <ClCompile Include="src\lib\utils\box2d\PrimitiveRenderer.cpp" />
     <ClCompile Include="src\lib\utils\camera\camera.cpp" />
     <ClCompile Include="src\lib\utils\camera\first_person_camera_controller.cpp" />
     <ClCompile Include="src\lib\utils\camera\frustum.cpp" />
@@ -427,12 +407,18 @@
     <ClCompile Include="src\lib\utils\viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\assets\shaders\b2draw\shader.frag" />
-    <None Include="src\assets\shaders\b2draw\shader.vert" />
-    <None Include="src\assets\shaders\particle\shader.frag" />
-    <None Include="src\assets\shaders\particle\shader.vert" />
-    <None Include="src\assets\shaders\textures\shader.frag" />
-    <None Include="src\assets\shaders\textures\shader.vert" />
+    <None Include="src\assets\shaders\core\b2draw\shader.frag" />
+    <None Include="src\assets\shaders\core\b2draw\shader.vert" />
+    <None Include="src\assets\shaders\emscripten\b2draw\shader.frag" />
+    <None Include="src\assets\shaders\emscripten\b2draw\shader.vert" />
+    <None Include="src\assets\shaders\emscripten\particle\shader.frag" />
+    <None Include="src\assets\shaders\emscripten\particle\shader.vert" />
+    <None Include="src\assets\shaders\emscripten\textures\shader.frag" />
+    <None Include="src\assets\shaders\emscripten\textures\shader.vert" />
+    <None Include="src\assets\shaders\core\particle\shader.frag" />
+    <None Include="src\assets\shaders\core\particle\shader.vert" />
+    <None Include="src\assets\shaders\core\textures\shader.frag" />
+    <None Include="src\assets\shaders\core\textures\shader.vert" />
     <None Include="src\lib\cereal\external\rapidxml\manual.html" />
   </ItemGroup>
   <ItemGroup>
@@ -552,7 +538,7 @@
     <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Emscripten|Emscripten'">
-    <IncludePath>$(ProjectDir)dependencies\include\box2d;$(ProjectDir)dependencies\include\SDL2;$(ProjectDir)dependencies\include\GL;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)dependencies\lib\x86\BOX2D;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\GLEW;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -654,7 +640,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Emscripten|Emscripten'">
     <ClCompile>
       <PreprocessorDefinitions>;__EMSCRIPTEN__</PreprocessorDefinitions>
-      <AdditionalOptions>--std=c++14 --bind -s USE_SDL=2  -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s WASM=1 -s USE_OGG=1 -s USE_VORBIS=1 -o angry-birds.html -s LINKABLE=1 -s EXPORT_ALL=1 -I src/lib  -I dependencies/include %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>--std=c++14 --bind -s FULL_ES3=1 -s USE_SDL=2  -l SDL -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL_MIXER=2 -s USE_LIBPNG=1 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s WASM=2 -s USE_OGG=1 -s USE_VORBIS=1  -s LINKABLE=1 -s EXPORT_ALL=1 -I src/lib  -I dependencies/include %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

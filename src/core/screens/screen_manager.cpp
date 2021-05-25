@@ -31,7 +31,11 @@ ScreenManager::ScreenManager() : m_screens({}),
 	m_entityX.systems.add<BirdSystem>();
 	m_entityX.systems.add<AnimatorSystem>();
 	m_entityX.systems.add<ParticleSystem>();
+#if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
 	m_entityX.systems.add<RenderSystem>(m_entityX.systems.system<PhysicsSystem2D>()->getDebugDraw());
+#else
+	m_entityX.systems.add<RenderSystem>();
+#endif
 	m_entityX.systems.add<UserInterfaceSystem>();
 	m_entityX.systems.add<GameStateSystem>(&m_gameStateManager);
 	//m_entityX.systems.add<DebugSystem>();

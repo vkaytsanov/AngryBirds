@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <iostream>
 #include "include/graphics.h"
+#include "../../src/core/data/include/config_development.h"
 
 Graphics::Graphics() : Graphics(new Configuration()) {
 }
@@ -52,12 +53,14 @@ void Graphics::createWindow() {
 		std::cout << SDL_GetError() << "\n";
 	}
 	else {
+		int flags = IMG_INIT_PNG;
+		
 		//Create Image Handling, but just PNG format
-		if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-			std::cout << IMG_GetError() << "\n";
+		if (!IMG_Init(flags)) {
+			std::cout << "SDL IMG Error: " << IMG_GetError() << "\n";
 		}
 
-		// Decide OpenGL and GLSL versions
+	// Decide OpenGL and GLSL versions
 #if defined(__APPLE__)
     // GL 3.2 Core + GLSL 150
     m_glslVersion = "#version 150";
@@ -65,11 +68,9 @@ void Graphics::createWindow() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-#elif defined(__EMSCRIPTEN__)
+#elif defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
     // GL 3.0 + GLSL 130
     m_glslVersion = "#version 130";
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #else

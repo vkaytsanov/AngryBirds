@@ -1,10 +1,10 @@
 #ifndef HEADER_INCLUDE__RECURSION__PHYSICS__B2__PRIMITIVERENDERER__H
 #define HEADER_INCLUDE__RECURSION__PHYSICS__B2__PRIMITIVERENDERER__H
-#include <vector>
-#include <utility>
+
 
 #include <GL/glew.h>
-
+#include <vector>
+#include <utility>
 #include <box2d/b2_draw.h>
 
 #include "utils/include/shaders.h"

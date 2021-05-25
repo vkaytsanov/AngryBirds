@@ -4,6 +4,7 @@
 #include "utils/geometry/include/vector3.h"
 #include "utils/include/texture_region.h"
 #include "utils/openGL/include/vertex_array.h"
+#include "../../../data/include/config_development.h"
 
 // FIXME: dirty way to change the size of the vertices
 // in case when there is a viewport
@@ -40,6 +41,10 @@ public:
 	bool m_flipX = false;
 	bool m_flipY = false;
 public:
+#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
+	static GLint m_positionLocation;
+	static GLint m_uvLocation;
+#endif
 	Sprite() = default;
 	Sprite(const TextureRegion& tR, bool hasAnimator = false);
 	Sprite(const Sprite& other) = default;

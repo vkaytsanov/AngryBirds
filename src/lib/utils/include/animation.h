@@ -23,7 +23,11 @@ private:
 	std::vector<float> m_frameDuration;
 	bool m_looping = false;
 	float m_currentTime = 0.0f;
+#if !defined(__EMSCRIPTEN__)
 	unsigned m_currentFrame = 0;
+#else
+	unsigned long m_currentFrame = 0;
+#endif
 public:
 	Animation() = default;
 	Animation(const std::vector<float>& frameDuration, std::vector<Sprite>&& frames, bool looping = false);

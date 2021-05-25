@@ -1,0 +1,13 @@
+#version 130
+
+out vec4 color;
+
+uniform sampler2D tex_id;
+
+precision mediump float;
+
+in vec2 uvOut;
+
+void main() {
+    color = texture(tex_id, uvOut);
+}

@@ -4,7 +4,9 @@
 #include "utils/ui/include/user_interface.h"
 #include <cstring>
 
+#if !defined(__EMSCRIPTEN__)
 #include "imgui/imgui_impl_sdl.h"
+#endif
 
 Input::Input(const float width, const float height) {
 	SDL_memset(m_keys, false, sizeof m_keys);
@@ -26,8 +28,9 @@ void Input::update() {
 	//    m_mouseRightClick = false;
 
 	while (SDL_PollEvent(&e) != 0) {
+#if !defined(__EMSCRIPTEN__)
 		ImGui_ImplSDL2_ProcessEvent(&e);
-		
+#endif
 		//User requests m_quit
 		if (e.type == SDL_QUIT) {
 			m_quit = true;

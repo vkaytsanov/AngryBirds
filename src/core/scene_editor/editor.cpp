@@ -1,8 +1,7 @@
 ﻿#include "include/editor.h"
 
 #include <fstream>
-
-#include "../lib/imgui/imgui.h"
+#include "imgui/imgui.h"
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>

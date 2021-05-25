@@ -5,6 +5,7 @@
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_video.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 #else

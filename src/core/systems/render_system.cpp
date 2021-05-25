@@ -6,6 +6,7 @@
 #include "../components/2d/include/sprite.h"
 #include "../components/include/particle_emitter.h"
 #include "../components/include/obstacle.h"
+#include "../data/include/config_development.h"
 
 RenderSystem::RenderSystem() : m_viewport(240, 120, &m_camera),
                                m_spriteShader("textures/shader.vert", "textures/shader.frag"),
@@ -13,8 +14,14 @@ RenderSystem::RenderSystem() : m_viewport(240, 120, &m_camera),
 
 	m_camera.m_pTransform = new Transform();
 	onResize(Lib::graphics->getWidth(), Lib::graphics->getHeight());
+
+#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
+	Sprite::m_positionLocation = glGetAttribLocation(m_spriteShader.getProgram(), "position");
+	Sprite::m_uvLocation = glGetAttribLocation(m_spriteShader.getProgram(), "uv");
+#endif
 }
 
+#if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
 RenderSystem::RenderSystem(b2draw::DebugDraw* debugDraw) :
 	m_viewport(240, 120, &m_camera),
 	m_spriteShader("textures/shader.vert", "textures/shader.frag"),
@@ -24,7 +31,7 @@ RenderSystem::RenderSystem(b2draw::DebugDraw* debugDraw) :
 	m_camera.m_pTransform = new Transform();
 	onResize(Lib::graphics->getWidth(), Lib::graphics->getHeight());
 }
-
+#endif
 void RenderSystem::configure(entityx::EntityManager& entities, entityx::EventManager& events) {
 
 }
@@ -42,7 +49,7 @@ void RenderSystem::postUpdate(entityx::EntityManager& entities, entityx::EventMa
 	renderSprites(entities);
 	renderParticles(entities);
 
-#if defined(_DEBUG)
+#if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
 	if (m_pDebugDraw) {
 		m_pDebugDraw->Render(&m_camera.getCombinedMatrix());
 	}
