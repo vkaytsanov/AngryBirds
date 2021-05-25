@@ -7,7 +7,23 @@
 #include <iostream>
 
 
-VertexArray::VertexArray() {
+VertexArray::VertexArray(bool isRaii) : m_isRaii(isRaii) {
+	if (isRaii) {
+		initialize();
+	}
+}
+
+VertexArray::VertexArray(VertexArray&& other) noexcept : arrayObject(std::move(other.arrayObject)), m_isRaii(std::move(other.m_isRaii)) {
+	other.arrayObject = 0;
+}
+
+VertexArray::~VertexArray() {
+	if (m_isRaii) {
+		free();
+	}
+}
+
+void VertexArray::initialize() {
 #if defined(_DEBUG)
 	static int counter = 0;
 	counter++;
@@ -15,21 +31,17 @@ VertexArray::VertexArray() {
 #endif
 	arrayObject = 0;
 	glGenVertexArrays(1, &arrayObject);
-	
 }
 
-VertexArray::VertexArray(VertexArray&& other) noexcept : arrayObject(other.arrayObject){
-	other.arrayObject = 0;
-}
-
-VertexArray::~VertexArray() {
-	free();
-	arrayObject = 0;
-}
-
-void VertexArray::free() const {
+void VertexArray::free() {
+#if defined(_DEBUG)
+	static int counter = 0;
+	counter++;
+	std::cout << "VertexArray " << counter << " destroyed.\n";
+#endif
 	glDeleteVertexArrays(1, &arrayObject);
 	unbind();
+	arrayObject = 0;
 }
 
 void VertexArray::bind() const {

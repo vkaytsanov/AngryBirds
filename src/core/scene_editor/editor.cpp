@@ -249,9 +249,7 @@ void Editor::drawPrefabsWindow() {
 			ImGui::SameLine();
 			ImGui::BeginGroup();
 			TextureRegion* tR = &entity.getComponent<Sprite>()->m_textureRegion;
-			// if(entity.has_component<Animator>()) {
-			// 	tR = &entity.getComponent<Animator>()->getFrame().m_textureRegion;
-			// }
+
 			ImGui::ImageButton(
 				(void*)tR->getTexture()->getBuffer(), {64, 64}, {tR->getU(), tR->getV()}, {tR->getU2(), tR->getV2()});
 

@@ -12,9 +12,6 @@ class GameStateManager;
 
 class AbstractScreen {
 protected:
-	entityx::EventManager m_eventManager;
-	entityx::EntityManager m_entities;
-
 	GameStateManager* m_pGameStateManager;
 public:
     AbstractScreen(GameStateManager* gameStateManager);

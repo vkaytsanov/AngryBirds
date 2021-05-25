@@ -14,6 +14,15 @@ AnimatorsDatabase::AnimatorsDatabase() {
 	initializePuffCloud();
 }
 
+AnimatorsDatabase::~AnimatorsDatabase() {
+	for (auto& animator : m_animators) {
+		for (auto& animation : animator.animations) {
+			for (auto& sprite : animation.m_frames) {
+				sprite.getVao()->free();
+			}
+		}
+	}
+}
 
 void AnimatorsDatabase::initializePig() {
 	const std::shared_ptr<Texture> texture = AssetManager::getInstance().getSprite("all-in-one");
@@ -21,7 +30,6 @@ void AnimatorsDatabase::initializePig() {
 		std::vector<Sprite> frames;
 		frames.emplace_back(Sprite(TextureRegion(texture, 683, 684, 95, 96)));
 		frames.emplace_back(Sprite(TextureRegion(texture, 585, 684, 95, 96)));
-
 		Animation idlePigAnimation = Animation({5.0f, 1.0f}, std::move(frames), true);
 		m_animators[PigMinion].animations.push_back(std::move(idlePigAnimation));
 	}
@@ -41,11 +49,15 @@ void AnimatorsDatabase::initializePig() {
 		Animation collidingPigAnimation = Animation({5.0f, 1.0f}, std::move(frames), true);
 		m_animators[PigMinion].animations.push_back(std::move(collidingPigAnimation));
 	}
+	{
+		std::vector<Sprite> frames;
+		frames.emplace_back(Sprite(TextureRegion(texture, 373, 1077, 95, 96)));
+
+		Animation collidingLaughingPigAnimation = Animation(2.0f, std::move(frames), false);
+		m_animators[PigMinion].animations.push_back(std::move(collidingLaughingPigAnimation));
+	}
 
 	StateHandler idleHandler = [](entityx::Entity entity, int& currentState) {
-		if (entity.getComponent<RigidBody2D>()->body->GetContactList() != nullptr) {
-			currentState = PigColliding;
-		}
 	};
 	StateHandler laughingHandler = [](entityx::Entity entity, int& currentState) {
 		if (entity.getComponent<Animator>()->animations[currentState].isFinished()) {
@@ -53,16 +65,16 @@ void AnimatorsDatabase::initializePig() {
 		}
 	};
 	StateHandler collidingHandler = [](entityx::Entity entity, int& currentState) {
-		auto rb = entity.getComponent<RigidBody2D>()->body;
-		// TODO
-		if(rb->GetLinearVelocity().x > 3.0f || rb->GetLinearVelocity().y > 3.0f) {
-			rb->GetWorld()->DestroyBody(rb);
-			currentState = PigDisappearing;
+	};
+	StateHandler collidingLaughingHandler = [](entityx::Entity entity, int& currentState) {
+		if (entity.getComponent<Animator>()->animations[currentState].isFinished()) {
+			currentState = PigColliding;
 		}
 	};
-	m_animators[PigMinion].conditions.push_back(std::move(idleHandler));
-	m_animators[PigMinion].conditions.push_back(std::move(laughingHandler));
-	m_animators[PigMinion].conditions.push_back(std::move(collidingHandler));
+	m_animators[PigMinion].conditions.push_back(idleHandler);
+	m_animators[PigMinion].conditions.push_back(laughingHandler);
+	m_animators[PigMinion].conditions.push_back(collidingHandler);
+	m_animators[PigMinion].conditions.push_back(collidingLaughingHandler);
 	m_animators[PigMinion].currentAnimation = 0;
 	m_animators[PigMinion].entityType = PigMinion;
 
@@ -103,11 +115,14 @@ void AnimatorsDatabase::initializePuffCloud() {
 
 	StateHandler puffHandler = [](entityx::Entity entity, int& currentState) {
 		if (entity.getComponent<Animator>()->animations[currentState].isFinished()) {
+			if (auto rb = entity.getComponent<RigidBody2D>()) {
+				rb->body->GetWorld()->DestroyBody(rb->body);
+			}
 			entity.destroy();
 		}
 	};
 	m_animators[PigMinion].animations.push_back(std::move(puffAnimation));
-	m_animators[PigMinion].conditions.push_back(std::move(puffHandler));
+	m_animators[PigMinion].conditions.push_back(puffHandler);
 }
 
 void AnimatorsDatabase::addBirdIdleAnimation(Animator& animator, int x, int y, int width, int height) {
@@ -123,7 +138,7 @@ void AnimatorsDatabase::addBirdIdleAnimation(Animator& animator, int x, int y, i
 			currentState = BirdFlying;
 		}
 	};
-	animator.conditions.push_back(std::move(idleHandler));
+	animator.conditions.push_back(idleHandler);
 }
 
 void AnimatorsDatabase::addBirdFlyingAnimation(Animator& animator, int x, int y, int width, int height) {
@@ -139,7 +154,7 @@ void AnimatorsDatabase::addBirdFlyingAnimation(Animator& animator, int x, int y,
 			currentState = BirdColliding;
 		}
 	};
-	animator.conditions.push_back(std::move(flyingHandler));
+	animator.conditions.push_back(flyingHandler);
 }
 
 void AnimatorsDatabase::addBirdCollidingAnimation(Animator& animator, int x, int y, int width, int height) {
@@ -152,7 +167,7 @@ void AnimatorsDatabase::addBirdCollidingAnimation(Animator& animator, int x, int
 
 	StateHandler collidingHandler = [](entityx::Entity entity, int& currentState) {
 	};
-	animator.conditions.push_back(std::move(collidingHandler));
+	animator.conditions.push_back(collidingHandler);
 }
 
 Animator& AnimatorsDatabase::fromTypeToAnimator(EntityType type) {

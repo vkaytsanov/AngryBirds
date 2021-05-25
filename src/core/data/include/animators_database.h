@@ -1,11 +1,15 @@
 ﻿#pragma once
+
+#include <array>
+
 #include "entity_type.h"
 #include "../../components/2d/include/animator.h"
 
 enum PigStates : int {
 	PigIdle,
-	PigLaughing,
+	PigIdleLaughing,
 	PigColliding,
+	PigCollidingLaughing,
 	PigDisappearing
 };
 
@@ -14,7 +18,6 @@ enum BirdStates : int {
 	BirdFlying,
 	BirdColliding
 };
-
 
 class AnimatorsDatabase {
 private:
@@ -25,11 +28,14 @@ private:
 	void initializeRed();
 	void initializePuffCloud();
 
+
 	void addBirdIdleAnimation(Animator& animator, int x, int y, int width, int height);
 	void addBirdFlyingAnimation(Animator& animator, int x, int y, int width, int height);
 	void addBirdCollidingAnimation(Animator& animator, int x, int y, int width, int height);
 public:
 	AnimatorsDatabase();
+	~AnimatorsDatabase();
+public:
 	Animator& fromTypeToAnimator(EntityType type);
 	static AnimatorsDatabase& getInstance();
 };

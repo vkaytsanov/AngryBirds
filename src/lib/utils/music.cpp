@@ -24,7 +24,13 @@ void Music::play(bool loopable) {
 	Mix_PlayMusic(rawMusic, loopable ? -1 : 0);
 }
 
+void Music::free() {
+	if (rawMusic) {
+		Mix_FreeMusic(rawMusic);
+		rawMusic = nullptr;
+	}
+}
+
 Music::~Music() {
-	Mix_FreeMusic(rawMusic);
-	rawMusic = nullptr;
+	free();
 }

@@ -21,11 +21,12 @@ class Music {
 private:
 	Mix_Music* rawMusic;
 public:
+	Music() = default;
 	Music(const std::string& file_path);
 	~Music();
 	void loadMusic(const std::string& file_path);
 	void play(bool loopable);
-	bool isPlaying();
+	void free();
 };
 
 

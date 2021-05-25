@@ -8,6 +8,8 @@
 #include "abstract_screen.h"
 
 class MenuScreen : public AbstractScreen {
+private:
+	void createPlayButton(entityx::EntityManager& entities);
 public:
 	MenuScreen(GameStateManager* gameStateManager);
 	void start(entityx::EntityX* entityX) override;

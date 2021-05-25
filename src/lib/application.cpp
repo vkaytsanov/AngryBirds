@@ -15,6 +15,13 @@
 #include "imgui/imgui_impl_sdl.h"
 
 
+#if defined(_DEBUG)
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
+
 Application::Application(Listener* listener) :
 	Application(listener, new Configuration()) {
 }
@@ -139,7 +146,7 @@ void Application::initImgui() {
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	(void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 	// //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
@@ -229,6 +236,10 @@ Application::~Application() {
 	delete logger;
 	delete graphics;
 	delete config;
+
+#if defined(_DEBUG)
+	_CrtDumpMemoryLeaks();
+#endif
 }
 
 void Application::log(const char* tag, const char* message) const {

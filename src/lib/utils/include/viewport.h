@@ -18,14 +18,15 @@
 class Viewport {
 private:
 	Camera* m_pCamera = nullptr;
+protected:
+	void setScreenBounds(int x, int y, const int width, const int height);
+public:
 	static float m_worldWidth;
 	static float m_worldHeight;
 	static int m_screenX;
 	static int m_screenY;
 	static int m_screenWidth;
 	static int m_screenHeight;
-protected:
-	void setScreenBounds(int x, int y, const int width, const int height);
 public:
 	Viewport() = default;
 	Viewport(Camera* camera);

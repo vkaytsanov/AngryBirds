@@ -22,6 +22,12 @@ Animation::Animation(float frameDuration, std::vector<Sprite>&& frames, bool loo
 	}
 }
 
+Animation::~Animation() {
+	// for(int i = 0; i < m_frames.size(); i++) {
+	// 	m_frames[i].getVao()->free();
+	// }
+}
+
 void Animation::loadFrames(const float frameDuration, std::vector<Sprite>&& frames, bool looping) {
 	m_frameDuration.reserve(frames.size());
 	for (unsigned i = 0; i < frames.size(); i++) {

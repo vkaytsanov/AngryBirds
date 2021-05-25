@@ -3,7 +3,7 @@
 #include "include/lib.h"
 
 void Box2dDatabase::createShapes() {
-	m_boxShape.SetAsBox(5, 5);
+	m_boxShape.SetAsBox(5.5, 5.5);
 	{
 		b2Vec2 vertices[3] = {
 			{-5, -5},
@@ -12,9 +12,9 @@ void Box2dDatabase::createShapes() {
 		};
 		m_triangleShape.Set(vertices, 3);
 	}
-	m_plankShape.SetAsBox(13.0f, 0.7f);
+	m_plankShape.SetAsBox(13.2f, 1.1f);
 
-	m_circleShape.m_radius = 5.f;
+	m_circleShape.m_radius = 6.2f;
 	m_redShape.m_radius = 2.5f;
 	
 	m_groundShape.SetAsBox(200, 22);
@@ -38,7 +38,7 @@ Box2dDatabase::Box2dDatabase() {
 		m_bodies[i].bodyDef.type = b2_dynamicBody;
 		m_bodies[i].bodyDef.linearDamping = 0.2f;
 		m_bodies[i].bodyDef.gravityScale = 0.0f;
-		m_bodies[i].fixtureDef.density = 3.f;
+		m_bodies[i].fixtureDef.density = 2.5f;
 		m_bodies[i].fixtureDef.friction = 0.5f;
 		m_bodies[i].fixtureDef.restitution = 0.2f;
 	}
@@ -60,7 +60,7 @@ Box2dDatabase::Box2dDatabase() {
 	// Obstacles
 	for(int i = WoodTriangle; i < ENTITY_TYPE_SIZE; i++) {
 		m_bodies[i].bodyDef.type = b2_dynamicBody;
-		m_bodies[i].fixtureDef.density = 0.2f;
+		m_bodies[i].fixtureDef.density = 5.2f;
 		m_bodies[i].fixtureDef.friction = 0.2f;
 		m_bodies[i].fixtureDef.restitution = 0.0f;
 	}

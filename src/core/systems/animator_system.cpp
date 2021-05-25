@@ -5,10 +5,6 @@
 
 
 void AnimatorSystem::configure(entityx::EntityManager& entities, entityx::EventManager& events) {
-	// for(auto entity : entities.entities_with_components<Animator>()) {
-	// 	entity.getComponent<Sprite>()->getVao()->free();
-	// }
-
 	events.subscribe<TheBirdIsGone>(*this);
 }
 
@@ -37,7 +33,11 @@ void AnimatorSystem::update(entityx::EntityManager& entities, entityx::EventMana
 		m_shouldSwitchAllPigsToLaughing = false;
 
 		for(auto entity : entities.entities_with_components<Pig>()) {
-			entity.getComponent<Animator>()->currentAnimation = PigStates::PigLaughing;
+			auto animator = entity.getComponent<Animator>();
+			// PigIdle = 0, PigLaughing = 1
+			// PigColliding = 2, PigCollidingLaughing = 3
+			animator->currentAnimation++;
+			animator->animations[animator->currentAnimation].reset();
 		}
 	}
 }

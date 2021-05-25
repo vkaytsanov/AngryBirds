@@ -4,7 +4,7 @@
 
 struct RigidBody2D : public entityx::Component<RigidBody2D>{
 	// to be initialized from #PhysicsSystem2D
-	b2Body* body;
+	b2Body* body = nullptr;
 	BodyInfo bodyInfo;
 
 	RigidBody2D() = default;

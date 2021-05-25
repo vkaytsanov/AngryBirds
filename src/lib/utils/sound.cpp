@@ -23,12 +23,21 @@ void Sound::play(int channel, bool loopable) {
 	Mix_PlayChannel(channel, rawSound, loopable ? -1 : 0);
 }
 
+bool Sound::isPlaying(int channel) {
+	return Mix_Playing(channel) > 0;
+}
+
 Sound::~Sound() {
-	Mix_FreeChunk(rawSound);
+	free();
 }
 
 void Sound::stop(int channel) {
 	Mix_HaltChannel(channel);
 }
 
-
+void Sound::free() {
+	if (rawSound) {
+		Mix_FreeChunk(rawSound);
+		rawSound = nullptr;
+	}
+}

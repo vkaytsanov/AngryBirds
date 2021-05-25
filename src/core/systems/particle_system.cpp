@@ -26,6 +26,9 @@ void ParticleSystem::receive(const TheBirdIsGone& event) {
 	case Red:
 		type = RedBirdFeathers;
 		break;
+	case Chuck:
+		type = YellowBirdFeathers;
+		break;
 	default:
 		Lib::app->error("TheBirdIsGoneEvent", "particle type not defined");
 	}

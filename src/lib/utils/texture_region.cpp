@@ -2,9 +2,12 @@
 // Created by Viktor on 15.1.2021 г..
 //
 
+#include <cmath>
+#include <array>
+
 #include "include/texture_region.h"
 #include "../include/lib.h"
-#include <cmath>
+
 
 
 TextureRegion::TextureRegion(std::shared_ptr<Texture> texture) : TextureRegion(texture, 0, 0, texture->getWidth(), texture->getHeight()){

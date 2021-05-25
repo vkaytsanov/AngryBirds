@@ -9,16 +9,22 @@
 enum GameState {
 	Menu,
 	Playing,
+	GameLost,
+	GameWon
 };
 
 
 class GameStateManager {
+	friend class GameStateSystem;
 private:
 	GameState m_lastState;
 	GameState m_currentState;
 public:
+	int m_currentLevel = 1;
+public:
 	GameStateManager();
-	~GameStateManager();
+	~GameStateManager() = default;
+public:
 	GameState getCurrentState() const;
 	const char* getCurrentStateName() const;
 	void changeState(GameState nextState);

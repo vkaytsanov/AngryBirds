@@ -6,7 +6,11 @@
 #include "../lib/include/lib.h"
 #include "components/2d/include/sprite.h"
 #include "data/include/asset_manager.h"
+#include "data/include/audio_database.h"
 #include "utils/include/texture_region.h"
+
+#include "systems/include/render_system.h"
+
 
 
 void GLAPIENTRY
@@ -20,6 +24,12 @@ MessageCallback(GLenum source,
 	fprintf(stderr, "GL CALLBACK: %s m_type = 0x%x, severity = 0x%x, message = %s\n",
 	        (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
 	        type, severity, message);
+}
+
+AngryBirds::~AngryBirds() {
+	// since it is static and we have allocated SDL2_Mixer memory that
+	// need to be released before calling #Mix_Quit
+	AudioDatabase::getInstance().free();
 }
 
 void AngryBirds::create() {
@@ -76,5 +86,5 @@ void AngryBirds::resume() {
 }
 
 void AngryBirds::resize(const int width, const int height) {
-	//m_entityX.systems.system<RenderSystem>()->onResize(width, height);
+	m_pScreenManager->m_entityX.systems.system<RenderSystem>()->onResize(width, height);
 }

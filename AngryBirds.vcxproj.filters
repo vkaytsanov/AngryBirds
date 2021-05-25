@@ -714,9 +714,6 @@
     <ClInclude Include="src\core\components\include\pig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\events\game_over.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\events\round_over.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -745,6 +742,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\components\include\obstacle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\data\include\audio_database.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\systems\include\game_state_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\screens\include\game_won_window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\data\include\config_development.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\screens\include\game_lost_window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\events\new_round.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\events\pig_killed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1137,6 +1155,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\components\obstacle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\data\audio_database.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\systems\game_state_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\screens\game_won_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\screens\game_lost_window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

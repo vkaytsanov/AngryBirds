@@ -5,8 +5,7 @@
 #include "utils/include/dirent.h"
 #include "include/lib.h"
 #include "../components/2d/include/rigid_body_2d.h"
-
-#define USE_EDITOR
+#include "../data/include/config_development.h"
 
 struct Transform;
 struct Pig;
@@ -46,18 +45,19 @@ Scene& SceneManager::getScene(const std::string& name) {
 }
 
 void SceneManager::changeScene(entityx::EntityManager* entityManager, const std::string& to) {
-	if(m_pCurrentScene == &m_scenes[to]) return;
-	
-	for (auto entity : entityManager->entities_with_components<Transform>()) {
-#if !defined(USE_EDITOR)
-		if(auto rb = entity.getComponent<RigidBody2D>()->body) {
-			rb->GetWorld()->DestroyBody(rb);
-		}
+#if !defined(_DEBUG) || defined(USE_EDITOR)
+	if (m_pCurrentScene == &m_scenes[to]) return;
 #endif
-		entity.destroy();
-
-	}
-	entityManager->softReset();
+	// for (auto entity : entityManager->entities_with_components<Transform>()) {
+	//
+	// 	if (auto rb = entity.getComponent<RigidBody2D>()->body) {
+	// 		rb->GetWorld()->DestroyBody(rb);
+	// 	}
+	//
+	// 	entity.destroy();
+	//
+	// }
+	// entityManager->softReset();
 
 #ifdef _DEBUG
 	if (m_scenes.find(to) == m_scenes.end()) {

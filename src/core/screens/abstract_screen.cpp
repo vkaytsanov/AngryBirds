@@ -4,18 +4,23 @@
 
 #include "include/abstract_screen.h"
 
+#include <box2d/b2_world.h>
 
-AbstractScreen::AbstractScreen(GameStateManager* gameStateManager) : m_entities(m_eventManager),
-                                                                     m_pGameStateManager(gameStateManager) {
+#include "../components/2d/include/rigid_body_2d.h"
+
+
+AbstractScreen::AbstractScreen(GameStateManager* gameStateManager) : m_pGameStateManager(gameStateManager) {
 }
 
 void AbstractScreen::start(entityx::EntityX* entityX) {
+	for(auto entity : entityX->entities.entities_with_components<RigidBody2D>()) {
+		auto rb = entity.getComponent<RigidBody2D>()->body;
+
+		rb->GetWorld()->DestroyBody(rb);
+	}
 	for (auto entity : entityX->entities.entities_with_components<Transform>()) {
 		entity.destroy();
 	}
-	entityX->entities.softReset();
 
-	for (auto entity : m_entities.entities_with_components<Transform>()) {
-		entityX->entities.create_from_copy(entity);
-	}
+	entityX->entities.softReset();
 }

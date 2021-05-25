@@ -8,6 +8,7 @@
 #include "../systems/include/bird_system.h"
 #include "../systems/include/particle_system.h"
 #include "../systems/include/user_interface_system.h"
+#include "../systems/include/game_state_system.h"
 
 #include "../components/2d/include/animator.h"
 #include "../components/2d/include/rigid_body_2d.h"
@@ -16,9 +17,14 @@
 #include "../components/include/particle_emitter.h"
 #include "../components/include/pig.h"
 #include "../components/include/obstacle.h"
+#include "../data/include/config_development.h"
 
-ScreenManager::ScreenManager() : m_menuScreen(&m_gameStateManager),
-                                 m_playingScreen(&m_gameStateManager) {
+
+ScreenManager::ScreenManager() : m_screens({}),
+                                 m_menuScreen(&m_gameStateManager),
+                                 m_playingScreen(&m_gameStateManager),
+                                 m_gameWonWindow(&m_gameStateManager),
+                                 m_gameLostWindow(&m_gameStateManager) {
 
 	m_entityX.systems.add<TransformSystem>();
 	m_entityX.systems.add<PhysicsSystem2D>();
@@ -27,6 +33,7 @@ ScreenManager::ScreenManager() : m_menuScreen(&m_gameStateManager),
 	m_entityX.systems.add<ParticleSystem>();
 	m_entityX.systems.add<RenderSystem>(m_entityX.systems.system<PhysicsSystem2D>()->getDebugDraw());
 	m_entityX.systems.add<UserInterfaceSystem>();
+	m_entityX.systems.add<GameStateSystem>(&m_gameStateManager);
 	//m_entityX.systems.add<DebugSystem>();
 
 	// TODO fix this in more convenient way
@@ -43,21 +50,23 @@ ScreenManager::ScreenManager() : m_menuScreen(&m_gameStateManager),
 	entity.addComponent<Button>();
 	entity.destroy();
 
-	m_screens[0] = &m_menuScreen;
-	m_screens[1] = &m_playingScreen;
+	m_screens[Menu] = &m_menuScreen;
+	m_screens[Playing] = &m_playingScreen;
+	m_screens[GameLost] = &m_gameLostWindow;
+	m_screens[GameWon] = &m_gameWonWindow;
 
 	m_entityX.systems.configure();
 
-#if 0
+#if !defined(USE_EDITOR)
 	m_screens[m_gameStateManager.getCurrentState()]->start(&m_entityX);
 #endif
 }
 
 void ScreenManager::update() {
-	if(m_gameStateManager.hasChanged()) {
+	if (m_gameStateManager.hasChanged()) {
 		m_screens[m_gameStateManager.getCurrentState()]->start(&m_entityX);
 	}
 	m_gameStateManager.update();
-	
+
 	m_entityX.systems.updateAll(Lib::graphics->getDeltaTime());
 }

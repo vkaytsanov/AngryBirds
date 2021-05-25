@@ -30,6 +30,9 @@ void Sprite::init() {
 		Vertex2d(Vector2f(-width, height), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
 	};
 
+#ifdef REUSE_BUFFERS
+	m_vao.initialize();
+#endif
 	VertexBuffer vbo;
 	m_vao.bind();
 	vbo.bind();
@@ -47,7 +50,7 @@ Sprite::Sprite(const TextureRegion& tR, bool hasAnimator) : m_textureRegion(tR) 
 	// std::cout << "size: " << sizeof(*this);
 	// assert(sizeof(Sprite) % 16 == 0), "Size is " + std::to_string(sizeof(Sprite)); // memory alignment
 
-	// if the entity has animator, we don't need to generate buffers since
+	// if the entity has animator, we don't need to generate buffer since
 	// they will be overwritten by the animator
 	if (!hasAnimator) {
 		init();

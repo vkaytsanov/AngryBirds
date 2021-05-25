@@ -29,6 +29,9 @@ struct Transform : public entityx::Component<Transform>{
 
 	Transform() = default;
 	Transform(const Vector3f& position);
+	Transform(const Transform& other) = default;
+	Transform(Transform&& other) = default;
+	Transform& operator=(const Transform& other) = default;
 
 	void translate(const float x, const float y, const float z);
 	void translate(const Vector3f& vec);

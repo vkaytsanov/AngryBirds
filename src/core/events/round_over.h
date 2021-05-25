@@ -1,6 +1,8 @@
 #pragma once
 #include "entityx/Event.h"
 
-struct RoundOver : public entityx::Event<RoundOver> {
-	
+struct RoundOverEvent : public entityx::Event<RoundOverEvent> {
+	bool isWon;
+
+	RoundOverEvent(bool isWon) : isWon(isWon){}
 };

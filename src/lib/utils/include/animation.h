@@ -17,6 +17,7 @@
  * #m_currentFrame and resets the timer.
  */
 class Animation {
+	friend class AnimatorsDatabase;
 private:
 	std::vector<Sprite> m_frames;
 	std::vector<float> m_frameDuration;
@@ -27,6 +28,8 @@ public:
 	Animation() = default;
 	Animation(const std::vector<float>& frameDuration, std::vector<Sprite>&& frames, bool looping = false);
 	Animation(float frameDuration, std::vector<Sprite>&& frames, bool looping = false);
+	~Animation();
+public:
 	void loadFrames(const float frameDuration, std::vector<Sprite>&& frames, bool looping = false);
 	void loadFrames(const std::vector<float>& frameDuration, std::vector<Sprite>&& frames, bool looping = false);
 	void update(float dt);

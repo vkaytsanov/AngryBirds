@@ -20,12 +20,14 @@ class Sound {
 private:
 	Mix_Chunk* rawSound;
 public:
+	Sound() = default;
 	Sound(const std::string& file_path);
 	~Sound();
 	void loadSound(const std::string& file_path);
 	void play(int channel = -1, bool loopable = false);
+	bool isPlaying(int channel = -1);
 	void stop(int channel = -1);
-
+	void free();
 };
 
 

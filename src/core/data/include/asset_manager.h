@@ -6,7 +6,6 @@
 #define MOD_ASSETS_H
 
 #include <unordered_map>
-#include <array>
 
 #include "utils/include/texture.h"
 

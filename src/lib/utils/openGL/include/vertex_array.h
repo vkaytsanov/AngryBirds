@@ -11,13 +11,16 @@ class VertexArray {
 private:
 public:
 	unsigned int arrayObject;
+	bool m_isRaii;
 public:
-	VertexArray();
+	VertexArray(bool isRaii = true);
 	VertexArray(const VertexArray& other) = default;
 	VertexArray(VertexArray&& other) noexcept;
 	VertexArray& operator=(const VertexArray& other) = default;
 	~VertexArray();
-	void free() const;
+public:
+	void initialize();
+	void free();
 	void bind() const;
 	static void unbind();
 };

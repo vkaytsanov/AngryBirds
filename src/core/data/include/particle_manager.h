@@ -1,9 +1,12 @@
 ﻿#pragma once
 
+#include <array>
+
 #include "utils/include/texture_region.h"
 
 enum ParticleType : uint32_t{
 	RedBirdFeathers,
+	YellowBirdFeathers,
 	MAX_NUMBER_OF_PARTICLES
 };
 
