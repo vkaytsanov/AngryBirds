@@ -2,9 +2,13 @@
 #define ANGRY_BIRDS
 
 #include "../../lib/include/listener.h"
-#include "../scene_editor/include/editor.h"
 #include "../screens/include/screen_manager.h"
 #include "../data/include/config_development.h"
+
+#if defined(USE_EDITOR)
+#include "../scene_editor/include/editor.h"
+#endif
+
 
 class AngryBirds : public Listener {
 private:

@@ -7,16 +7,31 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AngryBirds", "AngryBirds.vc
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Emscripten = Debug|Emscripten
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Emscripten|Emscripten = Emscripten|Emscripten
+		Emscripten|x64 = Emscripten|x64
+		Emscripten|x86 = Emscripten|x86
+		Release|Emscripten = Release|Emscripten
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Debug|Emscripten.ActiveCfg = Debug|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Debug|Emscripten.Build.0 = Debug|Emscripten
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Debug|x64.ActiveCfg = Debug|x64
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Debug|x64.Build.0 = Debug|x64
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Debug|x86.ActiveCfg = Debug|Win32
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Debug|x86.Build.0 = Debug|Win32
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Emscripten|Emscripten.ActiveCfg = Emscripten|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Emscripten|Emscripten.Build.0 = Emscripten|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Emscripten|x64.ActiveCfg = Emscripten|x64
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Emscripten|x64.Build.0 = Emscripten|x64
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Emscripten|x86.ActiveCfg = Emscripten|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Emscripten|x86.Build.0 = Emscripten|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Release|Emscripten.ActiveCfg = Release|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Release|Emscripten.Build.0 = Release|Emscripten
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Release|x64.ActiveCfg = Release|x64
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Release|x64.Build.0 = Release|x64
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Release|x86.ActiveCfg = Release|Win32

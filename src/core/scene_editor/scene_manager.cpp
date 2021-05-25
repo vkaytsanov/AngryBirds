@@ -2,10 +2,14 @@
 
 #include <box2d/b2_world.h>
 
-#include "utils/include/dirent.h"
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+
 #include "include/lib.h"
 #include "../components/2d/include/rigid_body_2d.h"
 #include "../data/include/config_development.h"
+
 
 struct Transform;
 struct Pig;
@@ -13,26 +17,16 @@ struct Bird;
 struct Obstacle;
 
 SceneManager::SceneManager() : m_pCurrentScene(nullptr) {
-	DIR* dir;
-	if ((dir = opendir(SCENES_PATH.c_str())) != nullptr) {
-		dirent* dirent;
-		int c = 0;
-		while ((dirent = readdir(dir)) != nullptr) {
-			// skipping the directories, we need only files
-			if (!strcmp(dirent->d_name, ".")) continue;
-			if (!strcmp(dirent->d_name, "..")) continue;
-			std::string name(dirent->d_name);
-			name = name.substr(0, name.length() - 4);
-			m_scenes.emplace(name, Scene(name));
-
-			c++;
-		}
-		Lib::app->log("SceneManager", (std::to_string(c) + " scenes loaded.").c_str());
-		closedir(dir);
-	}
-	else {
-		Lib::app->error("SceneManager", "couldn't open directory");
-	}
+	int c = 0;
+	for (const auto &entry : fs::recursive_directory_iterator(SCENES_PATH.c_str())) {
+        if (entry.path().extension() == ".bin") {
+        	std::string name = entry.path().filename().replace_extension("").string();
+        	
+        	m_scenes.emplace(name, Scene(name));
+        	c++;
+        }
+    }
+	Lib::app->log("SceneManager", (std::to_string(c) + " scenes loaded.").c_str());
 }
 
 Scene& SceneManager::getScene(const std::string& name) {

@@ -29,6 +29,7 @@ private:
 	std::array<Music, 4> m_musics;
 public:
 	AudioDatabase();
+	~AudioDatabase() = default;
 public:
 	void play(SoundType type);
 	void play(MusicType type, bool loopable = false);

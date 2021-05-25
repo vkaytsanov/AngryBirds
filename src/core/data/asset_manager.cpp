@@ -40,8 +40,6 @@ std::shared_ptr<Texture> AssetManager::getSprite(const std::string name) const {
 
 
 
-AssetManager::~AssetManager() {
-}
 
 std::string AssetManager::stripName(const std::string& name) {
 	return name.substr(0, name.length() - 4);

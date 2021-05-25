@@ -1,5 +1,6 @@
 ﻿#include "include/game_lost_window.h"
 
+#include "../components/include/transform.h"
 #include "../components/2d/include/sprite.h"
 #include "../components/2d/include/button.h"
 #include "../include/game_state_manager.h"

@@ -12,7 +12,7 @@
 #include "systems/include/render_system.h"
 
 
-
+#if defined(_DEBUG)
 void GLAPIENTRY
 MessageCallback(GLenum source,
                 GLenum type,
@@ -25,6 +25,8 @@ MessageCallback(GLenum source,
 	        (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
 	        type, severity, message);
 }
+
+#endif
 
 AngryBirds::~AngryBirds() {
 	// since it is static and we have allocated SDL2_Mixer memory that

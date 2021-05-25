@@ -6,6 +6,7 @@
 
 #include <box2d/b2_world.h>
 
+#include "../components/include/transform.h"
 #include "../components/2d/include/rigid_body_2d.h"
 
 

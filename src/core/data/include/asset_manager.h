@@ -29,7 +29,8 @@ private:
 	static std::string stripName(const std::string& name);
 public:
 	AssetManager();
-	~AssetManager();
+	~AssetManager() = default;
+public:
 	std::shared_ptr<Texture> getSprite(std::string name) const;
 	static AssetManager& getInstance();
 };
