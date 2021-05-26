@@ -32,8 +32,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-Emscripten/Emscripten/*.o
-Emscripten/Emscripten/*.tlog
+
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -96,6 +95,10 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+
+# Emscripten Object Files
+*.o
+*.tlog
 
 # Chutzpah Test files
 _Chutzpah*
