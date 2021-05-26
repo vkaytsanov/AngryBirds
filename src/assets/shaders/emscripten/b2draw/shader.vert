@@ -1,4 +1,4 @@
-#version 130
+#version 300 es 
 
 in vec2 position;
 in vec4 colour;

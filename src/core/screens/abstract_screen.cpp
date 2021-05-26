@@ -4,7 +4,11 @@
 
 #include "include/abstract_screen.h"
 
+#if !defined(__EMSCRIPTEN__)
 #include <box2d/b2_world.h>
+#else
+#include "box2d-emscripten/Dynamics/b2World.h"
+#endif
 
 #include "../components/include/transform.h"
 #include "../components/2d/include/rigid_body_2d.h"

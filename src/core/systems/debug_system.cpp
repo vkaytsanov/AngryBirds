@@ -5,7 +5,7 @@
 #include "include/debug_system.h"
 #include "../../lib/utils/ui/include/input_listener.h"
 
-DebugSystem::DebugSystem(){
+DebugSystem::DebugSystem() {
 
 }
 
@@ -29,7 +29,9 @@ void DebugSystem::configure(entityx::EntityManager& entities, entityx::EventMana
 	m_userInterface.addActor(&m_playerPos);
 	m_userInterface.addActor(&m_playerForward);
 	auto* inputListener = new InputListener();
+#if !defined(__EMSCRIPTEN__)
 	inputListener->keyDown = [&](int key) -> void {
+
 		if(key == SDLK_TAB){
 			if (m_isWireframe) {
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -40,25 +42,22 @@ void DebugSystem::configure(entityx::EntityManager& entities, entityx::EventMana
 			m_isWireframe = !m_isWireframe;
 		}
 	};
+#endif
 	m_userInterface.addListener(inputListener);
 	Lib::input->setProcessor(&m_userInterface);
 	m_userInterface.debug = true;
 }
 
 void DebugSystem::update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) {
-//	m_playerPos.setText(std::to_string(m_transform->position.x) + " " + std::to_string(m_transform->position.y) + std::to_string(m_transform->position.z));
-//	m_playerForward.setText(std::to_string(m_transform->forward.x) + " " + std::to_string(m_transform->forward.y) + std::to_string(m_transform->forward.z));
-//	m_playerForward.updateText();
-//	m_playerPos.updateText();
-//	m_userInterface.act(dt);
-//	m_userInterface.draw();
+	//	m_playerPos.setText(std::to_string(m_transform->position.x) + " " + std::to_string(m_transform->position.y) + std::to_string(m_transform->position.z));
+	//	m_playerForward.setText(std::to_string(m_transform->forward.x) + " " + std::to_string(m_transform->forward.y) + std::to_string(m_transform->forward.z));
+	//	m_playerForward.updateText();
+	//	m_playerPos.updateText();
+	//	m_userInterface.act(dt);
+	//	m_userInterface.draw();
 }
 
 DebugSystem::~DebugSystem() {
 	delete m_pLabelStyle;
 	TTF_CloseFont(m_pFont);
 }
-
-
-
-

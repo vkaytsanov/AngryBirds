@@ -5,7 +5,11 @@
 #ifndef VERTEX_BUFFER_H
 #define VERTEX_BUFFER_H
 
+#if !defined(__EMSCRIPTEN__)
 #include "GL/glew.h"
+#else
+#include <GLES3/gl3.h>
+#endif
 
 class VertexBuffer {
 private:

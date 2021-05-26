@@ -1,6 +1,10 @@
 ﻿#include "include/bird_system.h"
 
+#if !defined(__EMSCRIPTEN__)
 #include <box2d/b2_world.h>
+#else
+#include "box2d-emscripten/Dynamics/b2World.h"
+#endif
 
 #include "../components/2d/include/rigid_body_2d.h"
 #include "../components/2d/include/sprite.h"
@@ -65,7 +69,11 @@ void BirdSystem::handleSlingshotInput() {
 		b2Vec2 force = -m_forceMultiplier * (rigidBody->GetPosition() - m_slingPos);
 		if (m_currentBird.getComponent<Bird>()->type == Terence) force *= 4;
 
+#if !defined(__EMSCRIPTEN__)
 		rigidBody->ApplyForceToCenter({force.x, force.y}, true);
+#else
+		rigidBody->ApplyForceToCenter({force.x, force.y});
+#endif
 		rigidBody->SetGravityScale(1);
 
 		m_birds.pop();
@@ -97,7 +105,12 @@ void BirdSystem::handleBirdAbilityInput() {
 /* Heavily speeds up when the screen is tapped */
 void BirdSystem::useChuckAbility() {
 	const b2Vec2 force = b2Vec2(50'000, 0);
-	m_currentBird.getComponent<RigidBody2D>()->body->ApplyForceToCenter(force, false);
+#if !defined(__EMSCRIPTEN__)
+		m_currentBird.getComponent<RigidBody2D>()->body->ApplyForceToCenter(force, false);
+#else
+	m_currentBird.getComponent<RigidBody2D>()->body->ApplyForceToCenter({force.x, force.y});
+#endif
+
 }
 
 /* Shoots red soundwaves which can be used to topple structures */

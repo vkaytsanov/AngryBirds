@@ -5,8 +5,11 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
-
+#if !defined(__EMSCRIPTEN__)
 #include "GL/glew.h"
+#else
+#include <GLES3/gl3.h>
+#endif
 #include "../geometry/include/matrix4.h"
 #include "../geometry/include/vector2.h"
 #include <unordered_map>

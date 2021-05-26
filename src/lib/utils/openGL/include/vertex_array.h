@@ -5,7 +5,11 @@
 #ifndef VERTEX_ARRAY_H
 #define VERTEX_ARRAY_H
 
+#if !defined(__EMSCRIPTEN__)
 #include "GL/glew.h"
+#else
+#include <GLES3/gl3.h>
+#endif
 
 class VertexArray {
 private:

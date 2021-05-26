@@ -1,8 +1,12 @@
-#version 130
+#version 300 es 
+precision mediump float;
 
-in vec4 fsColour;
-out vec4 fragColour;
+uniform sampler2D tex_id;
+
+in vec2 uvOut;
+out vec4 color;
+
 
 void main() {
-	fragColour = fsColour;
+    color = texture(tex_id, uvOut);
 }

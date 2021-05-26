@@ -5,17 +5,21 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "GL/glew.h"
-#include "cereal/types/string.hpp"
 
-#ifdef __EMSCRIPTEN__
+
+
+#if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
+#include <GLES3/gl3.h>
 #else
+#include "GL/glew.h"
 #include <SDL2/SDL.h>
 #endif
 
+#include "cereal/types/string.hpp"
 #include <string>
+
 
 
 class Texture {

@@ -5,7 +5,12 @@
 #include <GL/glew.h>
 #include <vector>
 #include <utility>
+
+#if !defined(__EMSCRIPTEN__)
 #include <box2d/b2_draw.h>
+#else
+#include "box2d-emscripten/Common/b2Draw.h"
+#endif
 
 #include "utils/include/shaders.h"
 #include "utils/openGL/include/vertex_array.h"

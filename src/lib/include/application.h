@@ -9,7 +9,11 @@
 
 
 class Application {
+#if !defined(__EMSCRIPTEN__)
 private:
+#else
+public:
+#endif
 	bool running;
 	Listener* listener;
 	Input* input;

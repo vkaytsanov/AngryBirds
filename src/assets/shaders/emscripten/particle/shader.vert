@@ -1,10 +1,9 @@
-#version 130
+#version 300 es 
 
 in vec2 vertices;
 in vec2 uv;
 in vec2 position;
 in vec2 size;
-
 
 out vec2 uvOut;
 

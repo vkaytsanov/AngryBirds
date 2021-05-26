@@ -3,13 +3,14 @@
 #include "include/lib.h"
 #include "utils/ui/include/user_interface.h"
 #include <cstring>
+#include <memory>
 
 #if !defined(__EMSCRIPTEN__)
 #include "imgui/imgui_impl_sdl.h"
 #endif
 
 Input::Input(const float width, const float height) {
-	SDL_memset(m_keys, false, sizeof m_keys);
+	std::memset(&m_keys[0], false, sizeof m_keys);
 	m_lastMousePosX = m_currMousePosX = width / 2;
 	m_lastMousePosY = m_currMousePosY = height / 2;
 }
@@ -26,10 +27,13 @@ void Input::update() {
 	//    m_mouseMoved = false;
 	//    m_mouseLeftClick = false;
 	//    m_mouseRightClick = false;
-
+	
 	while (SDL_PollEvent(&e) != 0) {
+		
 #if !defined(__EMSCRIPTEN__)
 		ImGui_ImplSDL2_ProcessEvent(&e);
+#else
+		Lib::app->log("Input", "received input");
 #endif
 		//User requests m_quit
 		if (e.type == SDL_QUIT) {

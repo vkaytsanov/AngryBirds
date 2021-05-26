@@ -2,7 +2,11 @@
 #define HEADER_INCLUDE__RECURSION__PHYSICS__B2__DEBUGDRAW__H
 #include <vector>
 
+#if !defined(__EMSCRIPTEN__)
 #include <box2d/b2_draw.h>
+#else
+#include "box2d-emscripten/Common/b2Draw.h"
+#endif
 
 #include "utils/box2d/b2draw/PrimitiveRenderer.h"
 

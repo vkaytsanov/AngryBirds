@@ -1,6 +1,10 @@
 #include <cmath>
 
+#if !defined(__EMSCRIPTEN__)
 #include <box2d/b2_world.h>
+#else
+#include "box2d-emscripten/Dynamics/b2World.h"
+#endif
 
 #include "b2draw/algorithm.h"
 #include "b2draw/DebugDraw.h"

@@ -4,10 +4,6 @@
 
 #include "include/voxel_ray.h"
 
-#if ((defined(_MSVC_LANG) && _MSVC_LANG < 201'703L) || __cplusplus < 201'703L)
-#define FLT_MAX 3.4028234664e+38
-#endif
-
 VoxelRay::VoxelRay(const Vector3f& start, const Vector3f& direction) :m_direction(direction) {
 	m_step.x = (direction.x >= 0) ? 1 : -1;
 	m_step.y = (direction.y >= 0) ? 1 : -1;

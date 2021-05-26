@@ -7,10 +7,12 @@ Graphics::Graphics() : Graphics(new Configuration()) {
 }
 
 Graphics::Graphics(Configuration* config) : m_pConfig(config),
+#if !defined(__EMSCRIPTEN__)
                                             m_pContext(nullptr),
                                             m_pWindow(nullptr),
                                             m_pScreenSurface(nullptr),
                                             m_pRenderer(nullptr),
+#endif
                                             m_background(false),
                                             m_visible(true) {
 
@@ -50,16 +52,22 @@ float Graphics::getFps() const {
 void Graphics::createWindow() {
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-		std::cout << SDL_GetError() << "\n";
+		std::cout << "SDL INIT ERROR " << SDL_GetError() << "\n";
+		exit(-1);
 	}
-	else {
-		int flags = IMG_INIT_PNG;
-		
-		//Create Image Handling, but just PNG format
-		if (!IMG_Init(flags)) {
-			std::cout << "SDL IMG Error: " << IMG_GetError() << "\n";
-		}
-
+	
+#if defined(__EMSCRIPTEN__)
+	emscripten_set_canvas_element_size("#canvas", m_pConfig->width, m_pConfig->height);
+	emscripten_webgl_init_context_attributes(&attr);
+	attr.alpha = attr.depth = attr.stencil = attr.antialias =
+		attr.preserveDrawingBuffer = attr.failIfMajorPerformanceCaveat = 0;
+	attr.enableExtensionsByDefault = 1;
+	attr.premultipliedAlpha = 0;
+	attr.majorVersion = 2;
+	attr.minorVersion = 0;
+	ctx = emscripten_webgl_create_context("#canvas", &attr);
+	emscripten_webgl_make_context_current(ctx);
+#else
 	// Decide OpenGL and GLSL versions
 #if defined(__APPLE__)
     // GL 3.2 Core + GLSL 150
@@ -68,82 +76,90 @@ void Graphics::createWindow() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-#elif defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
-    // GL 3.0 + GLSL 130
-    m_glslVersion = "#version 130";
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #else
-		m_glslVersion = "#version 330 core";
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+	m_glslVersion = "#version 330 core";
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
 #endif
-
-		//Create m_pWindow
-		m_pWindow = SDL_CreateWindow(m_pConfig->title,
-		                             m_pConfig->x,
-		                             m_pConfig->y,
-		                             m_pConfig->width,
-		                             m_pConfig->height,
-		                             m_pConfig->isVisible | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
-		if (m_pWindow == nullptr) {
-			std::cout << SDL_GetError() << "\n";
-		}
-		else {
-			//Create the m_pContext for OpenGL
-			m_pContext = SDL_GL_CreateContext(m_pWindow);
-
-
-			if (!m_pContext) {
-				std::cout << SDL_GetError() << "\n";
-			}
-			else {
-				// glewExperimental = GL_TRUE;
-				GLenum err = glewInit();
-				if (GLEW_OK != err) {
-					std::cout << glewGetErrorString(err) << "\n";
-				}
-				SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-				SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-				SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-				
-				SDL_GL_MakeCurrent(m_pWindow, m_pContext);
-				
-				std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << "\n";
-				// refresh rate synchronized to the monitor
-				SDL_GL_SetSwapInterval(1);
-
-			}
-
-			//Get m_pWindow surface
-			m_pScreenSurface = SDL_GetWindowSurface(m_pWindow);
-			if (m_pScreenSurface == nullptr) {
-				std::cout << SDL_GetError() << "\n";
-			}
-			else {
-				//Update the surface
-				SDL_UpdateWindowSurface(m_pWindow);
-				//Create m_pRenderer
-				m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
-				if (m_pRenderer == nullptr) {
-					std::cout << SDL_GetError() << "\n";
-				}
-			}
-		}
-		if (TTF_Init() == -1) {
-			std::cout << TTF_GetError() << "\n";
-		}
-
+	//Create m_pWindow
+	m_pWindow = SDL_CreateWindow(m_pConfig->title,
+	                             m_pConfig->x,
+	                             m_pConfig->y,
+	                             m_pConfig->width,
+	                             m_pConfig->height,
+	                             m_pConfig->isVisible | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+	if (m_pWindow == nullptr) {
+		std::cout << SDL_GetError() << "\n";
+		exit(-1);
 	}
+
+	//Create the m_pContext for OpenGL
+	m_pContext = SDL_GL_CreateContext(m_pWindow);
+
+
+	if (!m_pContext) {
+		std::cout << "SDL2 CONTEXT ERROR: " << SDL_GetError() << "\n";
+		exit(-1);
+	}
+
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+	SDL_GL_MakeCurrent(m_pWindow, m_pContext);
+
+	// refresh rate synchronized to the monitor
+	SDL_GL_SetSwapInterval(1);
+
+
+	//Get m_pWindow surface
+	m_pScreenSurface = SDL_GetWindowSurface(m_pWindow);
+	if (m_pScreenSurface == nullptr) {
+		std::cout << "SDL2 SCREEN SURFACE ERROR: " << SDL_GetError() << "\n";
+		exit(-1);
+	}
+	//Update the surface
+	SDL_UpdateWindowSurface(m_pWindow);
+	//Create m_pRenderer
+	m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
+	if (m_pRenderer == nullptr) {
+		std::cout << "SDL2 RENDERER ERROR: " << SDL_GetError() << "\n";
+	}
+	
+
+	
+#endif
+	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << "\n";
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+	if (GLEW_OK != err) {
+		std::cout << glewGetErrorString(err) << "\n";
+	}
+	int flags = IMG_INIT_PNG;
+
+	//Create Image Handling, but just PNG format
+	if (!IMG_Init(flags)) {
+		std::cout << "SDL IMG Error: " << IMG_GetError() << "\n";
+		exit(-1);
+	}
+
+	if (TTF_Init() == -1) {
+		std::cout << "SDL2 TTF ERROR: " << TTF_GetError() << "\n";
+		exit(-1);
+	}
+
 }
 
 void Graphics::update() {
+#if !defined(__EMSCRIPTEN__)
 	SDL_UpdateWindowSurface(m_pWindow);
+#endif
 }
 
 Graphics::~Graphics() {
+#if !defined(__EMSCRIPTEN__)
 	//Destroy openGL m_pContext
 	SDL_GL_DeleteContext(m_pContext);
 	//Destroy surface
@@ -155,6 +171,7 @@ Graphics::~Graphics() {
 	//Destroy m_pWindow
 	SDL_DestroyWindow(m_pWindow);
 	m_pWindow = nullptr;
+#endif
 	//Shutdown SDL_TTF
 	TTF_Quit();
 	//Shut down SDL_Image
@@ -164,7 +181,9 @@ Graphics::~Graphics() {
 }
 
 SDL_Renderer* Graphics::getRenderer() const {
+#if !defined(__EMSCRIPTEN__)
 	return m_pRenderer;
+#endif
 }
 
 void Graphics::setWidth(const int width) const {
@@ -192,15 +211,21 @@ void Graphics::setVisible(const bool visible) {
 }
 
 SDL_Window* Graphics::getWindow() const {
+	#if !defined(__EMSCRIPTEN__)
 	return m_pWindow;
+#endif
 }
 
 SDL_Surface* Graphics::getScreenSurface() const {
+	#if !defined(__EMSCRIPTEN__)
 	return m_pScreenSurface;
+#endif
 }
 
 SDL_GLContext Graphics::getContext() const {
+	#if !defined(__EMSCRIPTEN__)
 	return m_pContext;
+#endif
 }
 
 const char* Graphics::getGlslVersion() const {

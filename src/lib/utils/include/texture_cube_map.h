@@ -5,18 +5,22 @@
 #ifndef TEXTURE_CUBE_MAP_H
 #define TEXTURE_CUBE_MAP_H
 
-#include "GL/glew.h"
-#include <string>
-#include <vector>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <GLES3/gl3.h>
 #else
+#include "GL/glew.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #endif
+
+#include <string>
+#include <vector>
+
+
 
 class TextureCubeMap {
 private:

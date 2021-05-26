@@ -1,7 +1,5 @@
 ﻿#include "include/scene_manager.h"
 
-#include <box2d/b2_world.h>
-
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;

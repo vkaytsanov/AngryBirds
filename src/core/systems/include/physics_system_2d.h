@@ -1,10 +1,14 @@
 ﻿#pragma once
-#include <box2d/b2_contact.h>
 
 #include "entityx/System.h"
+#if !defined(__EMSCRIPTEN__)
 #include "box2d/b2_world.h"
+#else
+#include "box2d-emscripten/Dynamics/b2World.h"
+#endif
 
 #include "../../data/include/config_development.h"
+
 
 #if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
 #include "utils/box2d/b2draw/DebugDraw.h"

@@ -2,12 +2,17 @@
 #include "../components/2d/include/rigid_body_2d.h"
 #include "../components/2d/include/animator.h"
 #include "../components/include/transform.h"
-#include "box2d/b2_contact.h"
+
 #include "../events/the_bird_is_gone.h"
 #include "../events/pig_killed.h"
 #include "../data/include/audio_database.h"
 #include "../data/include/animators_database.h"
 
+#if !defined(__EMSCRIPTEN__)
+#include "box2d/b2_contact.h"
+#else
+#include "box2d-emscripten/Dynamics/Contacts/b2Contact.h"
+#endif
 
 struct Obstacle;
 struct Bird;

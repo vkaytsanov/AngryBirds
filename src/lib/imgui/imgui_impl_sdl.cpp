@@ -55,8 +55,8 @@
 // (the multi-viewports feature requires SDL features supported from SDL 2.0.4+. SDL 2.0.5+ is highly recommended)
 #if defined(__EMSCRIPTEN__)
 #include "emscripten.h"
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h>
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>

@@ -39,10 +39,54 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Box2D.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\b2BroadPhase.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\b2Collision.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\b2Distance.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\b2DynamicTree.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\b2TimeOfImpact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2ChainShape.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2CircleShape.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2EdgeShape.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2PolygonShape.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2Shape.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Common\b2BlockAllocator.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Common\b2Draw.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Common\b2GrowableStack.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Common\b2Math.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Common\b2Settings.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Common\b2StackAllocator.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Common\b2Timer.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2Body.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2ContactManager.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2Fixture.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2Island.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2TimeStep.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2World.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2WorldCallbacks.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2ChainAndCircleContact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2ChainAndPolygonContact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2CircleContact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2Contact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2ContactSolver.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2EdgeAndCircleContact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2EdgeAndPolygonContact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2PolygonAndCircleContact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2PolygonContact.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2DistanceJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2FrictionJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2GearJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2Joint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2MouseJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2PrismaticJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2PulleyJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2RevoluteJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2RopeJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2WeldJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2WheelJoint.h" />
+    <ClInclude Include="dependencies\emscripten\box2d-emscripten\Rope\b2Rope.h" />
     <ClInclude Include="src\core\components\2d\include\button.h" />
     <ClInclude Include="src\core\components\2d\include\animator.h" />
-    <ClInclude Include="src\core\components\2d\include\circle_collider.h" />
-    <ClInclude Include="src\core\components\2d\include\rect_collider.h" />
     <ClInclude Include="src\core\components\2d\include\rigid_body_2d.h" />
     <ClInclude Include="src\core\components\2d\include\sprite.h" />
     <ClInclude Include="src\core\components\3d\include\box_collider.h" />
@@ -280,10 +324,53 @@
     <ClInclude Include="src\lib\utils\ui\include\user_interface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2BroadPhase.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2CollideCircle.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2CollideEdge.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2CollidePolygon.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2Collision.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2Distance.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2DynamicTree.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2TimeOfImpact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2ChainShape.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2CircleShape.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2EdgeShape.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\Shapes\b2PolygonShape.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Common\b2BlockAllocator.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Common\b2Draw.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Common\b2Math.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Common\b2Settings.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Common\b2StackAllocator.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Common\b2Timer.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2Body.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2ContactManager.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2Fixture.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2Island.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2World.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\b2WorldCallbacks.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2ChainAndCircleContact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2ChainAndPolygonContact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2CircleContact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2Contact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2ContactSolver.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2EdgeAndCircleContact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2EdgeAndPolygonContact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2PolygonAndCircleContact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Contacts\b2PolygonContact.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2DistanceJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2FrictionJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2GearJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2Joint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2MouseJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2PrismaticJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2PulleyJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2RevoluteJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2RopeJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2WeldJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Dynamics\Joints\b2WheelJoint.cpp" />
+    <ClCompile Include="dependencies\emscripten\box2d-emscripten\Rope\b2Rope.cpp" />
     <ClCompile Include="src\core\components\2d\animator.cpp" />
     <ClCompile Include="src\core\components\2d\button.cpp" />
-    <ClCompile Include="src\core\components\2d\circle_collider.cpp" />
-    <ClCompile Include="src\core\components\2d\rect_collider.cpp" />
     <ClCompile Include="src\core\components\2d\rigid_body_2d.cpp" />
     <ClCompile Include="src\core\components\2d\sprite.cpp" />
     <ClCompile Include="src\core\components\3d\box_collider.cpp" />
@@ -538,7 +625,7 @@
     <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Emscripten|Emscripten'">
-    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\include\emscripten;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)dependencies\lib\x86\BOX2D;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\GLEW;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -640,7 +727,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Emscripten|Emscripten'">
     <ClCompile>
       <PreprocessorDefinitions>;__EMSCRIPTEN__</PreprocessorDefinitions>
-      <AdditionalOptions>--std=c++14 --bind -s FULL_ES3=1 -s USE_SDL=2  -l SDL -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL_MIXER=2 -s USE_LIBPNG=1 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s WASM=2 -s USE_OGG=1 -s USE_VORBIS=1  -s LINKABLE=1 -s EXPORT_ALL=1 -I src/lib  -I dependencies/include %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>--std=c++14 --bind -s FULL_ES3=1 -s ALLOW_MEMORY_GROWTH=1 -s STB_IMAGE=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2  -s SDL2_IMAGE_FORMATS='["bmp","png","xpm"]' -s USE_SDL_MIXER=2 -s LINKABLE=1 -s EXPORT_ALL=1 -s USE_LIBPNG=1 -I src/lib -I dependencies/emscripten -s GL_UNSAFE_OPTS=0 -s GL_DEBUG=1 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

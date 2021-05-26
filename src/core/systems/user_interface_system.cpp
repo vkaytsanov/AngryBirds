@@ -56,6 +56,6 @@ bool UserInterfaceSystem::isButtonHit(entityx::ComponentHandle<Transform> transf
 #else
 	Lib::app->error("UserInterfaceSystem", "Button Hit is not implemented for different camera origin");
 #endif
-	
+
 	return false;
 }

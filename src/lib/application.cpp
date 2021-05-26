@@ -2,7 +2,7 @@
 // Created by Viktor on 17.12.2020 г..
 //
 
-#include "GL/glew.h"
+
 #include "include/application.h"
 #include "include/lib.h"
 #include <string>
@@ -10,9 +10,11 @@
 #include <typeinfo>
 
 #ifdef __EMSCRIPTEN__
+#include <GLES3/gl3.h>
 #include <emscripten.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #else
+#include "GL/glew.h"
 #include <SDL2/SDL.h>
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -26,9 +28,20 @@
 #include <crtdbg.h>
 #endif
 
+// TODO Refactor this in other application class
 #if defined(__EMSCRIPTEN__)
 void emscriptenLoop(void* arg) {
-	static_cast<Application*>(arg)->gameLoop();
+	Application* app = static_cast<Application*>(arg);
+	// fetching all the user input
+	app->input->update();
+	// processing the input by giving it to the processors
+	app->input->processEvents();
+
+	app->graphics->updateTime();
+	app->listener->render();
+
+	emscripten_sleep(10);
+
 }
 #endif
 
@@ -79,9 +92,7 @@ Application::Application(Listener* listener, Configuration* config, Graphics* gr
 #else
 	gameLoop();
 #endif
-
 }
-
 
 
 void Application::gameLoop() {
@@ -150,10 +161,12 @@ void Application::gameLoop() {
 		else {
 			SDL_Delay(1000);
 		}
+#if !defined(__EMSCRIPTEN__)
 		int error;
 		while ((error = glGetError()) != GL_NO_ERROR) {
 			this->error("OpenGL Error", reinterpret_cast<const char*>(glewGetErrorString(error)));
 		}
+#endif
 	}
 }
 

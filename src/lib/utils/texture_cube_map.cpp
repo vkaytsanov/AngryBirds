@@ -83,6 +83,7 @@ void TextureCubeMap::performChecks() {
 		Lib::app->error("TextureError", "BMP's height is not a power of 2");
 	}
 	int colorCount = surface->format->BytesPerPixel;
+#if !defined(__EMSCRIPTEN__)
 	if (colorCount == 4) {
 		// contains alpha channel
 		textureFormat = surface->format->Rmask == 0x000000ff ? GL_RGBA : GL_BGRA;
@@ -90,6 +91,15 @@ void TextureCubeMap::performChecks() {
 	else if (colorCount == 3) {
 		textureFormat = surface->format->Rmask == 0x000000ff ? GL_RGB : GL_BGR;
 	}
+#else
+	if (colorCount == 4) {
+		// contains alpha channel
+		textureFormat = GL_RGBA;
+	}
+	else if (colorCount == 3) {
+		textureFormat = GL_RGB;
+	}
+#endif
 	else {
 		Lib::app->error("TextureError", "Colors arent right");
 		exit(-1);

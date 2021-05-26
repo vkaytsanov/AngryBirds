@@ -45,8 +45,9 @@ void Texture::init(GLint flags) {
 	             GL_UNSIGNED_BYTE,
 	             surface->pixels);
 
+#if !defined(__EMSCRIPTEN__)
 	glGenerateMipmap(GL_TEXTURE_2D);
-
+#endif
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	SDL_FreeSurface(surface);
@@ -64,6 +65,7 @@ void Texture::performChecks(SDL_Surface* surface) {
 		Lib::app->error("TextureError", "BMP's height is not a power of 2");
 	}
 	m_colorCount = surface->format->BytesPerPixel;
+#if !defined(__EMSCRIPTEN__)
 	if (m_colorCount == 4) {
 		// contains alpha channel
 		m_textureFormat = surface->format->Rmask == 0x000000ff ? GL_RGBA : GL_BGRA;
@@ -71,6 +73,15 @@ void Texture::performChecks(SDL_Surface* surface) {
 	else if (m_colorCount == 3) {
 		m_textureFormat = surface->format->Rmask == 0x000000ff ? GL_RGB : GL_BGR;
 	}
+#else
+	if (m_colorCount == 4) {
+		// contains alpha channel
+		m_textureFormat = GL_RGBA;
+	}
+	else if (m_colorCount == 3) {
+		m_textureFormat = GL_RGB;
+	}
+#endif
 	else {
 		Lib::app->error("TextureError", "Colors arent right");
 		exit(-1);

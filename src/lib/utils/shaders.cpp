@@ -57,6 +57,19 @@ std::string Shaders::readFromFile(const std::string& path) {
 }
 
 void Shaders::compile() {
+#if defined(__EMSCRIPTEN__)
+	Lib::app->log("Shaders", "compiling...");
+	std::cout << vertexShader << "\n";
+	GLboolean canCompile = false;
+	glGetBooleanv(GL_SHADER_COMPILER, &canCompile);
+	
+
+	if(!canCompile) {
+		Lib::app->error("Shaders", "Can't compile");
+		std::cout << "GL Error:" << glGetError() << "\n";
+		exit(-1);
+	}
+#endif
 	if (vertexShader == nullptr) {
 		Lib::app->error("Shaders", "VertexShader is null");
 		exit(-1);
@@ -66,37 +79,44 @@ void Shaders::compile() {
 		exit(-1);
 	}
 
+	Lib::app->log("Shaders", "Trying to Create VertexShader");
 	// compiling first the vertex shader
 	vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+	Lib::app->log("Shaders", "Trying to get ShaderSource");
 	glShaderSource(vertexShaderID, 1, &vertexShader, nullptr);
+	Lib::app->log("Shaders", "Trying to Compile VertexShader");
 	glCompileShader(vertexShaderID);
 
 	checkForCompileError(vertexShaderID);
-
+	Lib::app->log("Shaders", "VertexShader Compiled");
 	// compiling now the fragment shader
 	fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragShaderID, 1, &fragShader, nullptr);
 	glCompileShader(fragShaderID);
 
 	checkForCompileError(fragShaderID);
-
+	Lib::app->log("Shaders", "FragmentShader Compiled");
 	// if there is geometry shader
+#if !defined(__EMSCRIPTEN__)
 	if (geomShader) {
 		geomShaderID = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(geomShaderID, 1, &geomShader, nullptr);
 		glCompileShader(geomShaderID);
 		checkForCompileError(geomShaderID);
 	}
-
+#endif
 	shaderProgram = glCreateProgram();
+	Lib::app->log("Shaders", "Created Program");
 	glAttachShader(shaderProgram, vertexShaderID);
+	Lib::app->log("Shaders", "VertexShader Attached");
 	glAttachShader(shaderProgram, fragShaderID);
+	Lib::app->log("Shaders", "FragmentShader Attached");
 	if (geomShader) {
 		glAttachShader(shaderProgram, geomShaderID);
 	}
 
 	glLinkProgram(shaderProgram);
-
+	Lib::app->log("Shaders", "Shaders Linked");
 	int status;
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
 	if (status != GL_TRUE) {

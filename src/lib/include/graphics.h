@@ -2,12 +2,13 @@
 #define GRAPHICS
 
 
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_video.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
+#include <emscripten/html5.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -23,10 +24,15 @@ class Graphics {
 	friend class Application;
 private:
 	Configuration* m_pConfig;
+#if defined(__EMSCRIPTEN__)
+	EmscriptenWebGLContextAttributes attr;
+	EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx;
+#else
 	SDL_Window* m_pWindow;
 	SDL_GLContext m_pContext;
 	SDL_Surface* m_pScreenSurface;
 	SDL_Renderer* m_pRenderer;
+#endif
 	uint32_t m_lastTime = 0;
 	float m_deltaTime = 0;
 	uint16_t m_fps = 0;
@@ -35,6 +41,7 @@ private:
 	bool m_background;
 	bool m_visible;
 	std::string m_glslVersion;
+
 public:
 	explicit Graphics(Configuration* config);
 	Graphics();

@@ -1,7 +1,12 @@
 //
 // Created by Viktor on 20.12.2020 г..
 //
+#if !defined(__EMSCRIPTEN__)
 #include "GL/glew.h"
+#else
+#include "emscripten.h"
+#include <GLES3/gl3.h>
+#endif
 #include <cmath>
 #include "include/viewport.h"
 
