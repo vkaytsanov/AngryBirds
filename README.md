@@ -4,13 +4,11 @@ To create custom scenes, go to `src/core/data/include/config_development.h` and 
 
 **Using:**
 
-`OpenGL 4.6`
+`OpenGL 4.6/OpenGLES 3.0/WebGL 2.0`
 
 `SDL2 2.0.14`
 
 `SDL2_Image 2.0.5`
-
-`SDL2_TTF 2.0.15`
 
 `SDL2_Mixer 2.0.4`
 
@@ -23,3 +21,5 @@ To create custom scenes, go to `src/core/data/include/config_development.h` and 
 [cereal](https://github.com/USCiLab/cereal) (Serialization Library)
 
 [box2d](https://github.com/erincatto/box2d) (2D Physics)
+
+[emscripten](https://github.com/emscripten-core/emscripten) (Port to web)
