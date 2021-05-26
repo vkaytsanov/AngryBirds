@@ -4,7 +4,7 @@ To create custom scenes, go to `src/core/data/include/config_development.h` and 
 
 **Using:**
 
-`OpenGL 4.6/(OpenGLES 3.0/WebGL 2.0) - Unstable, Not able to receive input`
+`OpenGL 4.6/(OpenGLES 3.0/WebGL 2.0 - Unstable, Not able to receive input)`
 
 `SDL2 2.0.14`
 
