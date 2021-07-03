@@ -16,6 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+#pragma once
+
 #include <box2d-emscripten/Common/b2Math.h>
 
 /// Color for debug drawing. Each value has the range [0,1].
