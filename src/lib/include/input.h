@@ -16,8 +16,7 @@
 
 
 class Input {
-private:
-	SDL_Event e;
+protected:
 	bool m_quit = false;
 	/* check SDL_KeyCode, max elements = 322 */
 	bool m_keys[322];
@@ -30,11 +29,10 @@ private:
 	float m_currMousePosY = 0;
 	InputProcessor* m_pProcessor = nullptr;
 public:
-	std::queue<SDL_Event> m_keyEvents;
-	std::queue<SDL_Event> m_touchEvents;
 	Input(const float width, const float height);
-	void update();
-	void processEvents();
+public:
+	virtual void update() = 0;
+	virtual void processEvents() = 0;
 	void resetMouse() const;
 	bool shouldQuit() const;
 	void setProcessor(InputProcessor* processor);

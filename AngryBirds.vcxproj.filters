@@ -741,6 +741,9 @@
     <ClInclude Include="src\lib\imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\lib\include\desktop_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\components\transform.cpp">
@@ -1146,6 +1149,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\lib\imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lib\desktop_input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

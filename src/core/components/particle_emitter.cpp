@@ -7,12 +7,6 @@
 #include "include/particle_emitter.h"
 #include "../data/include/particle_manager.h"
 
-#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
-GLint ParticleEmitter::m_verticesLocation = 0;
-GLint ParticleEmitter::m_uvLocation = 0;
-GLint ParticleEmitter::m_positionLocation = 0;
-GLint ParticleEmitter::m_sizeLocation = 0;
-#endif
 
 /** Draws particles in a single draw call at @param emittingPosition, using 2 Vertex Buffers.
  * One is for the constant vertices and uvs that are shared between all the particles,
@@ -22,38 +16,21 @@ ParticleEmitter::ParticleEmitter(ParticleType type) : particleType(type) {
 	vao.bind();
 	vbo.bind();
 	
-#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
-	vbo.vertexAttribPointer(m_verticesLocation, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleVertex),
-		(void*)(offsetof(ParticleVertex, vertices)));
-	vbo.vertexAttribPointer(m_uvLocation, 2, GL_FLOAT, GL_TRUE, sizeof(ParticleVertex),
-		(void*)(offsetof(ParticleVertex, uvs)));
-#else
-	vbo.vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleVertex),
-	                        (void*)(offsetof(ParticleVertex, vertices)));
-	vbo.vertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, sizeof(ParticleVertex),
-	                        (void*)(offsetof(ParticleVertex, uvs)));
-#endif
+
+	vbo.vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleVertex), (void*)(offsetof(ParticleVertex, vertices)));
+	vbo.vertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, sizeof(ParticleVertex), (void*)(offsetof(ParticleVertex, uvs)));
+
 	instancedVbo.bind();
-#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
-	instancedVbo.vertexAttribPointer(m_positionLocation, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex),
-		(void*)(offsetof(ParticleInstancedVertex, position)));
-	instancedVbo.vertexAttribPointer(m_sizeLocation, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex),
-		(void*)(offsetof(ParticleInstancedVertex, size)));
-#else
-	instancedVbo.vertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex),
-	                                 (void*)(offsetof(ParticleInstancedVertex, position)));
-	instancedVbo.vertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex),
-	                                 (void*)(offsetof(ParticleInstancedVertex, size)));
-#endif
+
+	instancedVbo.vertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex), (void*)(offsetof(ParticleInstancedVertex, position)));
+	instancedVbo.vertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleInstancedVertex), (void*)(offsetof(ParticleInstancedVertex, size)));
+
 	instancedVbo.unbind();
 
 	glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices
 	glVertexAttribDivisor(1, 0); // uvs : always reuse
 	glVertexAttribDivisor(2, 1); // positions : one per quad
 	glVertexAttribDivisor(3, 1); // sizes : one per quad
-
-	
-	unsigned int verticesCounter = 0;
 
 	const TextureRegion& tR = ParticleManager::getInstance().getParticle(type);
 	const float width = static_cast<float>(tR.getRegionWidth()) / 5.f;
@@ -68,6 +45,7 @@ ParticleEmitter::ParticleEmitter(ParticleType type) : particleType(type) {
 	const std::array<float, 8> uvs = tR.getPackedUvs();
 
 	std::array<ParticleVertex, 4> vertices;
+	unsigned int verticesCounter = 0;
 	for (int i = 0; i < 4; i++) {
 		ParticleVertex vertex;
 		vertex.vertices = Vector2f(particleVertices[verticesCounter + i + 0],

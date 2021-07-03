@@ -25,7 +25,7 @@ using namespace std;
 b2ChainShape::~b2ChainShape()
 {
 	b2Free(m_vertices);
-	m_vertices = NULL;
+	m_vertices = nullptr;
 	m_count = 0;
 }
 

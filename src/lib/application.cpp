@@ -9,15 +9,15 @@
 
 #include <typeinfo>
 
-
-
 #if defined(__EMSCRIPTEN__)
 #include <GLES3/gl3.h>
 #include <emscripten.h>
 #include <SDL2/SDL.h>
+#include "include/emscripten_input.h"
 #else
 #include "GL/glew.h"
 #include <SDL2/SDL.h>
+#include "include/desktop_input.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_sdl.h"
@@ -34,7 +34,6 @@
 #if defined(__EMSCRIPTEN__)
 void emscriptenLoop(void* arg) {
 	Application* app = static_cast<Application*>(arg);
-	app->log("Application", "updating");
 	// fetching all the user input
 	app->input->update();
 	// processing the input by giving it to the processors
@@ -60,7 +59,11 @@ Application::Application(Listener* listener, Configuration* config, IGraphics* g
 	// Logging, debugging and errors utility
 	this->logger = new Logger();
 	// Receive user input
-	this->input = new Input(config->width, config->height);
+#if defined(__EMSCRIPTEN__)
+	this->input = new EmscriptenInput(config->width, config->height);
+#else
+	this->input = new DesktopInput(config->width, config->height);
+#endif
 	// Our library for audio
 	this->audio = new Audio();
 	// if we dont have declared title, we will use the name of the class

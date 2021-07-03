@@ -16,13 +16,13 @@ RenderSystem::RenderSystem() : m_viewport(240, 120, &m_camera),
 	onResize(Lib::graphics->getWidth(), Lib::graphics->getHeight());
 
 #if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
-	Sprite::m_positionLocation = glGetAttribLocation(m_spriteShader.getProgram(), "position");
-	Sprite::m_uvLocation = glGetAttribLocation(m_spriteShader.getProgram(), "uv");
+	glBindAttribLocation(m_spriteShader.getProgram(), 0, "position");
+	glBindAttribLocation(m_spriteShader.getProgram(), 1, "uv");
 	
-	ParticleEmitter::m_verticesLocation = glGetAttribLocation(m_particleShader.getProgram(), "vertices");
-	ParticleEmitter::m_uvLocation = glGetAttribLocation(m_particleShader.getProgram(), "uv");
-	ParticleEmitter::m_positionLocation = glGetAttribLocation(m_particleShader.getProgram(), "position");
-	ParticleEmitter::m_sizeLocation = glGetAttribLocation(m_particleShader.getProgram(), "size");
+	glBindAttribLocation(m_particleShader.getProgram(), 0, "vertices");
+	glBindAttribLocation(m_particleShader.getProgram(), 1, "uv");
+	glBindAttribLocation(m_particleShader.getProgram(), 2, "position");
+	glBindAttribLocation(m_particleShader.getProgram(), 3, "size");
 #endif
 }
 

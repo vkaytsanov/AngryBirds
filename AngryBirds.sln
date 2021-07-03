@@ -16,6 +16,12 @@ Global
 		Release|Emscripten = Release|Emscripten
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		WasmDebug|Emscripten = WasmDebug|Emscripten
+		WasmDebug|x64 = WasmDebug|x64
+		WasmDebug|x86 = WasmDebug|x86
+		WasmRelease|Emscripten = WasmRelease|Emscripten
+		WasmRelease|x64 = WasmRelease|x64
+		WasmRelease|x86 = WasmRelease|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Debug|Emscripten.ActiveCfg = Debug|Emscripten
@@ -36,6 +42,18 @@ Global
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Release|x64.Build.0 = Release|x64
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Release|x86.ActiveCfg = Release|Win32
 		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.Release|x86.Build.0 = Release|Win32
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmDebug|Emscripten.ActiveCfg = Debug|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmDebug|Emscripten.Build.0 = Debug|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmDebug|x64.ActiveCfg = Debug|x64
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmDebug|x64.Build.0 = Debug|x64
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmDebug|x86.ActiveCfg = Debug|Win32
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmDebug|x86.Build.0 = Debug|Win32
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmRelease|Emscripten.ActiveCfg = Release|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmRelease|Emscripten.Build.0 = Release|Emscripten
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmRelease|x64.ActiveCfg = Release|x64
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmRelease|x64.Build.0 = Release|x64
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmRelease|x86.ActiveCfg = Release|Win32
+		{3D5CCB30-0811-4F1B-B447-334EC12EC6D0}.WasmRelease|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

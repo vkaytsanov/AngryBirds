@@ -219,6 +219,7 @@
     <ClInclude Include="src\lib\cereal\types\variant.hpp" />
     <ClInclude Include="src\lib\cereal\types\vector.hpp" />
     <ClInclude Include="src\lib\cereal\version.hpp" />
+    <ClInclude Include="src\lib\include\desktop_input.h" />
     <ClInclude Include="src\lib\entityx\3rdparty\catch.hpp" />
     <ClInclude Include="src\lib\entityx\3rdparty\simplesignal.h" />
     <ClInclude Include="src\lib\entityx\deps\Dependencies.h" />
@@ -373,6 +374,7 @@
     <ClCompile Include="src\lib\application.cpp" />
     <ClCompile Include="src\lib\audio.cpp" />
     <ClCompile Include="src\lib\configuration.cpp" />
+    <ClCompile Include="src\lib\desktop_input.cpp" />
     <ClCompile Include="src\lib\entityx\Entity.cc" />
     <ClCompile Include="src\lib\entityx\Event.cc" />
     <ClCompile Include="src\lib\entityx\help\Pool.cc" />

@@ -1,6 +1,10 @@
 ﻿#include "include/scene_manager.h"
 
+#if !defined(__EMSCRIPTEN__)
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#else
+#define _LIBCPP_NO_EXPERIMENTAL_DEPRECATION_WARNING_FILESYSTEM
+#endif
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 
