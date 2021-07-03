@@ -3,6 +3,9 @@
 //
 
 #include "include/texture.h"
+
+#include <SDL2/SDL_image.h>
+
 #include "../include/lib.h"
 
 Texture::Texture(const std::string& dir, const std::string& name) :
@@ -45,9 +48,6 @@ void Texture::init(GLint flags) {
 	             GL_UNSIGNED_BYTE,
 	             surface->pixels);
 
-#if !defined(__EMSCRIPTEN__)
-	glGenerateMipmap(GL_TEXTURE_2D);
-#endif
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	SDL_FreeSurface(surface);
@@ -57,12 +57,6 @@ void Texture::performChecks(SDL_Surface* surface) {
 	if (surface == nullptr) {
 		Lib::app->error("TextureError", SDL_GetError());
 		exit(-1);
-	}
-	if ((surface->w & (surface->w - 1)) != 0) {
-		Lib::app->error("TextureError", "BMP's width is not a power of 2");
-	}
-	if ((surface->h & (surface->h - 1)) != 0) {
-		Lib::app->error("TextureError", "BMP's height is not a power of 2");
 	}
 	m_colorCount = surface->format->BytesPerPixel;
 #if !defined(__EMSCRIPTEN__)

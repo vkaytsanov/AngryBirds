@@ -2,12 +2,8 @@
 #define HEADER_INCLUDE__RECURSION__PHYSICS__B2__DEBUGDRAW__H
 #include <vector>
 
-#if !defined(__EMSCRIPTEN__)
-#include <box2d/b2_draw.h>
-#else
-#include "box2d-emscripten/Common/b2Draw.h"
-#endif
 
+#include "box2d-emscripten/Common/b2Draw.h"
 #include "utils/box2d/b2draw/PrimitiveRenderer.h"
 
 template <typename T>
@@ -38,7 +34,7 @@ namespace b2draw {
 	 */
 
 
-	using float32 = float;
+
 
 	class DebugDraw
 		: public b2Draw {
@@ -67,19 +63,19 @@ namespace b2draw {
 		DebugDraw(DebugDraw&&) = default;
 		DebugDraw& operator=(DebugDraw&&) = default;
 
-		virtual ~DebugDraw() noexcept override;
+		virtual ~DebugDraw() noexcept ;
 
 		virtual void DrawPolygon(
 			b2Vec2 const* pVertices,
 			int32 vertexCount,
 			b2Color const& colour
-		) override;
+		) ;
 
 		virtual void DrawSolidPolygon(
 			b2Vec2 const* pVertices,
 			int32 vertexCount,
 			b2Color const& colour
-		) override;
+		) ;
 
 		virtual void DrawCircle(
 			b2Vec2 const& centre,
@@ -92,21 +88,21 @@ namespace b2draw {
 			float32 radius,
 			b2Vec2 const& axis,
 			b2Color const& colour
-		) override;
+		) ;
 
 		virtual void DrawSegment(
 			b2Vec2 const& begin,
 			b2Vec2 const& end,
 			b2Color const& colour
-		) override;
+		) ;
 
 		virtual void DrawPoint(
 			b2Vec2 const& point,
 			float32 size,
 			b2Color const& colour
-		) override;
+		) ;
 
-		virtual void DrawTransform(b2Transform const& xf) override;
+		virtual void DrawTransform(b2Transform const& xf) ;
 
 		void BufferData();
 

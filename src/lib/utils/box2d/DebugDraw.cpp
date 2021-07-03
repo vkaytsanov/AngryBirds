@@ -1,11 +1,7 @@
 #include <cmath>
 
-#if !defined(__EMSCRIPTEN__)
-#include <box2d/b2_world.h>
-#else
-#include "box2d-emscripten/Dynamics/b2World.h"
-#endif
 
+#include "box2d-emscripten/Dynamics/b2World.h"
 #include "b2draw/algorithm.h"
 #include "b2draw/DebugDraw.h"
 
@@ -47,7 +43,6 @@ namespace b2draw {
 		b2Color const& colour
 	) {
 		b2Color fillColour{colour};
-		fillColour.a = m_fillAlpha;
 
 		m_fillRenderer.addPolygon(pVertices, vertexCount, fillColour);
 	}
@@ -69,13 +64,12 @@ namespace b2draw {
 		b2Color const& colour
 	) {
 		b2Color fillColour{colour};
-		fillColour.a = m_fillAlpha;
 
 		m_fillRenderer.addCircle(centre, radius, fillColour);
 		m_lineRenderer.addSegment(
 			centre,
 			centre + radius * axis,
-			b2Color{0.0f, 0.0f, 0.0f, 1.0f}
+			b2Color{0.0f, 0.0f, 0.0f}
 		);
 	}
 

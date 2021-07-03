@@ -1,38 +1,17 @@
 #ifndef GRAPHICS
 #define GRAPHICS
 
-
-#if defined(__EMSCRIPTEN__)
-#include <emscripten.h>
-#include <emscripten/html5.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_video.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#else
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#endif
 
 #include <string>
 
 #include "configuration.h"
 
+class Listener;
 
-class Graphics {
+class IGraphics {
 	friend class Application;
 private:
-	Configuration* m_pConfig;
-#if defined(__EMSCRIPTEN__)
-	EmscriptenWebGLContextAttributes attr;
-	EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx;
-#else
-	SDL_Window* m_pWindow;
-	SDL_GLContext m_pContext;
-	SDL_Surface* m_pScreenSurface;
-	SDL_Renderer* m_pRenderer;
-#endif
 	uint32_t m_lastTime = 0;
 	float m_deltaTime = 0;
 	uint16_t m_fps = 0;
@@ -40,12 +19,12 @@ private:
 	uint64_t m_frameStart = 0;
 	bool m_background;
 	bool m_visible;
-	std::string m_glslVersion;
-
+protected:
+	Configuration* m_pConfig;
 public:
-	explicit Graphics(Configuration* config);
-	Graphics();
-	~Graphics();
+	explicit IGraphics(Configuration* config);
+	IGraphics();
+	virtual ~IGraphics() = default;
 	bool isBackground() const;
 	void setBackground(const bool background);
 	bool isVisible() const;
@@ -57,13 +36,8 @@ public:
 	int getHeight() const;
 	float getDeltaTime() const;
 	float getFps() const;
-	void createWindow();
-	void update();
-	SDL_Renderer* getRenderer() const;
-	SDL_Window* getWindow() const;
-	SDL_Surface* getScreenSurface() const;
-	SDL_GLContext getContext() const;
-	const char* getGlslVersion() const;
+	virtual void initialize() = 0;
+	virtual void swapBuffers(Listener* listener) = 0;
 };
 
 #endif

@@ -1,11 +1,7 @@
 ﻿
-#if !defined(__EMSCRIPTEN__)
-#include <box2d/b2_world.h>
-#include <box2d/b2_contact.h>
-#else
+
 #include <box2d-emscripten/Dynamics/b2World.h>
 #include <box2d-emscripten/Dynamics/Contacts/b2Contact.h>
-#endif
 
 #include "include/animators_database.h"
 #include "../components/2d/include/rigid_body_2d.h"

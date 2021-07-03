@@ -15,6 +15,13 @@
 #include "particle.h"
 
 struct ParticleEmitter : public entityx::Component<ParticleEmitter>{
+#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
+	static GLint m_verticesLocation;
+	static GLint m_uvLocation;
+	static GLint m_positionLocation;
+	static GLint m_sizeLocation;
+#endif
+	
 	std::vector<Particle> particles;
 	Vector3f emittingPosition;
 	bool hasGravity = false;

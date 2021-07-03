@@ -1,7 +1,6 @@
 #include "include/input.h"
 #include <iostream>
 #include "include/lib.h"
-#include "utils/ui/include/user_interface.h"
 #include <cstring>
 #include <memory>
 
@@ -15,19 +14,8 @@ Input::Input(const float width, const float height) {
 	m_lastMousePosY = m_currMousePosY = height / 2;
 }
 
-void Input::updateKeyboard() {
-
-}
-
-void Input::updateMouse() {
-
-}
-
 void Input::update() {
-	//    m_mouseMoved = false;
-	//    m_mouseLeftClick = false;
-	//    m_mouseRightClick = false;
-	
+	Lib::app->log("Input", "updating");
 	while (SDL_PollEvent(&e) != 0) {
 		
 #if !defined(__EMSCRIPTEN__)
@@ -35,11 +23,11 @@ void Input::update() {
 #else
 		Lib::app->log("Input", "received input");
 #endif
-		//User requests m_quit
+		//User requests to quit
 		if (e.type == SDL_QUIT) {
 			m_quit = true;
 		}
-			//User presses a key
+		//User presses a key
 		else if (e.type == SDL_KEYDOWN) {
 			if (e.key.keysym.sym > 322){
 				std::cout << "key is not registered";
@@ -48,7 +36,7 @@ void Input::update() {
 			m_keys[e.key.keysym.sym] = true;
 			m_keyEvents.push(e);
 		}
-			//User releases a key
+		//User releases a key
 		else if (e.type == SDL_KEYUP) {
 			if (e.key.keysym.sym > 322){
 				std::cout << "key is not registered";
@@ -126,7 +114,7 @@ void Input::update() {
 
 void Input::processEvents() {
 	if (!m_pProcessor) {
-		// Get rid of the events that happened, else we will getComponent bombarded
+		// Get rid of the events that happened, else we will get bombarded
 		// with events after a InputProcessor gets used
 		while (!m_keyEvents.empty()) {
 			m_keyEvents.pop();
@@ -219,8 +207,7 @@ bool Input::isMouseRightClick() const {
 }
 
 void Input::resetMouse() const {
-	SDL_WarpMouseInWindow(Lib::graphics->getWindow(), Lib::graphics->getWidth() / 2, Lib::graphics->getHeight() / 2);
-
+	//SDL_WarpMouseInWindow(Lib::graphics->getWindow(), Lib::graphics->getWidth() / 2, Lib::graphics->getHeight() / 2);
 }
 
 float Input::getMouseDeltaX() const {
@@ -232,7 +219,7 @@ float Input::getMouseDeltaY() const {
 }
 
 void Input::setProcessor(InputProcessor* processor) {
-	this->m_pProcessor = processor;
+	m_pProcessor = processor;
 }
 
 InputProcessor* Input::getProcessor() const {

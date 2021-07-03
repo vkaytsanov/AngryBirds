@@ -127,7 +127,6 @@
     <ClInclude Include="src\core\systems\include\game_state_system.h" />
     <ClInclude Include="src\core\systems\include\bird_system.h" />
     <ClInclude Include="src\core\systems\include\animator_system.h" />
-    <ClInclude Include="src\core\systems\include\debug_system.h" />
     <ClInclude Include="src\core\systems\include\particle_system.h" />
     <ClInclude Include="src\core\systems\include\physics_system.h" />
     <ClInclude Include="src\core\systems\include\render_system.h" />
@@ -232,6 +231,17 @@
     <ClInclude Include="src\lib\entityx\quick.h" />
     <ClInclude Include="src\lib\entityx\System.h" />
     <ClInclude Include="src\lib\entityx\tags\TagsComponent.h" />
+    <ClInclude Include="src\lib\imgui\imconfig.h" />
+    <ClInclude Include="src\lib\imgui\imgui.h" />
+    <ClInclude Include="src\lib\imgui\imgui_impl_opengl2.h" />
+    <ClInclude Include="src\lib\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\lib\imgui\imgui_impl_sdl.h" />
+    <ClInclude Include="src\lib\imgui\imgui_internal.h" />
+    <ClInclude Include="src\lib\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\lib\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\lib\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\lib\include\gles_graphics.h" />
+    <ClInclude Include="src\lib\include\gl_graphics.h" />
     <ClInclude Include="src\lib\include\application.h" />
     <ClInclude Include="src\lib\include\audio.h" />
     <ClInclude Include="src\lib\include\configuration.h" />
@@ -265,63 +275,12 @@
     <ClInclude Include="src\lib\utils\include\universal_viewport.h" />
     <ClInclude Include="src\lib\utils\include\viewport.h" />
     <ClInclude Include="src\lib\utils\math\include\math_utils.h" />
-    <ClInclude Include="src\lib\utils\noise\basictypes.h" />
-    <ClInclude Include="src\lib\utils\noise\exception.h" />
-    <ClInclude Include="src\lib\utils\noise\interp.h" />
-    <ClInclude Include="src\lib\utils\noise\latlon.h" />
-    <ClInclude Include="src\lib\utils\noise\mathconsts.h" />
-    <ClInclude Include="src\lib\utils\noise\misc.h" />
-    <ClInclude Include="src\lib\utils\noise\model\cylinder.h" />
-    <ClInclude Include="src\lib\utils\noise\model\line.h" />
-    <ClInclude Include="src\lib\utils\noise\model\model.h" />
-    <ClInclude Include="src\lib\utils\noise\model\plane.h" />
-    <ClInclude Include="src\lib\utils\noise\model\sphere.h" />
-    <ClInclude Include="src\lib\utils\noise\module\abs.h" />
-    <ClInclude Include="src\lib\utils\noise\module\add.h" />
-    <ClInclude Include="src\lib\utils\noise\module\billow.h" />
-    <ClInclude Include="src\lib\utils\noise\module\blend.h" />
-    <ClInclude Include="src\lib\utils\noise\module\cache.h" />
-    <ClInclude Include="src\lib\utils\noise\module\checkerboard.h" />
-    <ClInclude Include="src\lib\utils\noise\module\clamp.h" />
-    <ClInclude Include="src\lib\utils\noise\module\const.h" />
-    <ClInclude Include="src\lib\utils\noise\module\curve.h" />
-    <ClInclude Include="src\lib\utils\noise\module\cylinders.h" />
-    <ClInclude Include="src\lib\utils\noise\module\displace.h" />
-    <ClInclude Include="src\lib\utils\noise\module\exponent.h" />
-    <ClInclude Include="src\lib\utils\noise\module\invert.h" />
-    <ClInclude Include="src\lib\utils\noise\module\max.h" />
-    <ClInclude Include="src\lib\utils\noise\module\min.h" />
-    <ClInclude Include="src\lib\utils\noise\module\module.h" />
-    <ClInclude Include="src\lib\utils\noise\module\modulebase.h" />
-    <ClInclude Include="src\lib\utils\noise\module\multiply.h" />
-    <ClInclude Include="src\lib\utils\noise\module\perlin.h" />
-    <ClInclude Include="src\lib\utils\noise\module\power.h" />
-    <ClInclude Include="src\lib\utils\noise\module\ridgedmulti.h" />
-    <ClInclude Include="src\lib\utils\noise\module\rotatepoint.h" />
-    <ClInclude Include="src\lib\utils\noise\module\scalebias.h" />
-    <ClInclude Include="src\lib\utils\noise\module\scalepoint.h" />
-    <ClInclude Include="src\lib\utils\noise\module\select.h" />
-    <ClInclude Include="src\lib\utils\noise\module\spheres.h" />
-    <ClInclude Include="src\lib\utils\noise\module\terrace.h" />
-    <ClInclude Include="src\lib\utils\noise\module\translatepoint.h" />
-    <ClInclude Include="src\lib\utils\noise\module\turbulence.h" />
-    <ClInclude Include="src\lib\utils\noise\module\voronoi.h" />
-    <ClInclude Include="src\lib\utils\noise\noise.h" />
-    <ClInclude Include="src\lib\utils\noise\noisegen.h" />
-    <ClInclude Include="src\lib\utils\noise\vectortable.h" />
     <ClInclude Include="src\lib\utils\openGL\include\frame_buffer.h" />
     <ClInclude Include="src\lib\utils\openGL\include\index_buffer.h" />
     <ClInclude Include="src\lib\utils\openGL\include\particle_vertex.h" />
     <ClInclude Include="src\lib\utils\openGL\include\vertex.h" />
     <ClInclude Include="src\lib\utils\openGL\include\vertex_array.h" />
     <ClInclude Include="src\lib\utils\openGL\include\vertex_buffer.h" />
-    <ClInclude Include="src\lib\utils\ui\include\actor.h" />
-    <ClInclude Include="src\lib\utils\ui\include\click_listener.h" />
-    <ClInclude Include="src\lib\utils\ui\include\event_listener.h" />
-    <ClInclude Include="src\lib\utils\ui\include\input_listener.h" />
-    <ClInclude Include="src\lib\utils\ui\include\label.h" />
-    <ClInclude Include="src\lib\utils\ui\include\label_style.h" />
-    <ClInclude Include="src\lib\utils\ui\include\user_interface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\emscripten\box2d-emscripten\Collision\b2BroadPhase.cpp" />
@@ -403,7 +362,6 @@
     <ClCompile Include="src\core\screens\screen_manager.cpp" />
     <ClCompile Include="src\core\systems\animator_system.cpp" />
     <ClCompile Include="src\core\systems\bird_system.cpp" />
-    <ClCompile Include="src\core\systems\debug_system.cpp" />
     <ClCompile Include="src\core\systems\game_state_system.cpp" />
     <ClCompile Include="src\core\systems\particle_system.cpp" />
     <ClCompile Include="src\core\systems\physics_system.cpp" />
@@ -420,7 +378,17 @@
     <ClCompile Include="src\lib\entityx\help\Pool.cc" />
     <ClCompile Include="src\lib\entityx\help\Timer.cc" />
     <ClCompile Include="src\lib\entityx\System.cc" />
+    <ClCompile Include="src\lib\gles_graphics.cpp" />
+    <ClCompile Include="src\lib\gl_graphics.cpp" />
     <ClCompile Include="src\lib\graphics.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_impl_sdl.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\lib\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\lib\input.cpp" />
     <ClCompile Include="src\lib\lib.cpp" />
     <ClCompile Include="src\lib\logger.cpp" />
@@ -435,41 +403,6 @@
     <ClCompile Include="src\lib\utils\input_processor.cpp" />
     <ClCompile Include="src\lib\utils\math\math_utils.cpp" />
     <ClCompile Include="src\lib\utils\music.cpp" />
-    <ClCompile Include="src\lib\utils\noise\latlon.cpp" />
-    <ClCompile Include="src\lib\utils\noise\model\cylinder.cpp" />
-    <ClCompile Include="src\lib\utils\noise\model\line.cpp" />
-    <ClCompile Include="src\lib\utils\noise\model\plane.cpp" />
-    <ClCompile Include="src\lib\utils\noise\model\sphere.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\abs.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\add.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\billow.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\blend.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\cache.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\checkerboard.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\clamp.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\const.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\curve.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\cylinders.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\displace.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\exponent.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\invert.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\max.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\min.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\modulebase.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\multiply.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\perlin.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\power.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\ridgedmulti.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\rotatepoint.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\scalebias.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\scalepoint.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\select.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\spheres.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\terrace.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\translatepoint.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\turbulence.cpp" />
-    <ClCompile Include="src\lib\utils\noise\module\voronoi.cpp" />
-    <ClCompile Include="src\lib\utils\noise\noisegen.cpp" />
     <ClCompile Include="src\lib\utils\openGL\frame_buffer.cpp" />
     <ClCompile Include="src\lib\utils\openGL\index_buffer.cpp" />
     <ClCompile Include="src\lib\utils\openGL\particle_vertex.cpp" />
@@ -483,13 +416,6 @@
     <ClCompile Include="src\lib\utils\texture.cpp" />
     <ClCompile Include="src\lib\utils\texture_cube_map.cpp" />
     <ClCompile Include="src\lib\utils\texture_region.cpp" />
-    <ClCompile Include="src\lib\utils\ui\actor.cpp" />
-    <ClCompile Include="src\lib\utils\ui\click_listener.cpp" />
-    <ClCompile Include="src\lib\utils\ui\event_listener.cpp" />
-    <ClCompile Include="src\lib\utils\ui\input_listener.cpp" />
-    <ClCompile Include="src\lib\utils\ui\label.cpp" />
-    <ClCompile Include="src\lib\utils\ui\label_style.cpp" />
-    <ClCompile Include="src\lib\utils\ui\user_interface.cpp" />
     <ClCompile Include="src\lib\utils\universal_viewport.cpp" />
     <ClCompile Include="src\lib\utils\viewport.cpp" />
   </ItemGroup>
@@ -564,8 +490,7 @@
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Emscripten|Emscripten'" Label="Configuration">
-    <PlatformToolset>emcc</PlatformToolset>
-    <EmscriptenDir>D:\dev\emsdk\upstream\emscripten</EmscriptenDir>
+    <EmscriptenDir>D:\Dev\emsdk\upstream\emscripten</EmscriptenDir>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Emscripten|x64'">
     <PlatformToolset>v142</PlatformToolset>
@@ -596,17 +521,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath);$(ProjectDir)src\lib</IncludePath>
-    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)dependencies\emscripten;$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Emscripten'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath);$(ProjectDir)src\lib</IncludePath>
-    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath);$(ProjectDir)src\lib</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\emscripten;$(ProjectDir)dependencies\include;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Emscripten'">
@@ -617,7 +542,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)dependencies\include;$(IncludePath);$(ProjectDir)src\lib</IncludePath>
-    <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -625,8 +549,8 @@
     <LibraryPath>$(ProjectDir)dependencies\lib\x86\GLEW;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\BOX2D;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Emscripten|Emscripten'">
-    <IncludePath>$(ProjectDir)dependencies\include\emscripten;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)dependencies\lib\x86\BOX2D;$(ProjectDir)dependencies\lib\x86\SDL2;$(ProjectDir)dependencies\lib\x86\GLEW;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)dependencies\include;$(ProjectDir)dependencies\emscripten;$(ProjectDir)src\lib;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)dependencies\lib\x86\SDL2;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -727,7 +651,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Emscripten|Emscripten'">
     <ClCompile>
       <PreprocessorDefinitions>;__EMSCRIPTEN__</PreprocessorDefinitions>
-      <AdditionalOptions>--std=c++14 --bind -s FULL_ES3=1 -s ALLOW_MEMORY_GROWTH=1 -s STB_IMAGE=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2  -s SDL2_IMAGE_FORMATS='["bmp","png","xpm"]' -s USE_SDL_MIXER=2 -s LINKABLE=1 -s EXPORT_ALL=1 -s USE_LIBPNG=1 -I src/lib -I dependencies/emscripten -s GL_UNSAFE_OPTS=0 -s GL_DEBUG=1 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>--std=c++14 --bind -s FULL_ES3=1 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS="[""png""]" -s USE_SDL_MIXER=2 -s SDL2_MIXER_FORMATS="[""wav"", ""mp3""]" -s LINKABLE=1 -s EXPORT_ALL=1 -I src/lib -I dependencies/emscripten -I scenes -s GL_UNSAFE_OPTS=0 -s GL_DEBUG=1 -s ASSERTIONS=2 --preload-file src/assets -o angry-birds.html -s USE_SDL_TTF=2 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

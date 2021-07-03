@@ -8,11 +8,7 @@
 #include "../data/include/audio_database.h"
 #include "../data/include/animators_database.h"
 
-#if !defined(__EMSCRIPTEN__)
-#include "box2d/b2_contact.h"
-#else
 #include "box2d-emscripten/Dynamics/Contacts/b2Contact.h"
-#endif
 
 struct Obstacle;
 struct Bird;
@@ -134,7 +130,7 @@ void PhysicsSystem2D::preUpdate(entityx::EntityManager& entities, entityx::Event
 	}
 #if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
 	m_debugDraw.Clear();
-	m_world.DebugDraw();
+	m_world.DrawDebugData();
 	m_debugDraw.BufferData();
 #endif
 }

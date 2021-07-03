@@ -6,7 +6,7 @@
 
 namespace Lib {
 	Application* app;
-	Graphics* graphics;
+	IGraphics* graphics;
 	Input* input;
 	Audio* audio;
 }

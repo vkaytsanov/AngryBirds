@@ -12,6 +12,7 @@
 #include "../../../lib/utils/camera/include/orthographic_camera.h"
 #include "utils/camera/include/first_person_camera_controller.h"
 #include "utils/include/universal_viewport.h"
+#include "../../data/include/config_development.h"
 
 #if defined(_DEBUG) && defined(BOX2D_DEBUG_DRAW)
 #include "utils/box2d/b2draw/DebugDraw.h"

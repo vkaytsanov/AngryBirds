@@ -5,6 +5,12 @@
 #include "../screens/include/screen_manager.h"
 #include "../data/include/config_development.h"
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#include <emscripten/bind.h>
+
+#endif
+
 #if defined(USE_EDITOR)
 #include "../scene_editor/include/editor.h"
 #endif

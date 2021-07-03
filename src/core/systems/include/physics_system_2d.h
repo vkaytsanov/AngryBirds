@@ -1,12 +1,8 @@
 ﻿#pragma once
 
 #include "entityx/System.h"
-#if !defined(__EMSCRIPTEN__)
-#include "box2d/b2_world.h"
-#else
-#include "box2d-emscripten/Dynamics/b2World.h"
-#endif
 
+#include "box2d-emscripten/Dynamics/b2World.h"
 #include "../../data/include/config_development.h"
 
 

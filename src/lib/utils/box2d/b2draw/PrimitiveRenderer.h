@@ -2,15 +2,17 @@
 #define HEADER_INCLUDE__RECURSION__PHYSICS__B2__PRIMITIVERENDERER__H
 
 
-#include <GL/glew.h>
+#if !defined(__EMSCRIPTEN__)
+#include "GL/glew.h"
+#else
+#include "emscripten.h"
+#include <GLES3/gl3.h>
+#endif
+
 #include <vector>
 #include <utility>
 
-#if !defined(__EMSCRIPTEN__)
-#include <box2d/b2_draw.h>
-#else
 #include "box2d-emscripten/Common/b2Draw.h"
-#endif
 
 #include "utils/include/shaders.h"
 #include "utils/openGL/include/vertex_array.h"
@@ -21,7 +23,7 @@ namespace b2draw {
 
 
 	using Vertex = std::pair<b2Vec2, b2Color>;
-	using float32 = float;
+
 
 	class PrimitiveRenderer {
 	public:

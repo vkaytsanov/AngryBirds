@@ -12,7 +12,7 @@
 
 namespace Lib {
 	extern Application* app;
-	extern Graphics* graphics;
+	extern IGraphics* graphics;
 	extern Input* input;
 	extern Audio* audio;
 }

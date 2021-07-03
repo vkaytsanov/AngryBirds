@@ -8,6 +8,7 @@
 #if !defined(__EMSCRIPTEN__)
 #include "GL/glew.h"
 #else
+#include "emscripten.h"
 #include <GLES3/gl3.h>
 #endif
 

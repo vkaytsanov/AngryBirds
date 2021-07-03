@@ -29,8 +29,6 @@ private:
 	float m_currMousePosX = 0;
 	float m_currMousePosY = 0;
 	InputProcessor* m_pProcessor = nullptr;
-	void updateKeyboard();
-	void updateMouse();
 public:
 	std::queue<SDL_Event> m_keyEvents;
 	std::queue<SDL_Event> m_touchEvents;

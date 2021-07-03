@@ -18,17 +18,14 @@ public:
 	Listener* listener;
 	Input* input;
 	Configuration* config;
-	Graphics* graphics;
+	IGraphics* graphics;
 	Logger* logger;
 	Audio* audio;
 private:
-	void initImgui();
 	void exitApp();
 public:
 	void gameLoop();
-	explicit Application(Listener* listener);
-	Application(Listener* listener, Configuration* config);
-	Application(Listener* listener, Configuration* config, Graphics* graphics);
+	Application(Listener* listener, Configuration* config, IGraphics* graphics);
 	~Application();
 	void log(const char* tag, const char* message) const;
 	void log(const char* tag, int message) const;

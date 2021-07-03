@@ -2,17 +2,11 @@
 
 #include <array>
 
-#if !defined(__EMSCRIPTEN__)
-#include <box2d/b2_fixture.h>
-#include <box2d/b2_circle_shape.h>
-#include <box2d/b2_polygon_shape.h>
-#include <box2d/b2_body.h>
-#else
+
 #include "box2d-emscripten/Dynamics/b2Fixture.h"
 #include "box2d-emscripten/Collision/Shapes/b2CircleShape.h"
 #include "box2d-emscripten/Collision/Shapes/b2PolygonShape.h"
 #include "box2d-emscripten/Dynamics/b2Body.h"
-#endif
 
 #include "entity_type.h"
 

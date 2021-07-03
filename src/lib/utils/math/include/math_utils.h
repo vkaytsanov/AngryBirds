@@ -5,11 +5,8 @@
 #ifndef MATH_UTILS_H
 #define MATH_UTILS_H
 
-#if !defined(__EMSCRIPTEN__)
-#include "box2d/b2_math.h"
-#else
+
 #include "box2d-emscripten/Common/b2Math.h"
-#endif
 
 
 namespace MathUtils {
