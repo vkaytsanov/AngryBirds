@@ -41,10 +41,6 @@ public:
 	bool m_flipX = false;
 	bool m_flipY = false;
 public:
-#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
-	static GLint m_positionLocation;
-	static GLint m_uvLocation;
-#endif
 	Sprite() = default;
 	Sprite(const TextureRegion& tR, bool hasAnimator = false);
 	Sprite(const Sprite& other) = default;

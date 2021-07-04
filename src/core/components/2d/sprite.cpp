@@ -4,11 +4,6 @@
 #include "utils/openGL/include/index_buffer.h"
 #include "utils/openGL/include/vertex_buffer.h"
 
-#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN_DEVELOPMENT)
-	GLint Sprite::m_positionLocation = 0;
-	GLint Sprite::m_uvLocation = 0;
-#endif
-
 void Sprite::init() {
 	static bool indexBufferInitialized = false;
 	static IndexBuffer ibo;
@@ -22,17 +17,18 @@ void Sprite::init() {
 		ibo.bufferData(6 * sizeof(GLuint), indices, GL_STATIC_DRAW);
 	}
 
-
 	const float width = static_cast<float>(m_textureRegion.getRegionWidth()) / SPRITE_DESCALE;
 	const float height = static_cast<float>(m_textureRegion.getRegionHeight()) / SPRITE_DESCALE;
+	const float u = m_textureRegion.getU();
+	const float v = m_textureRegion.getV();
+	const float u2 = m_textureRegion.getU2();
+	const float v2 = m_textureRegion.getV2();
+	
 	Vertex2d vertices[] = {
-		Vertex2d(Vector2f(-width, -height),
-		         Vector2f(m_textureRegion.getU(), m_textureRegion.getV2() * m_textureRegion.m_tilingY)),
-		Vertex2d(Vector2f(width, -height), Vector2f(m_textureRegion.getU2() * m_textureRegion.m_tilingX,
-		                                            m_textureRegion.getV2() * m_textureRegion.m_tilingY)),
-		Vertex2d(Vector2f(width, height),
-		         Vector2f(m_textureRegion.getU2() * m_textureRegion.m_tilingX, m_textureRegion.getV())),
-		Vertex2d(Vector2f(-width, height), Vector2f(m_textureRegion.getU(), m_textureRegion.getV())),
+		Vertex2d(Vector2f(-width, -height), Vector2f(u, v2 * m_textureRegion.m_tilingY)),
+		Vertex2d(Vector2f(width, -height), Vector2f(u2 * m_textureRegion.m_tilingX, v2 * m_textureRegion.m_tilingY)),
+		Vertex2d(Vector2f(width, height), Vector2f(u2 * m_textureRegion.m_tilingX, v)),
+		Vertex2d(Vector2f(-width, height), Vector2f(u, v)),
 	};
 
 #ifdef REUSE_BUFFERS
@@ -53,9 +49,6 @@ void Sprite::init() {
 }
 
 Sprite::Sprite(const TextureRegion& tR, bool hasAnimator) : m_textureRegion(tR) {
-	// std::cout << "size: " << sizeof(*this);
-	// assert(sizeof(Sprite) % 16 == 0), "Size is " + std::to_string(sizeof(Sprite)); // memory alignment
-
 	// if the entity has animator, we don't need to generate buffer since
 	// they will be overwritten by the animator
 	if (!hasAnimator) {

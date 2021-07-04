@@ -76,8 +76,7 @@ void PhysicsSystem2D::preUpdate(entityx::EntityManager& entities, entityx::Event
 				// if a bird has almost no velocity, we destroy it
 				if (std::abs(velocity.x) < 1 || std::abs(velocity.y) < 1) {
 					// submit event for the particle system
-					events.post<TheBirdIsGone>(
-						TheBirdIsGone(entity.getComponent<Bird>()->type, rb->body->GetPosition()));
+					events.post<TheBirdIsGone>(TheBirdIsGone(entity.getComponent<Bird>()->type, rb->body->GetPosition()));
 					// play death sound
 					if (!AudioDatabase::getInstance().isPlaying(SOUND_BIRD_YELL)) {
 						AudioDatabase::getInstance().play(SOUND_BIRD_YELL);

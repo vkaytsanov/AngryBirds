@@ -9,11 +9,10 @@
 
 
 class Application {
-#if !defined(__EMSCRIPTEN__)
-private:
-#else
-public:
+#if defined(__EMSCRIPTEN__)
+	friend void emscriptenLoop(void* arg);
 #endif
+private:
 	bool running;
 	Listener* listener;
 	Input* input;
@@ -25,7 +24,7 @@ private:
 	void exitApp();
 public:
 	void gameLoop();
-	Application(Listener* listener, Configuration* config, IGraphics* graphics);
+	Application(Listener* listener, Configuration* config);
 	~Application();
 	void log(const char* tag, const char* message) const;
 	void log(const char* tag, int message) const;

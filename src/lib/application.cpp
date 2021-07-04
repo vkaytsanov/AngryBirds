@@ -14,10 +14,12 @@
 #include <emscripten.h>
 #include <SDL2/SDL.h>
 #include "include/emscripten_input.h"
+#include "include/gles_graphics.h"
 #else
 #include "GL/glew.h"
 #include <SDL2/SDL.h>
 #include "include/desktop_input.h"
+#include "include/gl_graphics.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_sdl.h"
@@ -48,21 +50,20 @@ void emscriptenLoop(void* arg) {
 #endif
 
 /* Initializing here the application */
-Application::Application(Listener* listener, Configuration* config, IGraphics* graphics) {
-
-	// Our m_pGame
+Application::Application(Listener* listener, Configuration* config) {
+	// Our game class
 	this->listener = listener;
 	// Our configuration file for the m_pGame
 	this->config = config;
-	// Our library for graphics
-	this->graphics = graphics;
 	// Logging, debugging and errors utility
 	this->logger = new Logger();
-	// Receive user input
+	// Receive user input and choose the graphics api
 #if defined(__EMSCRIPTEN__)
 	this->input = new EmscriptenInput(config->width, config->height);
+	this->graphics = new GLESGraphics(config);
 #else
 	this->input = new DesktopInput(config->width, config->height);
+	this->graphics = new GLGraphics(config);
 #endif
 	// Our library for audio
 	this->audio = new Audio();
@@ -75,10 +76,10 @@ Application::Application(Listener* listener, Configuration* config, IGraphics* g
 	Lib::graphics = graphics;
 	Lib::input = input;
 	Lib::audio = audio;
-	// creating the objects from the m_pGame
+	// creating the objects from the game class
 	listener->create();
 
-	// reset the delta time so we dont get huge value after long initialization of the game
+	// reset the delta time so we don't get huge value after long initialization of the game
 	graphics->m_lastTime = SDL_GetTicks();
 
 	running = true;
@@ -100,7 +101,7 @@ void Application::gameLoop() {
 		input->update();
 		// processing the input by giving it to the processors
 		input->processEvents();
-		// user has clicked the front right "X" m_quit button
+		// user has clicked the top right "X" quit button
 		if (input->shouldQuit()) break;
 		const bool isMinimized = !graphics->isVisible();
 		const bool isBackground = graphics->isBackground();
